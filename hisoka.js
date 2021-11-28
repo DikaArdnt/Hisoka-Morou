@@ -23,7 +23,7 @@ const database = require('./database.json')
 
 module.exports = hisoka = async (hisoka, m, chatUpdate) => {
     try {
-        var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : ''
+        var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : ''
         var budy = (typeof m.text == 'string' ? m.text : '')
         var prefix = prefa ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "Multi Prefix" : prefa ?? global.prefix
         const isMedia = m.mtype.includes('videoMessage') || m.mtype.includes('imageMessage') || m.mtype.includes('stickerMessage') || m.mtype.includes('audioMessage') || m.mtype.includes('documentMessage')
@@ -105,7 +105,6 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
             break
             case 'linkgroup': case 'linkgc': {
                 if (!m.isGroup) throw mess.group
-                if (!isBotAdmins) throw mess.botAdmin
                 let response = await hisoka.groupInviteCode(m.chat)
                 hisoka.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nLink Group : ${groupMetadata.subject}`, m, { detectLink: true })
             }
@@ -244,6 +243,12 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             break
             case 'tes': case 'menu': case 'help': case '?': {
                 anu = `
+┌──⭓ *Group Menu*
+│
+│⭔ ${prefix}linkgroup
+│
+└───────⭓
+
 ┌──⭓ *Search Menu*
 │
 │⭔ ${prefix}pinterest
@@ -258,16 +263,32 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}hentai
 │⭔ ${prefix}quotesanime
 │
-└───────⭓`
+└───────⭓
+
+┌──⭓ *Other Menu*
+│
+│⭔ ${prefix}ping
+│⭔ ${prefix}owner
+│⭔ ${prefix}menu / ${prefix}help / ${prefix}?
+│
+└───────⭓
+
+┌──⭓ *Owner Menu*
+│
+│⭔ ${prefix}chat [option]
+│
+└───────⭓
+`
+                let message = await prepareWAMessageMedia({ image: fs.readFileSync('./lib/hisoka.jpg') }, { upload: hisoka.waUploadToServer })
                 const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
                     templateMessage: {
                         hydratedTemplate: {
-                            locationMessage: { degreesLatitude: 0, degreesLongtitude: 0, jpegThumbnail: fs.readFileSync('./lib/hisoka.jpg') },
+                            imageMessage: message.imageMessage,
                             hydratedContentText: anu,
                             hydratedButtons: [{
                                 urlButton: {
-                                    displayText: 'This Is My Project',
-                                    url: 'https://github.com/DikaArdnt/Hisoka-Morrow'
+                                    displayText: 'Source Code',
+                                    url: 'https://github.com/DikaArdnt/Hisoka-Morou'
                                 }
                             }, {
                                 callButton: {
@@ -276,24 +297,23 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Button 1',
+                                    displayText: 'Status Bot',
                                     id: 'ping'
                                 }
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Button 2',
-                                    id: 'ping'
+                                    displayText: 'Contact Owner',
+                                    id: 'owner'
                                 }  
                             }, {
                                 quickReplyButton: {
-                                    displayText: 'Button 3',
-                                    id: 'ping'
+                                    displayText: 'Script',
+                                    id: 'sc'
                                 }
                             }]
                         }
                     }
                 }), { userJid: m.chat, quoted: m })
-                console.log(template)
                 hisoka.relayMessage(m.chat, template.message, { messageId: template.key.id })
             }
             break
