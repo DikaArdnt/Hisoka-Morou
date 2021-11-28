@@ -40,6 +40,8 @@ Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdn
 
 ## Thanks To
 * [`@adiwajshing/baileys-md`](https://github.com/adiwajshing/baileys/tree/multi-device)
+* [`Nurutomo`](https://github.com/Nurutomo)
+* [`Mhankbarbar`](https://github.com/MhankBarBar)
 * [`DikaArdnt/Hisoka-Morou]`](https://github.com/DikaArdnt/Hisoka-Morou)
 
 License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
