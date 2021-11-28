@@ -8,6 +8,11 @@ Base WhatsApp Bot Multi Device
 
 This is Base of WhatsApp multi device, working with [@adiwajshing/baileys-md'](https://github.com/adiwajshing/baileys/tree/multi-device)
 
+## My Project
+WhatsApp Bot normal [`DikaArdnt/Hisoka-Morrow`](https://github.com/DikaArdnt/Hisoka-Morrow)
+WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
+
+
 ## Installing
 ```bash
 $ git clone https://github.com/DikaArdnt/Hisoka-Morou
