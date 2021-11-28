@@ -42,7 +42,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
         const groupName = m.isGroup ? groupMetadata.subject : ''
         const participants = m.isGroup ? await groupMetadata.participants : ''
         const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
-		const isBotAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
+	const isBotAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
         const isGroupAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
         // Bot Status
@@ -227,6 +227,76 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 }
             }
             break
+            case 'bot': {
+                m.reply(mess.wait)
+                let buttons = [
+                    {buttonId: 'ping', buttonText: {displayText: 'Status Bot'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: {url: 'https://telegra.ph/file/bb15c9a53c4a0b68a99fa.jpg' },
+                    caption: `Hello @${m.sender.split("@")[0]}`,
+                    footerText: 'Hi Im Hisoka Bot',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+            }
+            break
+            case 'tes': case 'menu': case 'help': case '?': {
+                anu = `
+┌──⭓ *Search Menu*
+│
+│⭔ ${prefix}pinterest
+│⭔ ${prefix}wallpaper
+│⭔ ${prefix}wikimedia
+│
+└───────⭓
+
+┌──⭓ *Random Menu*
+│
+│⭔ ${prefix}porno
+│⭔ ${prefix}hentai
+│⭔ ${prefix}quotesanime
+│
+└───────⭓`
+                const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+                    templateMessage: {
+                        hydratedTemplate: {
+                            locationMessage: { degreesLatitude: 0, degreesLongtitude: 0, jpegThumbnail: fs.readFileSync('./lib/hisoka.jpg') },
+                            hydratedContentText: anu,
+                            hydratedButtons: [{
+                                urlButton: {
+                                    displayText: 'This Is My Project',
+                                    url: 'https://github.com/DikaArdnt/Hisoka-Morrow'
+                                }
+                            }, {
+                                callButton: {
+                                    displayText: 'Number Phone Owner',
+                                    phoneNumber: '+62 882-9202-4190'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Button 1',
+                                    id: 'ping'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Button 2',
+                                    id: 'ping'
+                                }  
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Button 3',
+                                    id: 'ping'
+                                }
+                            }]
+                        }
+                    }
+                }), { userJid: m.chat, quoted: m })
+                console.log(template)
+                hisoka.relayMessage(m.chat, template.message, { messageId: template.key.id })
+            }
+            break
             default:
                 if (budy.startsWith('=>')) {
                     if (!isCreator) return m.reply(mess.owner)
@@ -250,7 +320,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     try {
                         let evaled = await eval(budy.slice(2))
                         if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
-                        await reply(evaled)
+                        await m.reply(evaled)
                     } catch (err) {
                         m = String(err)
                         await m.reply(m)
@@ -268,7 +338,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
         
 
     } catch (err) {
-        hisoka.sendText(m.chat, util.format(err), m)
+        m.reply(util.format(err))
     }
 }
 
