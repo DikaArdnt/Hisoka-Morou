@@ -1,0 +1,37 @@
+{
+  "name": "test-bail-md",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@adiwajshing/baileys-md": "github:adiwajshing/baileys#multi-device",
+    "awesome-phonenumber": "^2.64.0",
+    "axios": "^0.24.0",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0-rc.10",
+    "child_process": "^1.0.2",
+    "crypto": "^1.0.1",
+    "file-type": "^16.5.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "0.0.1-security",
+    "got": "^11.8.3",
+    "human-readable": "^0.2.1",
+    "jimp": "^0.16.1",
+    "moment-timezone": "^0.5.34",
+    "node-fetch": "^2.6.1",
+    "node-webpmux": "^3.1.0",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
+    "perf_hooks": "0.0.1",
+    "pino": "^7.0.5",
+    "request": "^2.88.2",
+    "util": "^0.12.4"
+  }
+}
