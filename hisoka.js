@@ -5,7 +5,7 @@
 */
 
 require('./config')
-const { default: makeWASocket, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, downloadContentFromMessage, downloadHistory, proto, getMessage, generateWAMessageContent } = require('@adiwajshing/baileys-md')
+const { default: makeWASocket, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, downloadContentFromMessage, downloadHistory, proto, getMessage, generateWAMessageContent, prepareWAMessageMedia } = require('@adiwajshing/baileys-md')
 const fs = require('fs')
 const util = require('util')
 const chalk = require('chalk')
@@ -17,7 +17,7 @@ const os = require('os')
 const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { pinterest, wallpaper, wikimedia, porno, hentai, quotesAnime } = require('./lib/scraper')
-const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, delay, format, logic, generateProfilePicture, parseMention } = require('./lib/myfunc')
+const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, delay, format, logic, generateProfilePicture, parseMention, getRandom } = require('./lib/myfunc')
 const database = require('./database.json')
 
 
@@ -25,8 +25,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
     try {
         var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : ''
         var budy = (typeof m.text == 'string' ? m.text : '')
-        var prefix = prefa ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "Multi Prefix" : prefa ?? global.prefix
-        const isMedia = m.mtype.includes('videoMessage') || m.mtype.includes('imageMessage') || m.mtype.includes('stickerMessage') || m.mtype.includes('audioMessage') || m.mtype.includes('documentMessage')
+        var prefix = prefa ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : prefa ?? global.prefix
         const isCmd = body.startsWith(prefix)
         const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
@@ -36,7 +35,8 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
         const text = q = args.join(" ")
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
-
+	const isMedia = /image|video|sticker|audio/.test(mime)
+	
         // Group
         const groupMetadata = m.isGroup ? await hisoka.groupMetadata(m.chat).catch(e => {}) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
@@ -83,6 +83,10 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
         }
 
         switch(command) {
+	    case 'sc': {
+                m.reply('Script : https://github.com/DikaArdnt/Hisoka-Morou\n\n Dont Forget Give Star\n\nDonate : https://ko-fi.com/cak_haho\n\n Dont Forget Donate')
+            }
+            break
             case 'chat': {
                 if (!isCreator) throw mess.owner
                 if (!q) throw 'Option : 1. mute\n2. unmute\n3. archive\n4. unarchive\n5. read\n6. unread\n7. delete'
@@ -113,7 +117,22 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 if (!m.quoted) throw false
                 let { chat, fromMe, id, isBaileys } = m.quoted
                 if (!isBaileys) throw 'Pesan tersebut bukan dikirim oleh bot!'
-                hisoka.sendMessage(m.chat, { delete: id })
+                hisoka.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: true, id: m.quoted.id, participant: m.quoted.sender } })
+            }
+            break
+	    case 'toimage': case 'toimg': {
+                if (!quoted) throw 'Reply Image'
+                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
+                m.reply(mess.wait)
+                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let ran = await getRandom('.png')
+                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+                    fs.unlinkSync(media)
+                    if (err) throw err
+                    let buffer = fs.readFileSync(ran)
+                    hisoka.sendMessage(m.chat, { image: buffer }, { quoted: m })
+                    fs.unlinkSync(ran)
+                })
             }
             break
             case 'pinterest': {
@@ -167,13 +186,6 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 if (!isCreator) throw mess.owner
                 hisoka.public = false
                 m.reply('Sukses Change To Self Usage')
-            }
-            break
-            case 'addprefix': {
-                let dahada = prefa.includes(text)
-                if (dahada)return reply('Prefix Tersebut Telah Terdaftar, Coba Yang Lain...')
-                prefa.push(text)
-                m.reply(`Sukses Menambahkan "${text}" Sebagai Prefix`)
             }
             break
             case 'ping': case 'botstatus': case 'statusbot': {
@@ -265,11 +277,12 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │
 └───────⭓
 
-┌──⭓ *Other Menu*
+┌──⭓ *Main Menu*
 │
 │⭔ ${prefix}ping
 │⭔ ${prefix}owner
 │⭔ ${prefix}menu / ${prefix}help / ${prefix}?
+│⭔ ${prefix}delete
 │
 └───────⭓
 
