@@ -120,7 +120,7 @@ async function startHisoka() {
      * @param {*} options 
      * @returns 
      */
-    hisoka.sendVideo = async (jid, path, gif = false, caption = '', quoted = '', options) => {
+    hisoka.sendVideo = async (jid, path, caption = '', quoted = '', gif = false, options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await fetch(path)).buffer() : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         return await hisoka.sendMessage(jid, { video: buffer, caption: caption, gifPlayback: gif, ...options }, { quoted })
     }
@@ -138,7 +138,7 @@ async function startHisoka() {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await fetch(path)).buffer() : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         return await hisoka.sendMessage(jid, { audio: buffer, ptt: ptt, ...options }, { quoted })
     }
-    
+
     /**
      * 
      * @param {*} jid 
@@ -158,19 +158,34 @@ async function startHisoka() {
      */
     hisoka.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
         let mime = (message.msg || message).mimetype || ''
-        let messageType = mime.split('/')[0]
-        let extension = mime.split('/')[1]
-        trueFileName = attachExtension ? (filename + '.' + extension) : filename
+        let messageType = mime.split('/')[0].replace('application', 'document') ? mime.split('/')[0].replace('application', 'document') : mime.split('/')[0]
         const stream = await downloadContentFromMessage(message, messageType)
         let buffer = Buffer.from([])
         for await(const chunk of stream) {
             buffer = Buffer.concat([buffer, chunk])
         }
+	let type = await FileType.fromBuffer(buffer)
+        trueFileName = attachExtension ? (filename + '.' + type.ext) : filename
         // save to file
         await fs.writeFileSync(trueFileName, buffer)
         return trueFileName
     }
     
+    /**
+     * 
+     * @param {*} jid 
+     * @param {*} path 
+     * @param {*} quoted 
+     * @param {*} options 
+     * @returns 
+     */
+    hisoka.sendMedia = async (jid, path, quoted, options = {}) => {
+	 let { ext, mime, data } = await hisoka.getFile(path)
+	 messageType = mime.split("/")[0]
+	 pase = messageType.replace('application', 'document') || messageType
+	 return await hisoka.sendMessage(m.chat, { [`${pase}`]: data, mimetype: mime, ...options }, { quoted })
+    }
+
     /**
      * 
      * @param {*} jid 
