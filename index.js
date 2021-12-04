@@ -157,9 +157,10 @@ async function startHisoka() {
      * @returns 
      */
     hisoka.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+        let quoted = message.msg ? message.msg : message
         let mime = (message.msg || message).mimetype || ''
         let messageType = mime.split('/')[0].replace('application', 'document') ? mime.split('/')[0].replace('application', 'document') : mime.split('/')[0]
-        const stream = await downloadContentFromMessage(message, messageType)
+        const stream = await downloadContentFromMessage(quoted, messageType)
         let buffer = Buffer.from([])
         for await(const chunk of stream) {
             buffer = Buffer.concat([buffer, chunk])
