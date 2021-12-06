@@ -6,19 +6,26 @@ Base WhatsApp Bot Multi Device
 </p>
 <h1 align="center">Hisoka-Morou</h1>
 
-This is Base of WhatsApp multi device, working with [@adiwajshing/baileys-md'](https://github.com/adiwajshing/baileys/tree/multi-device)
+This is Base of WhatsApp multi device, working with ['@adiwajshing/baileys-md'](https://github.com/adiwajshing/baileys/tree/multi-device)
 
 ## My Project
 WhatsApp Bot normal [`DikaArdnt/Hisoka-Morrow`](https://github.com/DikaArdnt/Hisoka-Morrow)
 WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
 
 
-## Installing
+## UNTUK PENGGUNA WINDOWS/RDP
+
+* Unduh & Instal Git [`Klik Disini`](https://git-scm.com/downloads)
+* Unduh & Instal NodeJS [`Klik Disini`](https://nodejs.org/en/download)
+* Unduh & Instal FFmpeg [`Klik Disini`](https://ffmpeg.org/download.html) (**Jangan Lupa Tambahkan FFmpeg ke variabel lingkungan PATH**)
+
+
 ```bash
-$ git clone https://github.com/DikaArdnt/Hisoka-Morou
-$ cd Hisoka-Morou
-$ npm start / node .
+git clone https://github.com/DikaArdnt/Hisoka-Morou
+cd Hisoka-Morou
+npm install
 ```
+
 
 ## FOR TERMUX/UBUNTU/SSH USER
 
@@ -26,9 +33,15 @@ $ npm start / node .
 apt update && apt upgrade
 apt install git -y
 apt install nodejs -y
+apt install ffmpeg -y
 git clone https://github.com/DikaArdnt/Hisoka-Morou
 cd Hisoka-Morou
 npm install
+```
+
+## Installing
+```bash
+$ node .
 ```
 
 ## ❗ Warning
@@ -42,7 +55,7 @@ Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdn
 * [`@adiwajshing/baileys-md`](https://github.com/adiwajshing/baileys/tree/multi-device)
 * [`Nurutomo`](https://github.com/Nurutomo)
 * [`Mhankbarbar`](https://github.com/MhankBarBar)
-* [`DikaArdnt/Hisoka-Morou]`](https://github.com/DikaArdnt/Hisoka-Morou)
+* [`DikaArdnt/Hisoka-Morou]`(https://github.com/DikaArdnt/Hisoka-Morou)
 
 License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
 
