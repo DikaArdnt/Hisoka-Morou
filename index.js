@@ -20,7 +20,7 @@ global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.
 
 async function startHisoka() {
     const hisoka = makeWASocket({
-        logger: pino({ level: 'debug' }),
+        logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
         browser: ['Hisoka Multi Device','Safari','1.0.0'],
         auth: state
