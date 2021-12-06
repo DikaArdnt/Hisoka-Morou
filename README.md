@@ -6,7 +6,7 @@ Base WhatsApp Bot Multi Device
 </p>
 <h1 align="center">Hisoka-Morou</h1>
 
-This is Base of WhatsApp multi device, working with ['@adiwajshing/baileys-md'](https://github.com/adiwajshing/baileys/tree/multi-device)
+This is Base of WhatsApp multi device, working with [`@adiwajshing/baileys-md`](https://github.com/adiwajshing/baileys/tree/multi-device)
 
 ## My Project
 WhatsApp Bot normal [`DikaArdnt/Hisoka-Morrow`](https://github.com/DikaArdnt/Hisoka-Morrow)
@@ -55,7 +55,7 @@ Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdn
 * [`@adiwajshing/baileys-md`](https://github.com/adiwajshing/baileys/tree/multi-device)
 * [`Nurutomo`](https://github.com/Nurutomo)
 * [`Mhankbarbar`](https://github.com/MhankBarBar)
-* [`DikaArdnt/Hisoka-Morou]`(https://github.com/DikaArdnt/Hisoka-Morou)
+* [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
 
 License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
 
