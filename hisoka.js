@@ -439,7 +439,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                     {buttonId: `twitter ${text}`, buttonText: {displayText: '► Video'}, type: 1}
                 ]
                 let buttonMessage = {
-		    image: { url: anu.result.thumb }
+		    image: { url: anu.result.thumb },
                     caption: util.format(anu.result),
                     footerText: 'Press The Button Below',
                     buttons: buttons,
