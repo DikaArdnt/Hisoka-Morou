@@ -9,12 +9,12 @@ const chalk = require('chalk')
 
 // Website Api
 global.APIs = {
-	dappa: 'https://api.dapuhy.ga',
+	zenz: 'https://zenzapi.xyz',
 }
 
 // Apikey Website Api
 global.APIKeys = {
-	'https://api.dapuhy.ga': 'DappaAnjing',
+	'https://zenzapi.xyz': 'Your Key',
 }
 
 // Other
@@ -30,10 +30,8 @@ global.mess = {
     owner: 'Fitur Khusus Owner Bot',
     group: 'Fitur Digunakan Hanya Untuk Group!',
     private: 'Fitur Digunakan Hanya Untuk Private Chat!',
-	bot: 'Fitur Khusus Pengguna Nomor Bot',
+    bot: 'Fitur Khusus Pengguna Nomor Bot',
     wait: 'Loading...',
-	lockCmd: 'Fitur Tidak Diaktifkan Oleh Owner!',
-	example1: 'Selamat Datang @user Di Group @subject Jangan Lupa Baca Rules @desc\n\nNote :\n1. @user (Mention User Join)\n2. @bio (Get Bio User Join)\n3. @tanggal (Date Now)\n4. @desc (Get Description Group)\n5. @subject (Group Name)'
 }
 global.thumb = fs.readFileSync('./lib/hisoka.jpg')
 
