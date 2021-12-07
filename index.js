@@ -74,7 +74,7 @@ async function startHisoka() {
     })
 	
     // Setting
-    hisoka.public = false
+    hisoka.public = true
 
     hisoka.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update
