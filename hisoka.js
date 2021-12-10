@@ -293,21 +293,21 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
             case 'pinterest': {
                 m.reply(mess.wait)
                 anu = await pinterest(text)
-                result = anu[Math.floor(Math.random(), anu.length)]
+                result = anu[Math.floor(Math.random() * anu.length)]
                 hisoka.sendMessage(m.chat, { image: { url: result }, caption: '⭔ Media Url : '+result }, { quoted: m })
             }
             break
             case 'wallpaper': {
                 m.reply(mess.wait)
                 anu = await wallpaper(text)
-                result = anu[Math.floor(Math.random(), anu.length)]
+                result = anu[Math.floor(Math.random() * anu.length)]
                 hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Media Url : ${result.image}` }, { quoted: m })
             }
             break
             case 'wikimedia': {
                 m.reply(mess.wait)
                 anu = wikimedia(text)
-                result = anu[Math.floor(Math.random(), anu.length)]
+                result = anu[Math.floor(Math.random() * anu.length)]
                 hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Source : ${result.source}\n⭔ Media Url : ${result.image}` }, { quoted: m })
             }
             break
@@ -320,19 +320,19 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
             case 'hentai': {
                 m.reply(mess.wait)
                 anu = await hentai()
-                result = anu[Math.floor(Math.random(), anu.length)]
+                result = anu[Math.floor(Math.random() * anu.length)]
                 hisoka.sendMessage(m.chat, { video: { url: result.video_1 }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.category}\n⭔ Mimetype : ${result.type}\n⭔ Views : ${result.views_count}\n⭔ Shares : ${result.share_count}\n⭔ Source : ${result.link}\n⭔ Media Url : ${result.video_1}` }, { quoted: m })
             }
             break
             case 'quotesanime': case 'quoteanime': {
                 anu = await quotesAnime()
-                result = anu[Math.floor(Math.random(), anu.length)]
+                result = anu[Math.floor(Math.random() * anu.length)]
 		let buttons = [
                     {buttonId: `quotesanime`, buttonText: {displayText: 'Next'}, type: 1}
                 ]
                 let buttonMessage = {
                     text: `~_${result.quotes}_\n\nBy '${result.karakter}', ${result.anime}\n\n- ${result.up_at}`,
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 2
                 }
@@ -346,7 +346,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 ]
                 let buttonMessage = {
                     text: anu.result.message,
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 2
                 }
@@ -364,7 +364,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 let buttonMessage = {
                     video: { url: anu.result.nowatermark },
                     caption: `Download From ${text}`,
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 5
                 }
@@ -382,7 +382,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 let buttonMessage = {
                     video: { url: anu.result.watermark },
                     caption: `Download From ${text}`,
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 5
                 }
@@ -399,7 +399,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 ]
                 let buttonMessage = {
                     text: `Download From ${text}`,
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 2
                 }
@@ -424,7 +424,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 let buttonMessage = {
                     video: { url: anu.result.HD || anu.result.SD },
                     caption: util.format(anu.result),
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 5
                 }
@@ -441,7 +441,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 let buttonMessage = {
 		    image: { url: anu.result.thumb },
                     caption: util.format(anu.result),
-                    footerText: 'Press The Button Below',
+                    footer: 'Press The Button Below',
                     buttons: buttons,
                     headerType: 4
                 }
@@ -523,21 +523,6 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 } catch (e) {
                     m.reply(String(e))
                 }
-            }
-            break
-            case 'bot': {
-                m.reply(mess.wait)
-                let buttons = [
-                    {buttonId: 'ping', buttonText: {displayText: 'Status Bot'}, type: 1}
-                ]
-                let buttonMessage = {
-                    image: {url: 'https://telegra.ph/file/bb15c9a53c4a0b68a99fa.jpg' },
-                    caption: `Hello @${m.sender.split("@")[0]}`,
-                    footerText: 'Hi Im Hisoka Bot',
-                    buttons: buttons,
-                    headerType: 4
-                }
-                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
             case 'tes': case 'menu': case 'help': case '?': {
