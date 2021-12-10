@@ -11,6 +11,7 @@ This is Base of WhatsApp multi device, working with [`@adiwajshing/baileys-md`](
 ## My Project
 WhatsApp Bot normal [`DikaArdnt/Hisoka-Morrow`](https://github.com/DikaArdnt/Hisoka-Morrow)
 WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
+My WhatsaApp Bot [`Hisoka Morrow`](https://wa.me/62882920241908?text=.menu)
 
 
 ## UNTUK PENGGUNA WINDOWS/RDP
