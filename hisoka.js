@@ -225,24 +225,24 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: true, id: m.quoted.id, participant: m.quoted.sender } })
             }
             break
-	    case 'sticker': case 's': case 'stickergif': case 'sgif': {
-		if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
-		m.reply(mess.wait)
-                if (/image/.test(mime)) {
-		    let media = await quoted.download()
-		    let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
-		    await fs.unlinkSync(encmedia)
-		} else if (/video/.test(mime)) {
-		    if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
-		    let media = await quoted.download()
-		    let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
-		    await fs.unlinkSync(encmedia)
-		} else {
-            	    throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
-        	}
-	    }
-	    break
-	    case 'toimage': case 'toimg': {
+            case 'sticker': case 's': case 'stickergif': case 'sgif': {
+            if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
+            m.reply(mess.wait)
+                    if (/image/.test(mime)) {
+                let media = await quoted.download()
+                let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+                await fs.unlinkSync(encmedia)
+            } else if (/video/.test(mime)) {
+                if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
+                let media = await quoted.download()
+                let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+                await fs.unlinkSync(encmedia)
+            } else {
+                        throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
+                }
+            }
+            break
+            case 'toimage': case 'toimg': {
                 if (!quoted) throw 'Reply Image'
                 if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
@@ -257,7 +257,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 })
             }
             break
-	    case 'tomp4': case 'tovideo': {
+	        case 'tomp4': case 'tovideo': {
                 if (!quoted) throw 'Reply Image'
                 if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
@@ -277,7 +277,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 await fs.unlinkSync(media)
             }
             break
-	    case 'tourl': {
+	        case 'tourl': {
                 m.reply(mess.wait)
                 let media = await hisoka.downloadAndSaveMediaMessage(quoted)
                 if (/image/.test(mime)) {
@@ -304,6 +304,19 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Media Url : ${result.image}` }, { quoted: m })
             }
             break
+            case 'wallpaper': {
+                m.reply(mess.wait)
+                anu = await wallpaper(text)
+                result = anu[Math.floor(Math.random() * anu.length)]
+                hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Media Url : ${result.image}` }, { quoted: m })
+            }
+            break
+            case 'anime': case 'waifu': case 'husbu': case 'neko': case 'shinobu': case 'megumin': {
+                m.reply(mess.wait)
+                let anu = await getBuffer(api('zenz', '/api/random/anime/'+command, 'apikey'))
+                hisoka.sendMessage(m.chat, { image: { url: anu }, caption: `Download From ${text}` }, { quoted: m})
+            }
+            break
             case 'wikimedia': {
                 m.reply(mess.wait)
                 anu = wikimedia(text)
@@ -327,7 +340,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
             case 'quotesanime': case 'quoteanime': {
                 anu = await quotesAnime()
                 result = anu[Math.floor(Math.random() * anu.length)]
-		let buttons = [
+                let buttons = [
                     {buttonId: `quotesanime`, buttonText: {displayText: 'Next'}, type: 1}
                 ]
                 let buttonMessage = {
@@ -339,7 +352,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
-	    case 'motivasi': case 'dilanquote': case 'bucinquote': case 'katasenja': case 'puisi': {
+	        case 'motivasi': case 'dilanquote': case 'bucinquote': case 'katasenja': case 'puisi': {
                 let anu = await fetchJson(api('zenz', '/api/'+command, {}, 'apikey'))
                 let buttons = [
                     {buttonId: `motivasi`, buttonText: {displayText: 'Next'}, type: 1}
@@ -353,7 +366,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
-	    case 'tiktok': case 'tiktoknowm': {
+	        case 'tiktok': case 'tiktoknowm': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
                 let anu = await fetchJson(api('zenz', '/api/downloader/tiktok', { url: text }, 'apikey'))
@@ -407,14 +420,21 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, { audio: { url: anu.result.audio } }, { quoted: msg })
             }
             break
-	    case 'igdl': case 'ig': case 'instagram': {
+	        case 'igdl': case 'ig': case 'instagram': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
                 let anu = await fetchJson(api('zenz', '/api/downloader/instagram2', { url: text }, 'apikey'))
                 hisoka.sendMessage(m.chat, { video: { url: anu.data[0] }, caption: `Download From ${text}` }, { quoted: m})
             }
             break
-	    case 'twitdl': case 'twitter': {
+            case 'igdltv': case 'igreels': case 'igdl2': {
+                if (!text) throw 'Masukkan Query Link!'
+                m.reply(mess.wait)
+                let anu = await fetchJson(api('zenz', '/api/downloader/instagram', { url: text }, 'apikey'))
+                hisoka.sendMessage(m.chat, { video: { url: anu.data[0] }, caption: `Download From ${text}` }, { quoted: m})
+            }
+            break
+	        case 'twitdl': case 'twitter': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
                 let anu = await fetchJson(api('zenz', '/api/downloader/twitter', { url: text }, 'apikey'))
@@ -449,14 +469,14 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, { audio: { url: anu.result.audio } }, { quoted: msg })
             }
             break
-	    case 'fbdl': case 'fb': case 'facebook': {
+	        case 'fbdl': case 'fb': case 'facebook': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
                 let anu = await fetchJson(api('zenz', '/api/downloader/facebook', { url: text }, 'apikey'))
                 hisoka.sendMessage(m.chat, { video: { url: anu.result.url }, caption: `⭔ Title : ${anu.result.title}`}, { quoted: m })
             }
             break
-	    case 'pindl': case 'pinterestdl': {
+	        case 'pindl': case 'pinterestdl': {
                 if (!text) throw 'Masukkan Query Link!'
                 m.reply(mess.wait)
                 let anu = await fetchJson(api('zenz', '/api/downloader/pinterestdl', { url: text }, 'apikey'))
@@ -547,6 +567,9 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}tiktokwm [url]
 │⭔ ${prefix}tiktokmp3 [url]
 │⭔ ${prefix}instagram [url]
+│⭔ ${prefix}ig2 [url]
+│⭔ ${prefix}igreels [url]
+│⭔ ${prefix}igtv [url]
 │⭔ ${prefix}twitter [url]
 │⭔ ${prefix}twittermp3 [url]
 │⭔ ${prefix}facebook [url]
@@ -573,6 +596,17 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}bucinquote
 │⭔ ${prefix}katasenja
 │⭔ ${prefix}puisi
+│
+└───────⭓
+
+┌──⭓ *Image Menu*
+│
+│⭔ ${prefix}anime
+│⭔ ${prefix}waifu
+│⭔ ${prefix}husbu
+│⭔ ${prefix}neko
+│⭔ ${prefix}shinobu
+│⭔ ${prefix}megumin
 │
 └───────⭓
 
