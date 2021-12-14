@@ -503,7 +503,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                     + 'N:;Dika Ardnt.;;;'
                     + 'FN:Dika Ardnt.\n' // full name
                     + 'ORG:Owner Bot;\n' // the organization of the contact
-                    + 'TEL;type=CELL;type=VOICE;waid=m:++62 815-1558-9573\n' // WhatsApp ID + phone number
+                    + 'TEL;type=CELL;type=VOICE;waid=6281515589573:+62 815-1558-9573\n' // WhatsApp ID + phone number
                     + 'END:VCARD'
                 hisoka.sendMessage(m.chat, { contacts: { displayName: 'Dika Ardnt.', contacts: [{ vcard }] } }, { quoted: m })
             }
@@ -629,12 +629,12 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                             hydratedButtons: [{
                                 urlButton: {
                                     displayText: 'Source Code',
-                                    url: 'https://github.com/DikaArdnt/Hisoka-Morou'
+                                    url: 'https://github.com/lol/'
                                 }
                             }, {
                                 callButton: {
                                     displayText: 'Number Phone Owner',
-                                    phoneNumber: '+62 882-9202-4190'
+                                    phoneNumber: '+62 815-1558-9573'
                                 }
                             }, {
                                 quickReplyButton: {
