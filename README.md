@@ -11,7 +11,6 @@ This is Base of WhatsApp multi device, working with [`@adiwajshing/baileys-md`](
 ## My Project
 WhatsApp Bot normal [`DikaArdnt/Hisoka-Morrow`](https://github.com/DikaArdnt/Hisoka-Morrow)
 WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
-My WhatsaApp Bot [`Hisoka Morrow`](https://wa.me/62882920241908?text=.menu)
 
 
 ## UNTUK PENGGUNA WINDOWS/RDP
@@ -50,7 +49,7 @@ WhatsApp bot is still in the development stage, so there are a few bugs
 WhatsApp Connection (BETA, not working perfectly)
 
 Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdnt/Hisoka-Morou/blob/master/config.js)
-Get Apikey zenz on [`zenz`](https://zenzapi.xyz/dashboard)
+Get Apikey zenz on [`zenz`](https://zenzapi.xyz/)
 
 
 ## Thanks To
