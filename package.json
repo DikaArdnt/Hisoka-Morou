@@ -32,6 +32,7 @@
     "perf_hooks": "0.0.1",
     "pino": "^7.0.5",
     "request": "^2.88.2",
+    "scrape-primbon": "^1.1.0",
     "util": "^0.12.4",
     "yargs": "^17.2.1",
     "yt-search": "^2.10.2"
