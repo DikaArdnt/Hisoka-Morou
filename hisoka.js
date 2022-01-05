@@ -82,7 +82,11 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
         // Push Message To Console
         if (m.message) {
             console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
-        }
+	    const messageID = m.key.id // Auto read all message by MrAsR
+	    const participant = m.sender
+	    
+	    await hisoka.sendReadReceipt(m.chat, participant, [messageID])
+	}
 
         switch(command) {
 	    case 'sc': {
