@@ -18,7 +18,7 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
-const { pinterest, wallpaper, wikimedia, porno, hentai, quotesAnime } = require('./lib/scraper')
+const { pinterest, wallpaper, wikimedia, quotesAnime } = require('./lib/scraper')
 const { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
 const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, delay, format, logic, generateProfilePicture, parseMention, getRandom } = require('./lib/myfunc')
 
@@ -298,44 +298,44 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 hisoka.sendMessage(m.chat, { image: { url: result }, caption: '⭔ Media Url : '+result }, { quoted: m })
             }
             break
-            case 'wallpaper': {
-                m.reply(mess.wait)
-                anu = await wallpaper(text)
-                result = anu[Math.floor(Math.random() * anu.length)]
-                hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Media Url : ${result.image}` }, { quoted: m })
-            }
-            break
-            case 'wallpaper': {
-                m.reply(mess.wait)
-                anu = await wallpaper(text)
-                result = anu[Math.floor(Math.random() * anu.length)]
-                hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Media Url : ${result.image}` }, { quoted: m })
-            }
-            break
             case 'anime': case 'waifu': case 'husbu': case 'neko': case 'shinobu': case 'megumin': {
                 m.reply(mess.wait)
                 let anu = await getBuffer(api('zenz', '/api/random/anime/'+command, 'apikey'))
                 hisoka.sendMessage(m.chat, { image: { url: anu }, caption: `Download From ${text}` }, { quoted: m})
             }
             break
+            case 'wallpaper': {
+                if (!text) throw 'Masukkan Query Title'
+                anu = await wallpaper(text)
+                result = anu[Math.floor(Math.random() * anu.length)]
+		let buttons = [
+                    {buttonId: `wallpaper ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: result.image[0] },
+                    caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.type}\n⭔ Detail : ${result.source}\n⭔ Media Url : ${result.image[2] || result.image[1] || result.image[0]}`,
+                    footer: 'Hisoka Morrow',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+            }
+            break
             case 'wikimedia': {
-                m.reply(mess.wait)
-                anu = wikimedia(text)
+                if (!text) throw 'Masukkan Query Title'
+                anu = await wikimedia(text)
                 result = anu[Math.floor(Math.random() * anu.length)]
-                hisoka.sendMessage(m.chat, { image: { url: result.image }, caption: `⭔ Title : ${result.title}\n⭔ Source : ${result.source}\n⭔ Media Url : ${result.image}` }, { quoted: m })
-            }
-            break
-            case 'porno': case 'porn': case 'bokep': {
-                m.reply(mess.wait)
-                anu = await porno()
-                hisoka.sendMessage(m.chat, { video: { url: 'https://tikporntok.com/'+anu.video }, caption: `⭔ Title : ${anu.title}\n⭔ Viewers : ${anu.views}\n⭔ Tags : ${anu.tags}\n⭔ Likes : ${anu.like}\n⭔ Dislikes : ${anu.dislike}\n⭔ Favourite : ${anu.favorite}\n⭔ Time Upload : ${anu.upload}\n⭔ Description : ${anu.desc}\n⭔ Source : https://tikporntok.com/${anu.source}` }, { quoted: m })
-            }
-            break
-            case 'hentai': {
-                m.reply(mess.wait)
-                anu = await hentai()
-                result = anu[Math.floor(Math.random() * anu.length)]
-                hisoka.sendMessage(m.chat, { video: { url: result.video_1 }, caption: `⭔ Title : ${result.title}\n⭔ Category : ${result.category}\n⭔ Mimetype : ${result.type}\n⭔ Views : ${result.views_count}\n⭔ Shares : ${result.share_count}\n⭔ Source : ${result.link}\n⭔ Media Url : ${result.video_1}` }, { quoted: m })
+                let buttons = [
+                    {buttonId: `wikimedia ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: result.image },
+                    caption: `⭔ Title : ${result.title}\n⭔ Source : ${result.source}\n⭔ Media Url : ${result.image}`,
+                    footer: 'Hisoka Morrow',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
             case 'quotesanime': case 'quoteanime': {
