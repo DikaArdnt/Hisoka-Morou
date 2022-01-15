@@ -783,6 +783,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                     at: + new Date,
                     locked: false,
                 }
+                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
                 m.reply(`Done!`)
             }
             break
@@ -791,6 +792,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 if (!hash) throw `Tidak ada hash`
                 if (cmdmedia[hash] && cmdmedia[hash].locked) throw 'You have no permission to delete this sticker command'              
                 delete cmdmedia[hash]
+                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
                 m.reply(`Done!`)
             }
             break
@@ -810,6 +812,7 @@ ${Object.entries(cmdmedia).map(([key, value], index) => `${index + 1}. ${value.l
                 let hash = m.quoted.fileSha256.toString('base64')
                 if (!(hash in cmdmedia)) throw 'Hash not found in database'
                 cmdmedia[hash].locked = !/^un/i.test(command)
+                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
                 m.reply('Done!')
             }
             break
