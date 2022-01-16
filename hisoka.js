@@ -24,7 +24,6 @@ const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, slee
 
 let cmdmedia = JSON.parse(fs.readFileSync('./src/cmdmedia.json'))
 
-
 module.exports = hisoka = async (hisoka, m, chatUpdate) => {
     try {
         var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
@@ -816,6 +815,45 @@ ${Object.entries(cmdmedia).map(([key, value], index) => `${index + 1}. ${value.l
                 m.reply('Done!')
             }
             break
+            case 'addmsg': {
+                if (!m.quoted) throw 'Reply Message Yang Ingin Disave Di Database'
+                if (!text) throw `Example : ${prefix + command} nama file`
+                let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+                if (text.toLowerCase() in msgs) throw `'${text}' telah terdaftar di list pesan`
+                msgs[text.toLowerCase()] = quoted.fakeObj
+                fs.writeFileSync('./src/database.json', JSON.stringify(msg))
+m.reply(`Berhasil menambahkan pesan di list pesan sebagai '${text}'
+    
+Akses dengan ${prefix}getmsg ${text}
+
+Lihat list Pesan Dengan ${prefix}listmsg`)
+            }
+            break
+            case 'getmsg': {
+                if (!text) throw `Example : ${prefix + command} file name\n\nLihat list pesan dengan ${prefix}listmsg`
+                let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+                if (!(text.toLowerCase() in msgs)) throw `'${text}' tidak terdaftar di list pesan`
+                hisoka.copyNForward(m.chat, msgs[text.toLowerCase()], true)
+            }
+            break
+            case 'listmsg': {
+                let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+	        let seplit = Object.entries(msgs).map(([nama, isi]) => { return { nama, ...isi } })
+		teks = '「 LIST DATABASE 」\n\n'
+		for (let i of seplit) {
+		    teks += `⬡ *Name :* ${i.nama}\n⬡ *Type :* ${Object.keys(i.message)[0]}\n────────────────────────\n\n`
+	        }
+	        m.reply(teks)
+	    }
+	    break
+            case 'delmsg': case 'deletemsg': {
+	        let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+	        if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' tidak terdaftar didalam list pesan`)
+		delete msgs[text.toLowerCase()]
+                fs.writeFileSync('./src/database.json', JSON.stringify(msg))
+		m.reply(`Berhasil menghapus '${text}' dari list pesan`)
+            }
+	    break
             case 'public': {
                 if (!isCreator) throw mess.owner
                 hisoka.public = true
@@ -1003,6 +1041,10 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}listcmd
 │⭔ ${prefix}delcmd
 │⭔ ${prefix}lockcmd
+│⭔ ${prefix}addmsg
+│⭔ ${prefix}listmsg
+│⭔ ${prefix}getmsg
+│⭔ ${prefix}delmsg
 │
 └───────⭓
 
@@ -1055,6 +1097,14 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             default:
+                if (isCmd && budy.toLowerCase() != undefined) {
+		    if (m.chat.endsWith('broadcast')) return
+		    if (m.isBaileys) return
+		    let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+		    if (!(budy.toLowerCase() in msgs)) return
+		    hisoka.copyNForward(m.chat, msgs[budy.toLowerCase()], true)
+		}
+
                 if (budy.startsWith('=>')) {
                     if (!isCreator) return m.reply(mess.owner)
                     function Return(sul) {
