@@ -26,7 +26,7 @@ cd Hisoka-Morou
 npm install
 ```
 
-
+ 
 ## FOR TERMUX/UBUNTU/SSH USER
 
 ```bash
