@@ -322,7 +322,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
             case 'anime': case 'waifu': case 'husbu': case 'neko': case 'shinobu': case 'megumin': {
                 m.reply(mess.wait)
                 let anu = await getBuffer(api('zenz', '/api/random/anime/'+command, 'apikey'))
-                hisoka.sendMessage(m.chat, { image: { url: anu }, caption: `Download From ${text}` }, { quoted: m})
+                hisoka.sendMessage(m.chat, { image: anu, caption: `Download From ${text}` }, { quoted: m})
             }
             break
             case 'wallpaper': {
@@ -772,10 +772,9 @@ module.exports = hisoka = async (hisoka, m, chatUpdate) => {
                 if (!m.quoted) throw 'Reply Pesan!'
                 if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
                 if (!text) throw `Untuk Command Apa?`
-                cmdmedia[text.toLowerCase()] = quoted.fakeObj
                 let hash = m.quoted.fileSha256.toString('base64')
                 if (cmdmedia[hash] && cmdmedia[hash].locked) throw 'You have no permission to change this sticker command'
-                sticker[hash] = {
+                cmdmedia[hash] = {
                     text,
                     mentionedJid: m.mentionedJid,
                     creator: m.sender,
