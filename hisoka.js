@@ -820,7 +820,7 @@ ${Object.entries(cmdmedia).map(([key, value], index) => `${index + 1}. ${value.l
                 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
                 if (text.toLowerCase() in msgs) throw `'${text}' telah terdaftar di list pesan`
                 msgs[text.toLowerCase()] = quoted.fakeObj
-                fs.writeFileSync('./src/database.json', JSON.stringify(msg))
+                fs.writeFileSync('./src/database.json', JSON.stringify(msgs))
 m.reply(`Berhasil menambahkan pesan di list pesan sebagai '${text}'
     
 Akses dengan ${prefix}getmsg ${text}
@@ -849,7 +849,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
 	        let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
 	        if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' tidak terdaftar didalam list pesan`)
 		delete msgs[text.toLowerCase()]
-                fs.writeFileSync('./src/database.json', JSON.stringify(msg))
+                fs.writeFileSync('./src/database.json', JSON.stringify(msgs))
 		m.reply(`Berhasil menghapus '${text}' dari list pesan`)
             }
 	    break
