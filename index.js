@@ -80,6 +80,8 @@ async function startHisoka() {
     // Setting
     hisoka.public = true
 
+    hisoka.serializeM = (m) => smsg(hisoka, m, store)
+
     hisoka.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update
         if (connection === 'close') {
