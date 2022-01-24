@@ -909,7 +909,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             case 'listmsg': {
                 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
 	        let seplit = Object.entries(msgs).map(([nama, isi]) => { return { nama, ...isi } })
-		teks = '「 LIST DATABASE 」\n\n'
+		let teks = '「 LIST DATABASE 」\n\n'
 		for (let i of seplit) {
 		    teks += `⬡ *Name :* ${i.nama}\n⬡ *Type :* ${Object.keys(i.message)[0]}\n────────────────────────\n\n`
 	        }
