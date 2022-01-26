@@ -320,7 +320,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
              break
              case 'listonline': case 'liston': {
                     let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
-                    let online = [...Object.keys(store.presences[id]), hisoka.user.jid]
+                    let online = [...Object.keys(store.presences[id]), hisoka.user.id]
                     hisoka.sendText(m.chat, 'List Online:\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
              }
              break
