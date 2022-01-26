@@ -318,6 +318,12 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                  hisoka.sendTextWithMentions(m.chat, teks, m)
              }
              break
+             case 'listonline': case 'liston': {
+                    let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
+                    let online = [...Object.keys(store.presences[id]), hisoka.user.jid]
+                    hisoka.sendText(m.chat, 'List Online:\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
+             }
+             break
             case 'sticker': case 's': case 'stickergif': case 'sgif': {
             if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
@@ -1106,6 +1112,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}quoted
 │⭔ ${prefix}listpc
 │⭔ ${prefix}listgc
+│⭔ ${prefix}listonline
 │
 └───────⭓
 
