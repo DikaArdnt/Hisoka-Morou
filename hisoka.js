@@ -19,9 +19,9 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
-const { pinterest, wallpaper, wikimedia, quotesAnime } = require('./lib/scraper')
+const { pinterest, wallpaper, wikimedia, quotesAnime, aiovideodl } = require('./lib/scraper')
 const { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
-const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, delay, format, logic, generateProfilePicture, parseMention, getRandom } = require('./lib/myfunc')
+const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
 
 let cmdmedia = JSON.parse(fs.readFileSync('./src/cmdmedia.json'))
 
@@ -337,7 +337,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                 let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else {
-                        throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
+                throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
                 }
             }
             break
@@ -387,6 +387,97 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                     m.reply(util.format(anu))
                 }
                 await fs.unlinkSync(media)
+            }
+            break
+	    case 'yts': case 'ytsearch': {
+                if (!text) throw `Example : ${prefix + command} story wa anime`
+                let yts = require("yt-search")
+                let search = await yts(text)
+                let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
+                let no = 1
+                for (let i of search.all) {
+                    teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
+                }
+                hisoka.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
+            }
+            break
+	    case 'play': case 'ytplay': {
+                if (!text) throw `Example : ${prefix + command} story wa anime`
+                let yts = require("yt-search")
+                let search = await yts(text)
+                let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
+                let buttons = [
+                    {buttonId: `ytmp3 ${anu.url} 128kbps`, buttonText: {displayText: '♫ Audio'}, type: 1},
+                    {buttonId: `ytmp4 ${anu.url} 360p`, buttonText: {displayText: '► Video'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: anu.thumbnail },
+                    caption: `
+⭔ Title : ${anu.title}
+⭔ Ext : Search
+⭔ ID : ${anu.videoId}
+⭔ Duration : ${anu.timestamp}
+⭔ Viewers : ${anu.views}
+⭔ Upload At : ${anu.ago}
+⭔ Author : ${anu.author.name}
+⭔ Channel : ${anu.author.url}
+⭔ Description : ${anu.description}
+⭔ Url : ${anu.url}`,
+                    footer: 'Hisoka Morrow',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+            }
+            break
+	    case 'ytmp3': case 'ytaudio': {
+                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
+                let result = await aiovideodl(isUrl(text)[0])
+                let { url, title, thumbnail, duration, medias } = result
+                let quality = args[1] ? args[1] : '128kbps'                
+                let media = medias.filter(v => v.videoAvailable == false && v.audioAvailable == true && v.quality == quality).map(v => v)
+                if (media[0].formattedSize.split('MB')[0] >= 100.00) return m.reply('File Melebihi Batas'+util.format(media))
+                hisoka.sendImage(m.chat, thumbnail, `⭔ Title : ${title}\n⭔ File Size : ${media[0].formattedSize}\n⭔ Url : ${url}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}`, m)
+                hisoka.sendMessage(m.chat, { audio: { url: media[0].url }, mimetype: 'audio/mp4', fileName: `${title}.mp3` }, { quoted: m })
+            }
+            break
+            case 'ytmp4': case 'ytvideo': {
+                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
+                let result = await aiovideodl(isUrl(text)[0])
+                let { url, title, thumbnail, duration, medias } = result
+                let quality = args[1] ? args[1] : '360p'                
+                let media = medias.filter(v => v.videoAvailable == true && v.audioAvailable == false && v.quality == quality).map(v => v)
+                if (media[0].formattedSize.split('MB')[0] >= 100.00) return m.reply('File Melebihi Batas'+util.format(media))
+                hisoka.sendMessage(m.chat, { video: { url: media[0].url }, fileName: `${title}.mp4`, mimetype: 'video/mp4', caption: `⭔ Title : ${title}\n⭔ File Size : ${media[0].formattedSize}\n⭔ Url : ${url}\n⭔ Ext : MP4\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
+            }
+            break
+	    case 'getmusic': {
+                if (!text) throw `Example : ${prefix + command} 1`
+                if (!m.quoted) return m.reply('Reply Pesan')
+                if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
+                let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
+                if (!urls) throw `Mungkin pesan yang anda reply tidak mengandung result ytsearch`
+                let result = await aiovideodl(urls[text - 1])
+                let { url, title, thumbnail, duration, medias } = result
+                let quality = args[1] ? args[1] : '128kbps'                
+                let media = medias.filter(v => v.videoAvailable == false && v.audioAvailable == true && v.quality == quality).map(v => v)
+                if (media[0].formattedSize.split('MB')[0] >= 100.00) return m.reply('File Melebihi Batas'+util.format(media))
+                hisoka.sendImage(m.chat, thumbnail, `⭔ Title : ${title}\n⭔ File Size : ${media[0].formattedSize}\n⭔ Url : ${url}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}`, m)
+                hisoka.sendMessage(m.chat, { audio: { url: media[0].url }, mimetype: 'audio/mp4', fileName: `${title}.mp3` }, { quoted: m })
+            }
+            break
+            case 'getvideo': {
+                if (!text) throw `Example : ${prefix + command} 1`
+                if (!m.quoted) return m.reply('Reply Pesan')
+                if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
+                let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
+                if (!urls) throw `Mungkin pesan yang anda reply tidak mengandung result ytsearch`
+                let result = await aiovideodl(urls[text - 1])
+                let { url, title, thumbnail, duration, medias } = result
+                let quality = args[1] ? args[1] : '360p'                
+                let media = medias.filter(v => v.videoAvailable == true && v.audioAvailable == false && v.quality == quality).map(v => v)
+                if (media[0].formattedSize.split('MB')[0] >= 100.00) return m.reply('File Melebihi Batas'+util.format(media))
+                hisoka.sendMessage(m.chat, { video: { url: media[0].url }, fileName: `${title}.mp4`, mimetype: 'video/mp4', caption: `⭔ Title : ${title}\n⭔ File Size : ${media[0].formattedSize}\n⭔ Url : ${url}\n⭔ Ext : MP4\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
             }
             break
             case 'pinterest': {
@@ -965,34 +1056,24 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'owner': case 'creator': {
-                let vcard = 'BEGIN:VCARD\n' // metadata of the contact card
+                let vcard1 = 'BEGIN:VCARD\n' // metadata of the contact card
                     + 'VERSION:3.0\n' 
                     + 'N:;Dika Ardnt.;;;'
                     + 'FN:Dika Ardnt.\n' // full name
-                    + 'ORG:Owner Bot;\n' // the organization of the contact
+                    + 'ORG:Creator Bot;\n' // the organization of the contact
                     + 'TEL;type=CELL;type=VOICE;waid=6288292024190:+62 882-9202-4190\n' // WhatsApp ID + phone number
                     + 'END:VCARD'
-                hisoka.sendMessage(m.chat, { contacts: { displayName: 'Dika Ardnt.', contacts: [{ vcard }] } }, { quoted: m })
+		let vcard2 = 'BEGIN:VCARD\n' // metadata of the contact card
+                    + 'VERSION:3.0\n' 
+                    + 'N:;Hisoka.;;;'
+                    + 'FN:Hisoka.\n' // full name
+                    + 'ORG:Owner Bot;\n' // the organization of the contact
+                    + 'TEL;type=CELL;type=VOICE;waid=6285784918313:+62 857-8491-8313\n' // WhatsApp ID + phone number
+                    + 'END:VCARD'
+                hisoka.sendMessage(m.chat, { contacts: { displayName: 'Yntkts.', contacts: [{ vcard: vcard1 }, { vcard: vcard2 }] } }, { quoted: m })
             }
             break
-            case 'eval': {
-                if (!isCreator) return m.reply(mess.owner)
-                function Return(sul) {
-                    sat = JSON.stringify(sul, null, 2)
-                    bang = util.format(sat)
-                        if (sat == undefined) {
-                            bang = util.format(sul)
-                        }
-                        return m.reply(bang)
-                }
-                try {
-                    m.reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
-                } catch (e) {
-                    m.reply(String(e))
-                }
-            }
-            break
-            case 'tes': case 'menu': case 'help': case '?': {
+            case 'list': case 'menu': case 'help': case '?': {
                 anu = `
 ┌──⭓ *Group Menu*
 │
@@ -1021,11 +1102,17 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}twittermp3 [url]
 │⭔ ${prefix}facebook [url]
 │⭔ ${prefix}pinterestdl [url]
+│⭔ ${prefix}ytmp3 [url]
+│⭔ ${prefix}ytmp4 [url]
+│⭔ ${prefix}getmusic [query]
+│⭔ ${prefix}getvideo [query]
 │
 └───────⭓
 
 ┌──⭓ *Search Menu*
 │
+│⭔ ${prefix}play [query]
+│⭔ ${prefix}yts [query]
 │⭔ ${prefix}pinterest [query]
 │⭔ ${prefix}wallpaper [query]
 │⭔ ${prefix}wikimedia [query]
@@ -1180,14 +1267,6 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             default:
-                if (isCmd && budy.toLowerCase() != undefined) {
-		    if (m.chat.endsWith('broadcast')) return
-		    if (m.isBaileys) return
-		    let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
-		    if (!(budy.toLowerCase() in msgs)) return
-		    hisoka.copyNForward(m.chat, msgs[budy.toLowerCase()], true)
-		}
-
                 if (budy.startsWith('=>')) {
                     if (!isCreator) return m.reply(mess.owner)
                     function Return(sul) {
@@ -1224,6 +1303,14 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                         if (stdout) return m.reply(stdout)
                     })
                 }
+			
+		if (isCmd && budy.toLowerCase() != undefined) {
+		    if (m.chat.endsWith('broadcast')) return
+		    if (m.isBaileys) return
+		    let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+		    if (!(budy.toLowerCase() in msgs)) return
+		    hisoka.copyNForward(m.chat, msgs[budy.toLowerCase()], true)
+		}
         }
         
 
