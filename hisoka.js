@@ -1281,21 +1281,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
             }
             break
             case 'owner': case 'creator': {
-                let vcard1 = 'BEGIN:VCARD\n' // metadata of the contact card
-                    + 'VERSION:3.0\n' 
-                    + 'N:;Dika Ardnt.;;;'
-                    + 'FN:Dika Ardnt.\n' // full name
-                    + 'ORG:Creator Bot;\n' // the organization of the contact
-                    + 'TEL;type=CELL;type=VOICE;waid=6288292024190:+62 882-9202-4190\n' // WhatsApp ID + phone number
-                    + 'END:VCARD'
-		let vcard2 = 'BEGIN:VCARD\n' // metadata of the contact card
-                    + 'VERSION:3.0\n' 
-                    + 'N:;Hisoka.;;;'
-                    + 'FN:Hisoka.\n' // full name
-                    + 'ORG:Owner Bot;\n' // the organization of the contact
-                    + 'TEL;type=CELL;type=VOICE;waid=6285784918313:+62 857-8491-8313\n' // WhatsApp ID + phone number
-                    + 'END:VCARD'
-                hisoka.sendMessage(m.chat, { contacts: { displayName: 'Yntkts.', contacts: [{ vcard: vcard1 }, { vcard: vcard2 }] } }, { quoted: m })
+                hisoka.sendContact(m.chat, global.owner, m)
             }
             break
             case 'list': case 'menu': case 'help': case '?': {
