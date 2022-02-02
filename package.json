@@ -1,6 +1,6 @@
 {
   "name": "hisoka-morou",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "WhatsApp Using Lib Baileys Multi Device",
   "main": "index.js",
   "type": "commonjs",
@@ -23,6 +23,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "fs": "0.0.1-security",
     "got": "^11.8.3",
+    "google-it": "^1.6.2",
     "human-readable": "^0.2.1",
     "jimp": "^0.16.1",
     "moment-timezone": "^0.5.34",
