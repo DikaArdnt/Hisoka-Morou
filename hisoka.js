@@ -19,8 +19,6 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
-const google = require('google-it')
-const { dBinary, eBinary } = require('./lib/binary')
 const { pinterest, wallpaper, wikimedia, quotesAnime, aiovideodl } = require('./lib/scraper')
 const { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
 const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
@@ -94,8 +92,9 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
             if (!m.key.fromMe) return
         }
 
-        // Push Message To Console
+        // Push Message To Console && Auto Read
         if (m.message) {
+        hisoka.sendReadReceipt(m.chat, m.sender, [m.key.id])
             console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
 
@@ -591,6 +590,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             break
             case 'ebinary': {
             if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            let { eBinary } = require('./lib/binary')
             let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
             let eb = await eBinary(teks)
             m.reply(eb)
@@ -598,6 +598,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
         break
             case 'dbinary': {
             if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            let { dBinary } = require('./lib/binary')
             let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
             let db = await dBinary(teks)
             m.reply(db)
@@ -675,6 +676,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             break
         case 'google': {
                 if (!text) throw `Example : ${prefix + command} fatih arridho`
+                let google = require('google-it')
                 google({'query': text}).then(res => {
                 let teks = `Google Search From : ${text}\n\n`
                 for (let g of res) {
@@ -776,6 +778,20 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 m.reply(mess.wait)
                 let anu = await getBuffer(api('zenz', '/api/random/anime/'+command, 'apikey'))
                 hisoka.sendMessage(m.chat, { image: anu, caption: `Download From ${text}` }, { quoted: m})
+            }
+            break
+            case 'coffe': case 'kopi': {
+            let buttons = [
+                    {buttonId: `coffe`, buttonText: {displayText: 'Next Image'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: 'https://coffee.alexflipnote.dev/random' },
+                    caption: `☕ Random Coffe`,
+                    footer: 'Hisoka Morrow',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
             case 'wallpaper': {
@@ -1395,6 +1411,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 
 ┌──⭓ *Random Menu*
 │
+│⭔ ${prefix}coffe
 │⭔ ${prefix}porno
 │⭔ ${prefix}hentai
 │⭔ ${prefix}quotesanime
