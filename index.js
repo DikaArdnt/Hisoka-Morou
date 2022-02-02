@@ -11,6 +11,7 @@ const pino = require('pino')
 const fs = require('fs')
 const chalk = require('chalk')
 const FileType = require('file-type')
+const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer } = require('./lib/myfunc')
 
