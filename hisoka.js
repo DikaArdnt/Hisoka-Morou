@@ -593,15 +593,15 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
             let eb = await eBinary(teks)
             m.reply(eb)
-            }
-            break
+        }
+        break
             case 'dbinary': {
             if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
             let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
             let db = await dBinary(teks)
             m.reply(db)
-            }
-            break
+        }
+        break
             case 'emojimix': {
 	        if (!text) throw `Example : ${prefix + command} 😅+🤔`
 		let [emoji1, emoji2] = text.split`+`
