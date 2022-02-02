@@ -137,6 +137,122 @@ async function startHisoka() {
 
     // Add Other
 
+/** Send 1 Button Message
+ *
+ * @param {*} jid
+ * @param {*} text
+ * @param {*} footer
+ * @param {*} buttonId
+ * @param {*} displayText
+ * @param {*} quoted
+ * @param {*} mentions
+ */
+ 
+hisoka.send1ButMes = (jid, text = '' , footer = '', butId = '', dispText = '', quoted, ments) => {
+let but = [
+{
+buttonId: butId,
+buttonText: {
+displayText: dispText
+},
+type: 1
+}
+]
+let butMes = {
+text: text,
+buttons: but,
+footer: footer,
+mentions: ments ? ments: []
+}
+hisoka.sendMessage(jid, butMes, {quoted:quoted})
+}
+
+/** Send 2 Button Message
+ *
+ * @param {*} jid
+ * @param {*} text
+ * @param {*} footer
+ * @param {*} buttonId
+ * @param {*} displayText
+ * @param {*} buttonId2
+ * @param {*} displayText2
+ * @param {*} quoted
+ * @param {*} mentions
+ */
+ 
+hisoka.send2ButMes = (jid, text = '' , footer = '', butId = '', dispText = '', butId2 = '', dispText2 = '', quoted, ments) => {
+let but2 = [
+{
+buttonId: butId,
+buttonText: {
+displayText: dispText
+},
+type: 1
+},
+{
+buttonId: butId2,
+buttonText: {
+displayText: dispText2
+},
+type: 1
+}
+]
+let butMes2 = {
+text: text,
+buttons: but2,
+footer: footer,
+mentions: ments ? ments: []
+}
+hisoka.sendMessage(jid, butMes2, {quoted:quoted})
+}
+
+/** Send 3 Button Message
+ *
+ * @param {*} jid
+ * @param {*} text
+ * @param {*} footer
+ * @param {*} buttonId
+ * @param {*} displayText
+ * @param {*} buttonId2
+ * @param {*} displayText2
+ * @param {*} buttonId3
+ * @param {*} displayText3
+ * @param {*} quoted
+ * @param {*} mentions
+ */
+
+hisoka.send3ButMes = (jid, text = '' , footer = '', butId = '', dispText = '', butId2 = '', dispText2 = '', butId3 = '', dispText3 = '', quoted, ments) => {
+let but3 = [
+{
+buttonId: butId,
+buttonText: {
+displayText: dispText
+},
+type: 1
+},
+{
+buttonId: butId2,
+buttonText: {
+displayText: dispText2
+},
+type: 1
+},
+{
+buttonId: butId3,
+buttonText: {
+displayText: dispText3
+},
+type: 1
+}
+]
+let butMes3 = {
+text: text,
+buttons: but3,
+footer: footer,
+mentions: ments ? ments: []
+}
+hisoka.sendMessage(jid, butMes3, {quoted:quoted})
+}
     /**
      * 
      * @param {*} jid 
