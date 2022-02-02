@@ -379,7 +379,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             case 'jadian': {
             if (!m.isGroup) throw mess.group
             let member = participants.map(u => u.id)
-            orang = member[Math.floor(Math.random() * member.length)]
+            let orang = member[Math.floor(Math.random() * member.length)]
             let jodoh = member[Math.floor(Math.random() * member.length)]
             let jawab = `Ciee yang Jadian💖 Jangan lupa pajak jadiannya🐤
 
@@ -712,6 +712,28 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 })
                 }
                 break
+        case 'gimage': {
+        if (!text) throw `Example : ${prefix + command} kaori cicak`
+        let gis = require('g-i-s')
+        gis(text, async (error, result) => {
+        n = result
+        images = n[Math.floor(Math.random() * n.length)].url
+        let buttons = [
+                    {buttonId: `gimage ${text}`, buttonText: {displayText: 'Next Image'}, type: 1}
+                ]
+                let buttonMessage = {
+                    image: { url: images },
+                    caption: `*-------「 GIMAGE SEARCH 」-------*
+🤠 *Query* : ${text}
+🔗 *Media Url* : ${images}`,
+                    footer: 'Hisoka Morrow',
+                    buttons: buttons,
+                    headerType: 4
+                }
+                hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+        })
+        }
+        break
 	    case 'play': case 'ytplay': {
                 if (!text) throw `Example : ${prefix + command} story wa anime`
                 let yts = require("yt-search")
@@ -1426,6 +1448,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}play [query]
 │⭔ ${prefix}yts [query]
 │⭔ ${prefix}google [query]
+│⭔ ${prefix}gimage [query]
 │⭔ ${prefix}pinterest [query]
 │⭔ ${prefix}wallpaper [query]
 │⭔ ${prefix}wikimedia [query]
