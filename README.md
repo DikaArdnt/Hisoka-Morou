@@ -1,6 +1,10 @@
 # Hisoka-Morou
 Base WhatsApp Bot Multi Device
 
+## NOTE
+This Script is for everyone, not for Sale
+Ngejual SC ORI jahanam brader, neraka menunggumu
+
 <p align="center">
 	<img src="https://telegra.ph/file/09cc0981ccf07754d0af6.jpg" width="35%" style="margin-left: auto;margin-right: auto;display: block;">
 </p>
@@ -63,6 +67,11 @@ License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
 Support Me
 * [`Paypal`](https://www.paypal.me/Cakhaho)
 * [`Saweria`](https://saweria.co/DikaArdnt)
+
+## Contact Me
+* [`Wangsap`](https://wa.me/6288292024190)
+* [`Igeh`](https://instagram.com/cak_haho)
+* [`Pesbuk`](https://www.facebook.com/Haho.id)
 
 Thanks For Donate
 
