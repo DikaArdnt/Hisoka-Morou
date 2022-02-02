@@ -364,6 +364,30 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 }
             }
             break
+            case 'jodohku': {
+            if (!m.isGroup) throw mess.group
+            let member = participants.map(u => u.id)
+            let me = m.sender
+            let jodoh = member[Math.floor(Math.random() * member.length)]
+            let jawab = `👫Jodoh mu adalah
+
+@${me.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
+            let ments = [me, jodoh]
+            hisoka.send1ButMes(m.chat, jawab, `© ${ownername}`, `${prefix}jodohku`, `Jodohku`, m, ments)
+            }
+            break
+            case 'jadian': {
+            if (!m.isGroup) throw mess.group
+            let member = participants.map(u => u.id)
+            orang = member[Math.floor(Math.random() * member.length)]
+            let jodoh = member[Math.floor(Math.random() * member.length)]
+            let jawab = `Ciee yang Jadian💖 Jangan lupa pajak jadiannya🐤
+
+@${orang.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
+            let ments = [orang, jodoh]
+            hisoka.send1ButMes(m.chat, jawab, `© ${ownername}`, `${prefix}jadian`, `Jadian`, m, ments)
+            }
+            break
             case 'join': {
                 if (!isCreator) throw mess.owner
                 if (!text) throw 'Masukkan Link Group!'
@@ -1441,6 +1465,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}huluh
 │⭔ ${prefix}heleh
 │⭔ ${prefix}holoh
+│⭔ ${prefix}jadian
+│⭔ ${prefix}jodohku
 │⭔ ${prefix}family100
 │⭔ ${prefix}tebak [option]
 │⭔ ${prefix}math [mode]
