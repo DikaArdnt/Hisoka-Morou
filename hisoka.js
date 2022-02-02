@@ -19,6 +19,7 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
+const { dBinary, eBinary } = require('./lib/binary')
 const { pinterest, wallpaper, wikimedia, quotesAnime, aiovideodl } = require('./lib/scraper')
 const { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
 const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
@@ -585,6 +586,20 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             } else {
                 throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
                 }
+            }
+            break
+            case 'ebinary': {
+            if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
+            let eb = await eBinary(teks)
+            m.reply(eb)
+            }
+            break
+            case 'dbinary': {
+            if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
+            let db = await dBinary(teks)
+            m.reply(db)
             }
             break
             case 'emojimix': {
@@ -1443,6 +1458,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}tovideo
 │⭔ ${prefix}togif
 │⭔ ${prefix}tourl
+│⭔ ${prefix}ebinary
+│⭔ ${prefix}dbinary
 │
 └───────⭓
 
