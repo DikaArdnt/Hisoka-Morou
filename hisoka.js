@@ -142,9 +142,9 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebaklagu[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Lagu  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lagu`, `Tebak Lagu`, m)
+                await m.reply(`🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lagu`)
                 delete tebaklagu[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
@@ -153,61 +153,61 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             if (budy.toLowerCase() == jawaban) {
                 await m.reply(`🎮 Kuis Matematika  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}math mode`)
                 delete kuismath[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (tebakgambar.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakgambar[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Gambar  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak gambar`, `Tebak Gambar`, m)
+                await m.reply(`🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak gambar`)
                 delete tebakgambar[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (tebakkata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakkata[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Kata  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak kata`, `Tebak Kata`, m)
+                await m.reply(`🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak kata`)
                 delete tebakkata[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (caklontong.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = caklontong[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Cak Lontong  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lontong`, `Tebak Lontong`, m)
+                await m.reply(`🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lontong`)
                 delete caklontong[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakkalimat[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Kalimat  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak kalimat`, `Tebak Kalimat`, m)
+                await m.reply(`🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak kalimat`)
                 delete tebakkalimat[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         if (tebaklirik.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebaklirik[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Lirik  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lirik`, `Tebak Lirik`, m)
+                await m.reply(`🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lirik`)
                 delete tebaklirik[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 	    
 	if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebaktebakan[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await hisoka.send1ButMes(m.chat, `🎮 Tebak Tebakan  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak tebakan`, `Tebak Tebakan`, m)
+                await m.reply(`🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak tebakan`)
                 delete tebaktebakan[m.sender.split('@')[0]]
-            } else m.reply('*Salah!*')
+            } else m.reply('*Jawaban Salah!*')
         }
 
         switch(command) {
@@ -275,7 +275,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lagu`, `Tebak Lagu`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} lagu`)
                     delete tebaklagu[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'gambar') {
@@ -288,7 +288,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak gambar`, `Tebak Gambar`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} gambar`)
                     delete tebakgambar[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'kata') {
@@ -301,7 +301,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak kata`, `Tebak Kata`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} kata`)
                     delete tebakkata[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'kalimat') {
@@ -314,7 +314,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak kalimat`, `Tebak Kalimat`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} kalimat`)
                     delete tebakkalimat[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'lirik') {
@@ -327,7 +327,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lirik`, `Tebak Lirik`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} lirik`)
                     delete tebaklirik[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'lontong') {
@@ -340,7 +340,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (caklontong.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    hisoka.send1ButMes(m.chat, `Waktu Habis\nJawaban: ${result.jawaban}\nDeskripsi : ${result.deskripsi}\n\nIngin bermain lagi? tekan button dibawah`, `© ${ownername}`, `${prefix}tebak lontong`, `Tebak Lontong`, m)
+                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\nDeskripsi : ${result.deskripsi}\n\nIngin bermain? kirim ${prefix + command} kalimat`)
                     delete caklontong[m.sender.split('@')[0]]
                     }
                 }
@@ -371,7 +371,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
 
 @${me.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
             let ments = [me, jodoh]
-            hisoka.send1ButMes(m.chat, jawab, `© ${ownername}`, `${prefix}jodohku`, `Jodohku`, m, ments)
+            hisoka.sendTextWithMentions(m.chat, jawab, m)
             }
             break
             case 'jadian': {
@@ -383,7 +383,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
 
 @${orang.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
             let ments = [orang, jodoh]
-            hisoka.send1ButMes(m.chat, jawab, `© ${ownername}`, `${prefix}jadian`, `Jadian`, m, ments)
+            hisoka.sendTextWithMentions(m.chat, jawab, m)
             }
             break
             case 'join': {
@@ -475,8 +475,8 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 } else if (args[0].toLowerCase() === 'open') {
                     await hisoka.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`Sukses Membuka Group`)).catch((err) => m.reply(jsonformat(err)))
                 } else {
-                hisoka.send2ButMes(m.chat, `MODE GROUP`, `© ${ownername}`, `${prefix}group close`, `CLOSE`, `${prefix}group open`, `OPEN`, m)
-            }
+                m.reply(`Option : open/close`)
+             }
             }
             break
             case 'editinfo': {
@@ -488,7 +488,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
              } else if (args[0] === 'close'){
                 await hisoka.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`Sukses Menutup Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
              } else {
-                hisoka.send2ButMes(m.chat, `EDIT INFO GROUP`, `© ${ownername}`, `${prefix}editinfo close`, `CLOSE`, `${prefix}editinfo open`, `OPEN`, m)
+             m.reply(`Option : open/close`)
             }
             }
             break
