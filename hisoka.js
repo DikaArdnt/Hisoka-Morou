@@ -144,7 +144,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebaklagu[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lagu`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebaklagu[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -162,7 +162,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebakgambar[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak gambar`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebakgambar[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -171,7 +171,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebakkata[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak kata`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebakkata[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -180,7 +180,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = caklontong[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lontong`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete caklontong[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -189,7 +189,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebakkalimat[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak kalimat`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebakkalimat[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -198,7 +198,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebaklirik[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak lirik`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebaklirik[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -207,7 +207,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             kuis = true
             jawaban = tebaktebakan[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}tebak tebakan`)
+                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak tebakan', buttonText: { displayText: 'Tebak Tebakan' }, type: 1 }], `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, 'Hisoka Morrow', m)
                 delete tebaktebakan[m.sender.split('@')[0]]
             } else m.reply('*Jawaban Salah!*')
         }
@@ -277,7 +277,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} lagu`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete tebaklagu[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'gambar') {
@@ -290,7 +290,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} gambar`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete tebakgambar[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'kata') {
@@ -303,7 +303,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} kata`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete tebakkata[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'kalimat') {
@@ -316,7 +316,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} kalimat`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete tebakkalimat[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'lirik') {
@@ -329,7 +329,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? kirim ${prefix + command} lirik`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete tebaklirik[m.sender.split('@')[0]]
                     }
                 } else if (args[0] === 'lontong') {
@@ -342,7 +342,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                     await sleep(60000)
                     if (caklontong.hasOwnProperty(m.sender.split('@')[0])) {
                     console.log("Jawaban: " + result.jawaban)
-                    m.reply(`Waktu Habis\nJawaban:  ${result.jawaban}\nDeskripsi : ${result.deskripsi}\n\nIngin bermain? kirim ${prefix + command} kalimat`)
+                    hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `Waktu Habis\nJawaban:  ${result.jawaban}\nDeskripsi : ${result.deskripsi}\n\nIngin bermain? tekan button dibawah`, 'Hisoka Morrow', m)
                     delete caklontong[m.sender.split('@')[0]]
                     }
                 }
@@ -372,7 +372,11 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             let jawab = `👫Jodoh mu adalah
 
 @${me.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
-            hisoka.sendTextWithMentions(m.chat, jawab, m)
+            let ments = [me, jodoh]
+            let buttons = [
+                        { buttonId: 'jodohku', buttonText: { displayText: 'Jodohku' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, jawab, 'Hisoka Morrow', m, {mentions: ments})
             }
             break
             case 'jadian': {
@@ -383,7 +387,11 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             let jawab = `Ciee yang Jadian💖 Jangan lupa pajak jadiannya🐤
 
 @${orang.split('@')[0]} ❤️ @${jodoh.split('@')[0]}`
-            hisoka.sendTextWithMentions(m.chat, jawab, m)
+            let menst = [orang, jodoh]
+            let buttons = [
+                        { buttonId: 'jadian', buttonText: { displayText: 'Jodohku' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, jawab, 'Hisoka Morrow', m, {mentions: ments})
             }
             break
             case 'join': {
@@ -475,7 +483,12 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 } else if (args[0].toLowerCase() === 'open') {
                     await hisoka.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`Sukses Membuka Group`)).catch((err) => m.reply(jsonformat(err)))
                 } else {
-                m.reply(`Option : open/close`)
+                let buttons = [
+                        { buttonId: 'group open', buttonText: { displayText: 'Open' }, type: 1 },
+                        { buttonId: 'group close', buttonText: { displayText: 'Close' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, `Mode Group`, 'Hisoka Morrow', m)
+
              }
             }
             break
@@ -488,7 +501,12 @@ ${Array.from(room.jawaban, (jawaban, index) => {
              } else if (args[0] === 'close'){
                 await hisoka.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`Sukses Menutup Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
              } else {
-             m.reply(`Option : open/close`)
+             let buttons = [
+                        { buttonId: 'editinfo open', buttonText: { displayText: 'Open' }, type: 1 },
+                        { buttonId: 'editinfo close', buttonText: { displayText: 'Close' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, `Mode Edit Info`, 'Hisoka Morrow', m)
+
             }
             }
             break
