@@ -43,6 +43,16 @@ cd Hisoka-Morou
 npm install
 ```
 
+## IF ERROR INSTALL MODULE BAILEYS FOR TERMUX
+
+```bash
+npm i yarn
+npm i typescript -g
+yarn
+tsc -p ./node_modules/@adiwajshing/baileys/
+npm start
+```
+
 ## Installing
 ```bash
 $ node .
