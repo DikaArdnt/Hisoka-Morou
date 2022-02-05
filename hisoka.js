@@ -391,7 +391,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             let buttons = [
                         { buttonId: 'jadian', buttonText: { displayText: 'Jodohku' }, type: 1 }
                     ]
-                    await hisoka.sendButtonText(m.chat, buttons, jawab, 'Hisoka Morrow', m, {mentions: ments})
+                    await hisoka.sendButtonText(m.chat, buttons, jawab, 'Hisoka Morrow', m, {mentions: menst})
             }
             break
             case 'join': {
