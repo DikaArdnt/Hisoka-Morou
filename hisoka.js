@@ -1930,12 +1930,12 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}holoh
 │⭔ ${prefix}jadian
 │⭔ ${prefix}jodohku
+│⭔ ${prefix}delttt
 │⭔ ${prefix}tictactoe
 │⭔ ${prefix}family100
 │⭔ ${prefix}tebak [option]
 │⭔ ${prefix}math [mode]
 │⭔ ${prefix}suitpvp [@tag]
-
 │
 └───────⭓
 
