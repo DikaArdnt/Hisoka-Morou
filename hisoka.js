@@ -1866,7 +1866,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 }
 
                 if (budy.startsWith('$')) {
-                    if (!isCreator) return reply(mess.owner)
+                    if (!isCreator) return m.reply(mess.owner)
                     exec(budy.slice(2), (err, stdout) => {
                         if(err) return m.reply(err)
                         if (stdout) return m.reply(stdout)
