@@ -474,10 +474,30 @@ ${Array.from(room.jawaban, (jawaban, index) => {
                 }
             }
             break
+            case 'tagall': {
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
+let teks = `══✪〘 *👥 Tag All* 〙✪══
+ 
+ ➲ *Pesan : ${q ? q : 'kosong'}*\n\n`
+                for (let mem of participants) {
+                teks += `⭔ @${mem.id.split('@')[0]}\n`
+                }
+                hisoka.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
+                }
+                break
+                case 'hidetag': {
+            if (!m.isGroup) throw mess.group
+            if (!isBotAdmins) throw mess.botAdmin
+            if (!isGroupAdmins && !isGroupOwner) throw mess.admin
+            hisoka.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
+            }
+            break
             case 'group': case 'grup': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                if (!isGroupAdmins) throw mess.admin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
                 if (args[0].toLowerCase() === 'close') {
                     await hisoka.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`Sukses Menutup Group`)).catch((err) => m.reply(jsonformat(err)))
                 } else if (args[0].toLowerCase() === 'open') {
@@ -495,7 +515,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             case 'editinfo': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                if (!isGroupAdmins) throw mess.admin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
              if (args[0] === 'open'){
                 await hisoka.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`Sukses Membuka Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
              } else if (args[0] === 'close'){
@@ -519,7 +539,7 @@ ${Array.from(room.jawaban, (jawaban, index) => {
             case 'ephemeral': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                if (!isGroupAdmins) throw mess.admin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
                 if (!text) throw 'Masukkan value enable/disable'
                 if (args[0] === 'enable') {
                     await hisoka.sendMessage(m.chat, { disappearingMessagesInChat: WA_DEFAULT_EPHEMERAL }).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
@@ -1599,6 +1619,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}editinfo [option]
 │⭔ ${prefix}add @user
 │⭔ ${prefix}kick @user
+│⭔ ${prefix}hidetag [text]
+│⭔ ${prefix}tagall [text]
 │⭔ ${prefix}promote @user
 │⭔ ${prefix}demote @user
 │
