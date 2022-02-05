@@ -455,9 +455,17 @@ ${Array.from(room.jawaban, (jawaban, index) => {
 	    case 'setname': case 'setsubject': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                if (!isGroupAdmins) throw mess.admin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
                 if (!text) throw 'Text ?'
-                await hisoka.groupUpdateSubject(m.chat, text).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+                await hisoka.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
+            }
+            break
+          case 'setdesc': case 'setdesk': {
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
+                if (!text) throw 'Text ?'
+                await hisoka.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
             }
             break
             case 'setprofile': case 'setpp': {
@@ -1615,6 +1623,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}ephemeral [option]
 │⭔ ${prefix}setpp
 │⭔ ${prefix}setname [text]
+│⭔ ${prefix}setdesc [text]
 │⭔ ${prefix}group [option]
 │⭔ ${prefix}editinfo [option]
 │⭔ ${prefix}add @user
