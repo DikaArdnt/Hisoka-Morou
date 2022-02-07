@@ -734,9 +734,9 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isGroupAdmins && !isGroupOwner) throw mess.admin
-                if (args[0].toLowerCase() === 'close') {
+                if (args[0] === 'close'){
                     await hisoka.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`Sukses Menutup Group`)).catch((err) => m.reply(jsonformat(err)))
-                } else if (args[0].toLowerCase() === 'open') {
+                } else if (args[0] === 'open'){
                     await hisoka.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`Sukses Membuka Group`)).catch((err) => m.reply(jsonformat(err)))
                 } else {
                 let buttons = [
