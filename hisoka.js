@@ -415,6 +415,7 @@ Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
             }
             break
             case 'suitpvp': case 'suit': {
+	    if (m.mentionedJid[0] === m.sender) return m.reply(`Tidak bisa bermain dengan diri sendiri !`)
             this.suit = this.suit ? this.suit : {}
             let poin = 10
             let poin_lose = 10
