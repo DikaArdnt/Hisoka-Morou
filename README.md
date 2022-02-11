@@ -46,7 +46,7 @@ npm install
 ## IF ERROR INSTALL MODULE BAILEYS FOR TERMUX
 
 ```bash
-npm i yarn
+npm i yarn -g
 npm i typescript -g
 yarn
 tsc -p ./node_modules/@adiwajshing/baileys/
