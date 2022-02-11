@@ -415,7 +415,6 @@ Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
             }
             break
             case 'suitpvp': case 'suit': {
-	    if (m.mentionedJid[0] === m.sender) return m.reply(`Tidak bisa bermain dengan diri sendiri !`)
             this.suit = this.suit ? this.suit : {}
             let poin = 10
             let poin_lose = 10
@@ -794,28 +793,82 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
             break
             case 'bcgc': case 'bcgroup': {
                 if (!isCreator) throw mess.owner
+                if (!text) throw `Text mana?\n\nExample : ${prefix + command} fatih-san`
                 let getGroups = await hisoka.groupFetchAllParticipating()
                 let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
                 let anu = groups.map(v => v.id)
-                cc = await hisoka.serializeM(text ? m : m.quoted ? await m.quoted.fakeObj : false || m)
-                cck = text ? text : cc.text
-                m.reply(`Mengirim Broadcast Ke ${anu.length} Chat, Waktu Selesai ${anu.length * 1.5} detik`)
+                m.reply(`Mengirim Broadcast Ke ${anu.length} Group Chat, Waktu Selesai ${anu.length * 1.5} detik`)
                 for (let i of anu) {
                     await sleep(1500)
-                    await hisoka.copyNForward(i, hisoka.cMod(m.chat, cc, /bc|broadcast|bcgc/i.test(cck) ? cck : `「 *${hisoka.user.name} Broadcast* 」\n\n ${cck}`), true).catch(_ => _)
-                }
+                    let btn = [{
+                                urlButton: {
+                                    displayText: 'Source Code',
+                                    url: 'https://github.com/DikaArdnt/Hisoka-Morou'
+                                }
+                            }, {
+                                callButton: {
+                                    displayText: 'Number Phone Owner',
+                                    phoneNumber: '+62 882-9202-4190'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Status Bot',
+                                    id: 'ping'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Contact Owner',
+                                    id: 'owner'
+                                }  
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Script',
+                                    id: 'sc'
+                                }
+                            }]
+                      fatihgans = fs.readFileSync('./lib/hisoka.jpg')
+                      let txt = `「 Broadcast Bot 」\n\n${text}`
+                      hisoka.send5ButImg(i, txt, hisoka.user.name, fatihgans, btn)
+                    }
                 m.reply(`Sukses Mengirim Broadcast Ke ${anu.length} Group`)
             }
             break
             case 'bc': case 'broadcast': case 'bcall': {
                 if (!isCreator) throw mess.owner
+                if (!text) throw `Text mana?\n\nExample : ${prefix + command} fatih-san`
                 let anu = await store.chats.all().map(v => v.id)
-                cc = await hisoka.serializeM(q ? m : m.quoted ? await m.getQuotedObj() : false || m)
-                cck = q ? q : cc.text
                 m.reply(`Mengirim Broadcast Ke ${anu.length} Chat\nWaktu Selesai ${anu.length * 1.5} detik`)
 		for (let yoi of anu) {
 		    await sleep(1500)
-		    await hisoka.copyNForward(yoi, hisoka.cMod(m.chat, cc, /bc|broadcast/i.test(cck) ? cck : `「 *${hisoka.user.name} BROADCAST* 」\n\n ${cck}`), true).catch(_ => _)
+		    let btn = [{
+                                urlButton: {
+                                    displayText: 'Source Code',
+                                    url: 'https://github.com/DikaArdnt/Hisoka-Morou'
+                                }
+                            }, {
+                                callButton: {
+                                    displayText: 'Number Phone Owner',
+                                    phoneNumber: '+62 882-9202-4190'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Status Bot',
+                                    id: 'ping'
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Contact Owner',
+                                    id: 'owner'
+                                }  
+                            }, {
+                                quickReplyButton: {
+                                    displayText: 'Script',
+                                    id: 'sc'
+                                }
+                            }]
+                      fatihgans = fs.readFileSync('./lib/hisoka.jpg')
+                      let txt = `「 Broadcast Bot 」\n\n${text}`
+                      hisoka.send5ButImg(yoi, txt, hisoka.user.name, fatihgans, btn)
 		}
 		m.reply('Sukses Broadcast')
             }
@@ -2033,8 +2086,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}leave
 │⭔ ${prefix}block @user
 │⭔ ${prefix}unblock @user
-│⭔ ${prefix}bcgroup
-│⭔ ${prefix}bcall
+│⭔ ${prefix}bcgroup [text]
+│⭔ ${prefix}bcall [text]
 │
 └───────⭓
 `

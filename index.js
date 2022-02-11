@@ -137,6 +137,31 @@ async function startHisoka() {
     hisoka.ev.on('creds.update', saveState)
 
     // Add Other
+    /** Send Button 5 Image
+     *
+     * @param {*} jid
+     * @param {*} text
+     * @param {*} footer
+     * @param {*} image
+     * @param [*] button
+     * @param {*} options
+     * @returns
+     */
+    hisoka.send5ButImg = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
+        let message = await prepareWAMessageMedia({ image: img }, { upload: hisoka.waUploadToServer })
+        var template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+        templateMessage: {
+        hydratedTemplate: {
+        imageMessage: message.imageMessage,
+               "hydratedContentText": text,
+               "hydratedFooterText": footer,
+               "hydratedButtons": but
+            }
+            }
+            }), options)
+            hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
+    }
+
     /**
      * 
      * @param {*} jid 
