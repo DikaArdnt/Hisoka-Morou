@@ -7,7 +7,15 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
+  "keywords": [
+    "termux",
+    "whatsapp",
+    "2021",
+    "wabase-md",
+    "base",
+    "baileys-md",
+    "bot"
+  ],
   "author": "Dika Ardnt.",
   "license": "MIT",
   "dependencies": {
