@@ -731,17 +731,16 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
             hisoka.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
             }
             break
-//=============>Moga Ga Ada BUG
-case 'vote':
-if (!m.isGroup) throw mess.group
-if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
-if (!q) throw `Masukkan Alasan Melakukan Vote, Example: *${prefix + command} Owner Ganteng*`
-m.reply(`Vote dimulai!\n\n*${prefix}upvote* - untuk ya\n*${prefix}devote* - untuk tidak\n*${prefix}cekvote* - untuk mengecek vote\n*${prefix}hapusvote* - untuk menghapus vote`)
-vote[m.chat] = [q, [], []]
-await sleep(1000)
-upvote = vote[m.chat][1]
-devote = vote[m.chat][2]
-teks_vote = `*「 VOTE 」*
+               case 'vote': {
+            if (!m.isGroup) throw mess.group
+            if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
+            if (!text) throw `Masukkan Alasan Melakukan Vote, Example: *${prefix + command} Owner Ganteng*`
+            m.reply(`Vote dimulai!\n\n*${prefix}upvote* - untuk ya\n*${prefix}devote* - untuk tidak\n*${prefix}cekvote* - untuk mengecek vote\n*${prefix}hapusvote* - untuk menghapus vote`)
+            vote[m.chat] = [q, [], []]
+            await sleep(1000)
+            upvote = vote[m.chat][1]
+            devote = vote[m.chat][2]
+            teks_vote = `*「 VOTE 」*
 
 *Alasan:* ${vote[m.chat][0]}
 
@@ -759,31 +758,30 @@ teks_vote = `*「 VOTE 」*
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote
-`
+*${prefix}hapusvote* - untuk menghapus vote`
 let buttonsVote = [
   {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
+  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
 ]
 
-let buttonMessageVote = {
-    text: teks_vote,
-    footer: `©${global.botName}`,
-    buttons: buttonsVote,
-    headerType: 1
-}
-
-hisoka.sendMessage(m.chat, buttonMessageVote)
-break
-case 'upvote':
-if (!m.isGroup) throw mess.group
-if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
-isVote = vote[m.chat][1].concat(vote[m.chat][2])
-wasVote = isVote.includes(m.sender)
-if (wasVote) throw 'Kamu Sudah Vote'
-vote[m.chat][1].push(m.sender)
-menvote = vote[m.chat][1].concat(vote[m.chat][2])
-teks_vote = `*「 VOTE 」*
+            let buttonMessageVote = {
+                text: teks_vote,
+                footer: hisoka.user.name,
+                buttons: buttonsVote,
+                headerType: 1
+            }
+            hisoka.sendMessage(m.chat, buttonMessageVote)
+	    }
+            break
+               case 'upvote': {
+            if (!m.isGroup) throw mess.group
+            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            isVote = vote[m.chat][1].concat(vote[m.chat][2])
+            wasVote = isVote.includes(m.sender)
+            if (wasVote) throw 'Kamu Sudah Vote'
+            vote[m.chat][1].push(m.sender)
+            menvote = vote[m.chat][1].concat(vote[m.chat][2])
+            teks_vote = `*「 VOTE 」*
 
 *Alasan:* ${vote[m.chat][0]}
 
@@ -801,32 +799,31 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote
-`
-let buttonsUpvote = [
-  {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
-]
+*${prefix}hapusvote* - untuk menghapus vote`
+            let buttonsUpvote = [
+              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
+            ]
 
-let buttonMessageUpvote = {
-    text: teks_vote,
-    footer: `©${global.botName}`,
-    buttons: buttonsUpvote,
-    headerType: 1,
-    mentions: menvote
-}
-
-hisoka.sendMessage(m.chat, buttonMessageUpvote)
-break
-case 'devote':
-if (!m.isGroup) throw mess.group
-if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
-isVote = vote[m.chat][1].concat(vote[m.chat][2])
-wasVote = isVote.includes(m.sender)
-if (wasVote) throw 'Kamu Sudah Vote'
-vote[m.chat][2].push(m.sender)
-menvote = vote[m.chat][1].concat(vote[m.chat][2])
-teks_vote = `*「 VOTE 」*
+            let buttonMessageUpvote = {
+                text: teks_vote,
+                footer: hisoka.user.name,
+                buttons: buttonsUpvote,
+                headerType: 1,
+                mentions: menvote
+             }
+            hisoka.sendMessage(m.chat, buttonMessageUpvote)
+	    }
+             break
+                case 'devote': {
+            if (!m.isGroup) throw mess.group
+            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            isVote = vote[m.chat][1].concat(vote[m.chat][2])
+            wasVote = isVote.includes(m.sender)
+            if (wasVote) throw 'Kamu Sudah Vote'
+            vote[m.chat][2].push(m.sender)
+            menvote = vote[m.chat][1].concat(vote[m.chat][2])
+            teks_vote = `*「 VOTE 」*
 
 *Alasan:* ${vote[m.chat][0]}
 
@@ -844,29 +841,28 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote
-`
-let buttonsDevote = [
-  {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-  {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
-]
+*${prefix}hapusvote* - untuk menghapus vote`
+            let buttonsDevote = [
+              {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
+            ]
 
-let buttonMessageDevote = {
-    text: teks_vote,
-    footer: `©${global.botName}`,
-    buttons: buttonsDevote,
-    headerType: 1,
-    mentions: menvote
-}
-
-hisoka.sendMessage(m.chat, buttonMessageDevote)
-break
-case 'cekvote':
-if (!m.isGroup) throw mess.group
-if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
-[reason, upvote, devote] = vote[m.chat]
-mentionedJid = [...upvote, ...devote]
-teks_vote = `*「 VOTE 」*
+            let buttonMessageDevote = {
+                text: teks_vote,
+                footer: hisoka.user.name,
+                buttons: buttonsDevote,
+                headerType: 1,
+                mentions: menvote
+            }
+            hisoka.sendMessage(m.chat, buttonMessageDevote)
+	}
+            break
+                 case 'cekvote': {
+            if (!m.isGroup) throw mess.group
+            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            [reason, upvote, devote] = vote[m.chat]
+            mentionedJid = [...upvote, ...devote]
+            teks_vote = `*「 VOTE 」*
 
 *Alasan:* ${reason}
 
@@ -884,22 +880,18 @@ ${devote.map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote
-
-
-©${global.botName}
-`
-console.log(teks_vote)
-hisoka.sendTextWithMentions(m.chat, teks_vote, m)
-break
-case 'hapusvote':
-if (!m.isGroup) throw mess.group
-if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
-delete vote[m.chat]
-m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
-break
-//=============>BATAS SUCI
-            case 'group': case 'grup': {
+*${prefix}hapusvote* - untuk menghapus vote`
+            hisoka.sendTextWithMentions(m.chat, teks_vote, m)
+	}
+            break
+              case 'hapusvote': {
+            if (!m.isGroup) throw mess.group
+            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+            delete vote[m.chat]
+            m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
+	    }
+            break
+               case 'group': case 'grup': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isGroupAdmins && !isGroupOwner) throw mess.admin
