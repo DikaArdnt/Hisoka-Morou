@@ -32,7 +32,7 @@ let caklontong = game.lontong = []
 let tebakkalimat = game.kalimat = []
 let tebaklirik = game.lirik = []
 let tebaktebakan = game.tebakan = []
-const vote =[]
+let vote =[]
 
 module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
     try {
@@ -802,7 +802,7 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 *${prefix}hapusvote* - untuk menghapus vote`
             let buttonsUpvote = [
               {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
             ]
 
             let buttonMessageUpvote = {
@@ -844,7 +844,7 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 *${prefix}hapusvote* - untuk menghapus vote`
             let buttonsDevote = [
               {buttonId: `${prefix}upvote`, buttonText: {displayText: '𝚄𝙿𝚅𝙾𝚃𝙴'}, type: 1},
-              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1} //𝚄𝙿𝚅𝙾𝚃𝙴 𝙳𝙴𝚅𝙾𝚃𝙴
+              {buttonId: `${prefix}devote`, buttonText: {displayText: '𝙳𝙴𝚅𝙾𝚃𝙴'}, type: 1}
             ]
 
             let buttonMessageDevote = {
@@ -884,7 +884,7 @@ ${devote.map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
             hisoka.sendTextWithMentions(m.chat, teks_vote, m)
 	}
             break
-              case 'hapusvote': {
+		case 'deletevote' case'delvote': case 'hapusvote': {
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
             delete vote[m.chat]
@@ -2075,6 +2075,11 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}tagall [text]
 │⭔ ${prefix}promote @user
 │⭔ ${prefix}demote @user
+│⭔ ${prefix}vote [text]
+│⭔ ${prefix}devote
+│⭔ ${prefix}upvote
+│⭔ ${prefix}cekvote
+│⭔ ${prefix}hapusvote
 │
 └───────⭓
 
@@ -2250,8 +2255,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}bcgroup [text]
 │⭔ ${prefix}bcall [text]
 │
-└───────⭓
-`
+└───────⭓`
                 let message = await prepareWAMessageMedia({ image: fs.readFileSync('./lib/hisoka.jpg') }, { upload: hisoka.waUploadToServer })
                 const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
                     templateMessage: {
