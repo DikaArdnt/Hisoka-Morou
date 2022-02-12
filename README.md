@@ -43,7 +43,7 @@ cd Hisoka-Morou
 npm install
 ```
 
-## IF ERROR INSTALL MODULE BAILEYS FOR TERMUX
+## IF ERROR INSTALL MODULE FOR TERMUX
 
 ```bash
 npm i yarn -g
