@@ -857,33 +857,35 @@ ${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
             hisoka.sendMessage(m.chat, buttonMessageDevote)
 	}
             break
-                 case 'cekvote': {
-            if (!m.isGroup) throw mess.group
-            if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
-            [reason, upvote, devote] = vote[m.chat]
-            mentionedJid = [...upvote, ...devote]
-            teks_vote = `*「 VOTE 」*
+                 
+case 'cekvote':
+if (!m.isGroup) throw mess.group
+if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
+teks_vote = `*「 VOTE 」*
 
-*Alasan:* ${reason}
+*Alasan:* ${vote[m.chat][0]}
 
 ┌〔 UPVOTE 〕
 │ 
 ├ Total: ${upvote.length}
-${upvote.map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
+${vote[m.chat][1].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
 ┌〔 DEVOTE 〕
 │ 
 ├ Total: ${devote.length}
-${devote.map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
+${vote[m.chat][2].map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
 │ 
 └────
 
-*${prefix}hapusvote* - untuk menghapus vote`
-            hisoka.sendTextWithMentions(m.chat, teks_vote, m)
-	}
-            break
+*${prefix}hapusvote* - untuk menghapus vote
+
+
+©${hisoka.user.id}
+`
+hisoka.sendTextWithMentions(m.chat, teks_vote, m)
+break
 		case 'deletevote': case'delvote': case 'hapusvote': {
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
