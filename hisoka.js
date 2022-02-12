@@ -884,7 +884,7 @@ ${devote.map((v, i) => `├ ${i + 1}. @${v.split`@`[0]}`).join('\n')}
             hisoka.sendTextWithMentions(m.chat, teks_vote, m)
 	}
             break
-		case 'deletevote' case'delvote': case 'hapusvote': {
+		case 'deletevote': case'delvote': case 'hapusvote': {
             if (!m.isGroup) throw mess.group
             if (!(m.chat in vote)) throw `_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`
             delete vote[m.chat]
