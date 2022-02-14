@@ -698,20 +698,27 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
                 await hisoka.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
             }
             break
-            case 'setprofile': case 'setpp': {
+          case 'setppbot': {
                 if (!isCreator) throw mess.owner
-                if (!quoted) throw 'Reply Image'
-                if (/image/.test(mime)) throw `balas image dengan caption *${prefix + command}*`
+                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
                 let media = await hisoka.downloadAndSaveMediaMessage(quoted)
-                if (!m.isGroup && !isBotAdmins && !isGroupAdmins && !isGroupOwner) {
-                    await hisoka.updateProfilePicture(m.chat, { url: media }).catch((err) => fs.unlinkSync(media))
-		    await fs.unlinkSync(media)
-                } else if (!isCreator) {
-                    await hisoka.updateProfilePicture(hisoka.user.id, { url: media }).catch((err) => fs.unlinkSync(media))
-		    await fs.unlinkSync(media)
+                await hisoka.updateProfilePicture(botNumber, { url: media }).catch((err) => fs.unlinkSync(media))
+                m.reply(mess.success)
                 }
-            }
-            break
+                break
+           case 'setppgroup': case 'setppgrup': case 'setppgc': {
+                if (!m.isGroup) throw mess.group
+                if (!isGroupAdmins && !isGroupOwner) throw mess.admin
+                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
+                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                await hisoka.updateProfilePicture(m.chat, { url: media }).catch((err) => fs.unlinkSync(media))
+                m.reply(mess.success)
+                }
+                break
             case 'tagall': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
@@ -2067,7 +2074,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │
 │⭔ ${prefix}linkgroup
 │⭔ ${prefix}ephemeral [option]
-│⭔ ${prefix}setpp
+│⭔ ${prefix}setppgc [image]
 │⭔ ${prefix}setname [text]
 │⭔ ${prefix}setdesc [text]
 │⭔ ${prefix}group [option]
@@ -2257,6 +2264,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}unblock @user
 │⭔ ${prefix}bcgroup [text]
 │⭔ ${prefix}bcall [text]
+│⭔ ${prefix}setppbot [image]
 │
 └───────⭓`
                 let message = await prepareWAMessageMedia({ image: fs.readFileSync('./lib/hisoka.jpg') }, { upload: hisoka.waUploadToServer })
