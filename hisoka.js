@@ -1845,7 +1845,6 @@ Untuk Download Media Silahkan Klik salah satu Button dibawah ini atau masukkan c
 			headerType: 4
 		    }
 		    hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
-                    db.data.users[m.sender].limit -= 1
 		} else if (anu.type == 'image') {
 		    anu.media.map(async (url) => {
 		        hisoka.sendMessage(m.chat, { image: { url }, caption: `⭔ Title : ${anu.title}\n⭔ Author : ${anu.author.name}\n⭔ Like : ${anu.like}\n⭔ Caption : ${anu.caption}` }, { quoted: m })
