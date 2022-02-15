@@ -1821,6 +1821,46 @@ break
                 hisoka.sendMessage(m.chat, { video: { url: anu.result }, caption: `Download From ${text}` }, { quoted: m })
             }
             break
+            case 'umma': case 'ummadl': {
+	        if (!text) throw `Example : ${prefix + command} https://umma.id/channel/video/post/gus-arafat-sumber-kecewa-84464612933698`
+                let { umma } = require('./lib) scraper')
+		let anu = await umma(isUrl(text)[0])
+		if (anu.type == 'video') {
+		    let buttons = [
+                        {buttonId: `ytmp3 ${anu.media[0]} 128kbps`, buttonText: {displayText: '♫ Audio'}, type: 1},
+                        {buttonId: `ytmp4 ${anu.media[0]} 360p`, buttonText: {displayText: '► Video'}, type: 1}
+                    ]
+		    let buttonMessage = {
+		        image: { url: anu.author.profilePic },
+			caption: `
+⭔ Title : ${anu.title}
+⭔ Author : ${anu.author.name}
+⭔ Like : ${anu.like}
+⭔ Caption : ${anu.caption}
+⭔ Url : ${anu.media[0]}
+Untuk Download Media Silahkan Klik salah satu Button dibawah ini atau masukkan command ytmp3/ytmp4 dengan url diatas
+`,
+			footer: hisoka.user.name,
+			buttons,
+			headerType: 4
+		    }
+		    hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+                    db.data.users[m.sender].limit -= 1
+		} else if (anu.type == 'image') {
+		    anu.media.map(async (url) => {
+		        hisoka.sendMessage(m.chat, { image: { url }, caption: `⭔ Title : ${anu.title}\n⭔ Author : ${anu.author.name}\n⭔ Like : ${anu.like}\n⭔ Caption : ${anu.caption}` }, { quoted: m })
+		    })
+		}
+	    }
+	    break
+            case 'ringtone': {
+		if (!text) throw `Example : ${prefix + command} black rover`
+                let { ringtone } = require('./lib/scraper')
+		let anu = await ringtone(text)
+		let result = anu[Math.floor(Math.random() * anu.length)]
+		hisoka.sendMessage(m.chat, { audio: { url: result.audio }, fileName: result.title+'.mp3', mimetype: 'audio/mpeg' }, { quoted: m })
+	    }
+	    break
             case 'setcmd': {
                 if (!m.quoted) throw 'Reply Pesan!'
                 if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
@@ -2115,6 +2155,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}ytmp4 [url]
 │⭔ ${prefix}getmusic [query]
 │⭔ ${prefix}getvideo [query]
+│⭔ ${prefix}umma [url]
 │
 └───────⭓
 
@@ -2128,6 +2169,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}wallpaper [query]
 │⭔ ${prefix}wikimedia [query]
 │⭔ ${prefix}ytsearch [query]
+│⭔ ${prefix}ringtone [query]
 │
 └───────⭓
 
