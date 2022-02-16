@@ -17,7 +17,7 @@ const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia } = require('./
 
 global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
 
-const store = makeInMemoryStore({ logger: pino().child({ level: 'fatal', stream: 'store' }) })
+const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
 
 async function startHisoka() {
@@ -348,7 +348,7 @@ async function startHisoka() {
 	else if (/audio/.test(mime)) type = 'audio'
 	else type = 'document'
 	await hisoka.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { ...opt, ...options })
-	return pathFile
+	return fs.promises.unlink(pathFile)
     }
 
     /**
@@ -426,22 +426,24 @@ async function startHisoka() {
      * @param {*} path 
      * @returns 
      */
-    hisoka.getFile = async (path, save) => {
-        let res, filename
-		let data = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,` [1], 'base64') : /^https?:\/\//.test(path) ? await (res = await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : typeof path === 'string' ? path : Buffer.alloc(0)
-		if (!Buffer.isBuffer(data)) throw new TypeError('Result is not a buffer')
-		let type = await FileType.fromBuffer(data) || {
-			mime: 'application/octet-stream',
-			ext: '.bin'
-		}
-		if (data && save && !filename) (filename = path.join(__dirname, './src/' + new Date * 1 + '.' + type.ext), await fs.promises.writeFile(filename, data))
-		return {
-			res,
-			filename,
-			...type,
-			size: await getSizeMedia(data),
-			data
-		}
+    hisoka.getFile = async (PATH, save) => {
+        let res
+        let data = Buffer.isBuffer(PATH) ? PATH : /^data:.*?\/.*?;base64,/i.test(PATH) ? Buffer.from(PATH.split`,`[1], 'base64') : /^https?:\/\//.test(PATH) ? await (res = await getBuffer(PATH)) : fs.existsSync(PATH) ? (filename = PATH, fs.readFileSync(PATH)) : typeof PATH === 'string' ? PATH : Buffer.alloc(0)
+        //if (!Buffer.isBuffer(data)) throw new TypeError('Result is not a buffer')
+        let type = await FileType.fromBuffer(data) || {
+            mime: 'application/octet-stream',
+            ext: '.bin'
+        }
+        filename = path.join(__filename, '../src/' + new Date * 1 + '.' + type.ext)
+        if (data && save) fs.promises.writeFile(filename, data)
+        return {
+            res,
+            filename,
+	    size: await getSizeMedia(data),
+            ...type,
+            data
+        }
+
     }
 
     return hisoka
