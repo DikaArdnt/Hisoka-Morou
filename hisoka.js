@@ -11,7 +11,6 @@ const util = require('util')
 const chalk = require('chalk')
 const { exec, spawn, execSync } = require("child_process")
 const axios = require('axios')
-const { fromBuffer } = require('file-type')
 const path = require('path')
 const os = require('os')
 const moment = require('moment-timezone')
@@ -19,7 +18,7 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
-const { smsg, getGroupAdmins, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
+const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
 
 let cmdmedia = JSON.parse(fs.readFileSync('./src/cmdmedia.json'))
 let game = JSON.parse(fs.readFileSync("./src/game.json"))
@@ -33,7 +32,7 @@ let caklontong_desk = game.lontong_desk = []
 let tebakkalimat = game.kalimat = []
 let tebaklirik = game.lirik = []
 let tebaktebakan = game.tebakan = []
-let vote =[]
+let vote = []
 
 module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
     try {
@@ -44,7 +43,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
         const pushname = m.pushName || "No Name"
-        const botNumber = hisoka.user.id ? hisoka.user.id.split(":")[0]+"@s.whatsapp.net" : hisoka.user.id
+        const botNumber = await hisoka.decodeJid(hisoka.user.id)
         const isCreator = [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const itsMe = m.sender == botNumber ? true : false
         const text = q = args.join(" ")
@@ -56,38 +55,12 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const groupMetadata = m.isGroup ? await hisoka.groupMetadata(m.chat).catch(e => {}) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
         const participants = m.isGroup ? await groupMetadata.participants : ''
-        const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
+        const groupAdmins = m.isGroup ? await participants.filter(v => v.admin !== null).map(v => v.id) : ''
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
-    	const isAdmins = m.isGroup ? (groupOwner ? groupOwner : groupAdmins).includes(m.sender) : false
+    	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
-        // Bot Status
-        const used = process.memoryUsage()
-        const cpus = os.cpus().map(cpu => {
-            cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
-			return cpu
-        })
-        const cpu = cpus.reduce((last, cpu, _, { length }) => {
-            last.total += cpu.total
-			last.speed += cpu.speed / length
-			last.times.user += cpu.times.user
-			last.times.nice += cpu.times.nice
-			last.times.sys += cpu.times.sys
-			last.times.idle += cpu.times.idle
-			last.times.irq += cpu.times.irq
-			return last
-        }, {
-            speed: 0,
-			total: 0,
-			times: {
-			    user: 0,
-			    nice: 0,
-			    sys: 0,
-			    idle: 0,
-			    irq: 0
-            }
-        })
-
+	
         // Public & Self
         if (!hisoka.public) {
             if (!m.key.fromMe) return
@@ -95,7 +68,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 
         // Push Message To Console && Auto Read
         if (m.message) {
-        hisoka.sendReadReceipt(m.chat, m.sender, [m.key.id])
+            hisoka.sendReadReceipt(m.chat, m.sender, [m.key.id])
             console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
 
@@ -2086,6 +2059,31 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             }
             break
             case 'ping': case 'botstatus': case 'statusbot': {
+                const used = process.memoryUsage()
+                const cpus = os.cpus().map(cpu => {
+                    cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
+			        return cpu
+                })
+                const cpu = cpus.reduce((last, cpu, _, { length }) => {
+                    last.total += cpu.total
+                    last.speed += cpu.speed / length
+                    last.times.user += cpu.times.user
+                    last.times.nice += cpu.times.nice
+                    last.times.sys += cpu.times.sys
+                    last.times.idle += cpu.times.idle
+                    last.times.irq += cpu.times.irq
+                    return last
+                }, {
+                    speed: 0,
+                    total: 0,
+                    times: {
+			            user: 0,
+			            nice: 0,
+			            sys: 0,
+			            idle: 0,
+			            irq: 0
+                }
+                })
                 let timestamp = speed()
                 let latensi = speed() - timestamp
                 neww = performance.now()
@@ -2375,8 +2373,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                         if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
                         await m.reply(evaled)
                     } catch (err) {
-                        m = String(err)
-                        await m.reply(m)
+                        await m.reply(String(err))
                     }
                 }
 
