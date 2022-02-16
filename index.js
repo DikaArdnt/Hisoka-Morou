@@ -13,7 +13,7 @@ const chalk = require('chalk')
 const FileType = require('file-type')
 const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
-const { smsg, isUrl, generateMessageTag, getBuffer } = require('./lib/myfunc')
+const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia } = require('./lib/myfunc')
 
 global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
 
@@ -93,13 +93,13 @@ async function startHisoka() {
         }
     })
 
-    hisoka.getName = async (jid, withoutContact  = false) => {
-        id = await hisoka.decodeJid(jid)
+    hisoka.getName = (jid, withoutContact  = false) => {
+        id = hisoka.decodeJid(jid)
         withoutContact = hisoka.withoutContact || withoutContact 
         let v
         if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
             v = store.contacts[id] || {}
-            if (!(v.name || v.subject)) v = await hisoka.groupMetadata(id) || {}
+            if (!(v.name || v.subject)) v = hisoka.groupMetadata(id) || {}
             resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
         })
         else v = id === '0@s.whatsapp.net' ? {
@@ -325,15 +325,29 @@ async function startHisoka() {
      * 
      * @param {*} jid 
      * @param {*} path 
+     * @param {*} filename
+     * @param {*} caption
      * @param {*} quoted 
      * @param {*} options 
      * @returns 
      */
-    hisoka.sendMedia = async (jid, path, quoted, options = {}) => {
-	 let { ext, mime, data } = await hisoka.getFile(path)
-	 messageType = mime.split("/")[0]
-	 pase = messageType.replace('application', 'document') || messageType
-	 return await hisoka.sendMessage(m.chat, { [`${pase}`]: data, mimetype: mime, ...options }, { quoted })
+    hisoka.sendMedia = async (jid, path, filename = '', caption = '', quoted, options = {}) => {
+	 let type = await hisoka.getFile(path, true)
+        let { mime, ext, res, data, filename } = type
+        if (res && res.status !== 200 || file.length <= 65536) {
+            try { throw { json: JSON.parse(file.toString()) } }
+            catch (e) { if (e.json) throw e.json }
+        }
+	let opt = {}
+	if (quoted) opt.quoted = quoted
+	let type = '', mimetype = mime
+	if (options.asDocument) type = 'document'
+	if (/webp/.test(mime)) type = 'sticker'
+	else if (/image/.test(mime)) type = 'image'
+	else if (/video/.test(mime)) type = 'video'
+	else if (/audio/.test(mime)) type = 'audio'
+	else type = 'document'
+	return await hisoka.sendMessage(jid, { [type]: { url: filename }, caption, mimetype: mime, fileName: filename, ...options }, { ...opt, ...options })
     }
 
     /**
@@ -424,6 +438,7 @@ async function startHisoka() {
 			res,
 			filename,
 			...type,
+			size: await getSizeMedia(data),
 			data
 		}
     }
