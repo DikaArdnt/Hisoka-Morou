@@ -331,9 +331,9 @@ async function startHisoka() {
      * @param {*} options 
      * @returns 
      */
-    hisoka.sendMedia = async (jid, path, fileName = '', caption = '', quoted, options = {}) => {
-	 let type = await hisoka.getFile(path, true)
-        let { mime, ext, res, data, filename: pathFile } = type
+    hisoka.sendMedia = async (jid, path, fileName = '', caption = '', quoted = '', options = {}) => {
+	 let types = await hisoka.getFile(path, true)
+        let { mime, ext, res, data, filename: pathFile } = types
         if (res && res.status !== 200 || file.length <= 65536) {
             try { throw { json: JSON.parse(file.toString()) } }
             catch (e) { if (e.json) throw e.json }
@@ -347,7 +347,7 @@ async function startHisoka() {
 	else if (/video/.test(mime)) type = 'video'
 	else if (/audio/.test(mime)) type = 'audio'
 	else type = 'document'
-	await hisoka.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName: fileName, ...options }, { ...opt, ...options })
+	await hisoka.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { ...opt, ...options })
 	return pathFile
     }
 
