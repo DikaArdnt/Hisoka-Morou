@@ -239,7 +239,7 @@ ${arr.slice(0, 3).join('')}
 ${arr.slice(3, 6).join('')}
 ${arr.slice(6).join('')}
 
-${isWin ? `@${winner.split('@')[0]} Menang!` : isTie ? `Game berakhir (+${playScore} XP)` : `Giliran ${['❌', '⭕'][1 * room.game._currentTurn]} (@${room.game.currentTurn.split('@')[0]})`}
+${isWin ? `@${winner.split('@')[0]} Menang!` : isTie ? `Game berakhir` : `Giliran ${['❌', '⭕'][1 * room.game._currentTurn]} (@${room.game.currentTurn.split('@')[0]})`}
 ❌: @${room.game.playerX.split('@')[0]}
 ⭕: @${room.game.playerO.split('@')[0]}
 
@@ -1416,7 +1416,7 @@ break
             case '3dchristmas': case '3ddeepsea': case 'americanflag': case '3dscifi': case '3drainbow': case '3dwaterpipe': case 'halloweenskeleton': case 'sketch': case 'bluecircuit': case 'space': case 'metallic': case 'fiction': case 'greenhorror': case 'transformer': case 'berry': case 'thunder': case 'magma': case '3dcrackedstone': case '3dneonlight': case 'impressiveglitch': case 'naturalleaves': case 'fireworksparkle': case 'matrix': case 'dropwater':  case 'harrypotter': case 'foggywindow': case 'neondevils': case 'christmasholiday': case '3dgradient': case 'blackpink': case 'gluetext': {
                 if (!text) throw `Example : ${prefix + command} text`
                 m.reply(mess.wait)
-                let anu = await getBuffer(api('zenz', '/textpro/'+command+'?text='+text, 'apikey'))
+                let anu = await getBuffer(api('zenz', '/textpro/'+command+', { text }, 'apikey'))
                 hisoka.sendMessage(m.chat, { image: anu, caption: `Download From ${text}` }, { quoted: m})
 	    }
             break
@@ -2198,6 +2198,42 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}neko
 │⭔ ${prefix}shinobu
 │⭔ ${prefix}megumin
+│
+└───────⭓
+
+┌──⭓ *Maker Menu*
+│
+│⭔ ${prefix}3dchristmas
+│⭔ ${prefix}3ddeepsea
+│⭔ ${prefix}americanflag
+│⭔ ${prefix}3dscifi
+│⭔ ${prefix}3drainbow
+│⭔ ${prefix}3dwaterpipe
+│⭔ ${prefix}halloweenskeleton
+│⭔ ${prefix}sketch
+│⭔ ${prefix}bluecircuit
+│⭔ ${prefix}space
+│⭔ ${prefix}metallic
+│⭔ ${prefix}fiction
+│⭔ ${prefix}greenhorror
+│⭔ ${prefix}transformer
+│⭔ ${prefix}berry
+│⭔ ${prefix}thunder
+│⭔ ${prefix}magma
+│⭔ ${prefix}3dcrackedstone
+│⭔ ${prefix}3dneonlight
+│⭔ ${prefix}impressiveglitch
+│⭔ ${prefix}naturalleaves
+│⭔ ${prefix}fireworksparkle
+│⭔ ${prefix}matrix
+│⭔ ${prefix}dropwater
+│⭔ ${prefix}harrypotter
+│⭔ ${prefix}foggywindow
+│⭔ ${prefix}neondevils
+│⭔ ${prefix}christmasholiday
+│⭔ ${prefix}3dgradient
+│⭔ ${prefix}blackpink
+│⭔ ${prefix}gluetext
 │
 └───────⭓
 
