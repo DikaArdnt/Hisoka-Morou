@@ -12,6 +12,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const FileType = require('file-type')
 const PhoneNumber = require('awesome-phonenumber')
+const axios = require('axios')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia } = require('./lib/myfunc')
 
