@@ -343,24 +343,29 @@ async function startHisoka() {
      * @returns 
      */
     hisoka.sendMedia = async (jid, path, fileName = '', caption = '', quoted = '', options = {}) => {
-	 let types = await hisoka.getFile(path, true)
-        let { mime, ext, res, data, filename: pathFile } = types
-        if (res && res.status !== 200 || file.length <= 65536) {
-            try { throw { json: JSON.parse(file.toString()) } }
-            catch (e) { if (e.json) throw e.json }
+        let types = await hisoka.getFile(path, true)
+           let { mime, ext, res, data, filename } = types
+           if (res && res.status !== 200 || file.length <= 65536) {
+               try { throw { json: JSON.parse(file.toString()) } }
+               catch (e) { if (e.json) throw e.json }
+           }
+       let type = '', mimetype = mime, pathFile = filename
+       if (options.asDocument) type = 'document'
+       if (options.asSticker || /webp/.test(mime)) {
+        let { writeExif } = require('./lib/exif')
+        let media = { mimetype: mime, data }
+        pathFile = await writeExif(media, { packname: options.packname ? options.packname : global.packname, author: options.author ? options.author : global.author, categories: options.categories ? options.categories : [] })
+        await fs.promises.unlink(filename)
+        type = 'sticker'
+        mimetype = 'image/webp'
         }
-	let opt = {}
-	if (quoted) opt.quoted = quoted
-	let type = '', mimetype = mime
-	if (options.asDocument) type = 'document'
-	if (/webp/.test(mime)) type = 'sticker'
-	else if (/image/.test(mime)) type = 'image'
-	else if (/video/.test(mime)) type = 'video'
-	else if (/audio/.test(mime)) type = 'audio'
-	else type = 'document'
-	await hisoka.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { ...opt, ...options })
-	return fs.promises.unlink(pathFile)
-    }
+       else if (/image/.test(mime)) type = 'image'
+       else if (/video/.test(mime)) type = 'video'
+       else if (/audio/.test(mime)) type = 'audio'
+       else type = 'document'
+       await hisoka.sendMessage(jid, { [type]: { url: pathFile }, caption, mimetype, fileName, ...options }, { quoted, ...options })
+       return fs.promises.unlink(pathFile)
+       }
 
     /**
      * 
