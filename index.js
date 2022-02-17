@@ -25,7 +25,8 @@ async function startHisoka() {
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
         browser: ['Hisoka Multi Device','Safari','1.0.0'],
-        auth: state
+        auth: state,
+        version: [2, 2204, 13]
     })
 
     store.bind(hisoka.ev)
