@@ -12,9 +12,8 @@ const fs = require('fs')
 const chalk = require('chalk')
 const FileType = require('file-type')
 const PhoneNumber = require('awesome-phonenumber')
-const axios = require('axios')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
-const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia } = require('./lib/myfunc')
+const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson } = require('./lib/myfunc')
 
 global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
 
@@ -23,8 +22,8 @@ const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream
 const getVersionWaweb = () => {
     let version
     try {
-        let a = axios.get('https://web.whatsapp.com/check-update?version=1&platform=web')
-        version = [a.data.currentVersion.replace(/[.]/g, ', ')]
+        let a = fetchJson('https://web.whatsapp.com/check-update?version=1&platform=web')
+        version = [a.currentVersion.replace(/[.]/g, ', ')]
     } catch {
         version = [2, 2204, 13]
     }
