@@ -19,6 +19,16 @@ global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
+const getVersionWaweb = () => {
+    let version
+    try {
+        let a = axios.get('https://web.whatsapp.com/check-update?version=1&platform=web')
+        version = [a.data.currentVersion.replace(/[.]/g, ', ')]
+    } catch {
+        version = [2, 2204, 13]
+    }
+    return version
+}
 
 async function startHisoka() {
     const hisoka = hisokaConnect({
@@ -26,7 +36,7 @@ async function startHisoka() {
         printQRInTerminal: true,
         browser: ['Hisoka Multi Device','Safari','1.0.0'],
         auth: state,
-        version: [2, 2204, 13]
+        version: getVersionWaweb() || [2, 2204, 13]
     })
 
     store.bind(hisoka.ev)
