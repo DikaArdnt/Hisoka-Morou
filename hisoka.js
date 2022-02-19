@@ -1273,8 +1273,8 @@ break
                 let search = await yts(text)
                 let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
                 let buttons = [
-                    {buttonId: `ytmp3 ${anu.url} 128kbps`, buttonText: {displayText: '♫ Audio'}, type: 1},
-                    {buttonId: `ytmp4 ${anu.url} 360p`, buttonText: {displayText: '► Video'}, type: 1}
+                    {buttonId: `ytmp3 ${anu.url}`, buttonText: {displayText: '♫ Audio'}, type: 1},
+                    {buttonId: `ytmp4 ${anu.url}`, buttonText: {displayText: '► Video'}, type: 1}
                 ]
                 let buttonMessage = {
                     image: { url: anu.thumbnail },
@@ -1360,10 +1360,17 @@ break
             break
             case 'anime': case 'waifu': case 'husbu': case 'neko': case 'shinobu': case 'megumin': {
                 m.reply(mess.wait)
-                let anu = await getBuffer(api('zenz', '/api/random/anime/'+command, 'apikey'))
-                hisoka.sendMessage(m.chat, { image: anu, caption: `Download From ${text}` }, { quoted: m})
+                hisoka.sendMessage(m.chat, { image: { url: api('zenz', '/api/random/anime/'+command, 'apikey') }, caption: `Download From ${text}` }, { quoted: m})
             }
             break
+	    case 'couple': {
+                m.reply(mess.wait)
+                let anu = await fetchJson('https://raw.githubusercontent.com/iamriz7/kopel_/main/kopel.json')
+                let random = anu[Math.floor(Math.random() * anu.length)]
+                hisoka.sendMessage(m.chat, { image: { url: random.male }, caption: `Couple Male` }, { quoted: m })
+                hisoka.sendMessage(m.chat, { image: { url: random.female }, caption: `Couple Female` }, { quoted: m })
+            }
+	    break
             case 'coffe': case 'kopi': {
             let buttons = [
                     {buttonId: `coffe`, buttonText: {displayText: 'Next Image'}, type: 1}
@@ -1447,9 +1454,20 @@ break
             case '3dchristmas': case '3ddeepsea': case 'americanflag': case '3dscifi': case '3drainbow': case '3dwaterpipe': case 'halloweenskeleton': case 'sketch': case 'bluecircuit': case 'space': case 'metallic': case 'fiction': case 'greenhorror': case 'transformer': case 'berry': case 'thunder': case 'magma': case '3dcrackedstone': case '3dneonlight': case 'impressiveglitch': case 'naturalleaves': case 'fireworksparkle': case 'matrix': case 'dropwater':  case 'harrypotter': case 'foggywindow': case 'neondevils': case 'christmasholiday': case '3dgradient': case 'blackpink': case 'gluetext': {
                 if (!text) throw `Example : ${prefix + command} text`
                 m.reply(mess.wait)
-                let anu = await getBuffer(api('zenz', '/textpro/'+command, { text: text }, 'apikey'))
-                hisoka.sendMessage(m.chat, { image: anu, caption: `Download From ${text}` }, { quoted: m})
+                hisoka.sendMessage(m.chat, { image: { url: api('zenz', '/textpro/' + command, { text: text }, 'apikey') }, caption: `Text Pro ${command}` }, { quoted: m})
 	    }
+            break
+	    case 'shadow': case 'romantic': case 'smoke': case 'burnpapper': case 'naruto': case 'lovemsg': case 'grassmsg': case 'lovetext': case 'coffecup': case 'butterfly': case 'harrypotter': case 'retrolol': {
+                if (!text) throw 'No Query Text'
+                m.reply(mess.wait)
+                hisoka.sendMessage(m.chat, { image: { url: api('zenz', '/photooxy/' + command, { text: text }, 'apikey') }, caption: `Photo Oxy ${command}` }, { quoted: m })
+            }
+            break
+            case 'ffcover': case 'crossfire': case 'galaxy': case 'glass': case 'neon': case 'beach': case 'blackpink': case 'igcertificate': case 'ytcertificate': {
+                if (!text) throw 'No Query Text'
+                m.reply(mess.wait)
+                hisoka.sendMessage(m.chat, { image: { url: api('zenz', '/ephoto/' + command, { text: text }, 'apikey') }, caption: `Ephoto ${command}` }, { quoted: m })
+            }
             break
 	    case 'nomerhoki': case 'nomorhoki': {
                 if (!Number(text)) throw `Example : ${prefix + command} 6288292024190`
@@ -1771,18 +1789,32 @@ break
                 hisoka.sendMessage(m.chat, { audio: cnvrt, mimetype: 'audio/mpeg'}, { quoted: msg })
             }
             break
-	        case 'igdl': case 'ig': case 'instagram': {
-                if (!text) throw 'Masukkan Query Link!'
+	        case 'instagram': case 'ig': case 'igdl': {
+                if (!text) throw 'No Query Url!'
                 m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/instagram2', { url: text }, 'apikey'))
-                hisoka.sendMessage(m.chat, { video: { url: anu.data[0] }, caption: `Download From ${text}` }, { quoted: m})
-            } 
+                if (/(?:\/p\/|\/reel\/|\/tv\/)([^\s&]+)/.test(isUrl(text)[0])) {
+                    let anu = await fetchJson(api('zenz', '/downloader/instagram2', { url: isUrl(text)[0] }, 'apikey'))
+                    for (let media of anu.data) hisoka.sendMedia(m.chat, media, '', `Download Url Instagram From ${isUrl(text)[0]}`, m)
+                } else if (/\/stories\/([^\s&]+)/.test(isUrl(text)[0])) {
+                    let anu = await fetchJson(api('zenz', '/downloader/instastory', { url: isUrl(text)[0] }, 'apikey'))
+                    hisoka.sendFile(m.chat, anu.media[0].url, '', `Download Url Instagram From ${isUrl(text)[0]}`, m)
+                }
+            }
             break
-            case 'igdltv': case 'igreels': case 'igdl2': {
-                if (!text) throw 'Masukkan Query Link!'
+            case 'joox': case 'jooxdl': {
+                if (!text) throw 'No Query Title'
                 m.reply(mess.wait)
-                let anu = await fetchJson(api('zenz', '/api/downloader/instagram', { url: text }, 'apikey'))
-                hisoka.sendMessage(m.chat, { video: { url: anu.result.link }, caption: `⭔ Desc : ${anu.result.caption.desc}`}, { quoted: m })
+                let anu = await fetchJson(api('zenz', '/downloader/joox', { query: text }, 'apikey'))
+                let msg = await hisoka.sendImage(m.chat, anu.result.img, `⭔ Title : ${anu.result.lagu}\n⭔ Album : ${anu.result.album}\n⭔ Singer : ${anu.result.penyanyi}\n⭔ Publish : ${anu.result.publish}\n⭔ Lirik :\n${anu.result.lirik.result}`, m)
+                hisoka.sendMessage(m.chat, { audio: { url: anu.result.mp4aLink }, mimetype: 'audio/mpeg', fileName: anu.result.lagu+'.m4a' }, { quoted: msg })
+            }
+            break
+            case 'soundcloud': case 'scdl': {
+                if (!text) throw 'No Query Title'
+                m.reply(mess.wait)
+                let anu = await fetchJson(api('zenz', '/downloader/soundcloud', { url: isUrl(text)[0] }, 'apikey'))
+                let msg = await hisoka.sendImage(m.chat, anu.result.thumb, `⭔ Title : ${anu.result.title}\n⭔ Url : ${isUrl(text)[0]}`)
+                hisoka.sendMessage(m.chat, { audio: { url: anu.result.url }, mimetype: 'audio/mpeg', fileName: anu.result.title+'.m4a' }, { quoted: msg })
             }
             break
 	        case 'twitdl': case 'twitter': {
@@ -2105,23 +2137,6 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                 delete this.anonymous[room.id]
                 if (command === 'leave') break
             }
-            case 'sendkontak': case 'sendcontact': {
-                if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                let room = Object.values(this.anonymous).find(room => room.check(m.sender))
-                if (!room) {
-                    let buttons = [
-                        { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
-                    ]
-                    await hisoka.sendButtonText(m.chat, buttons, `\`\`\`Kamu Sedang Tidak Berada Di Sesi Anonymous, Tekan Button Untuk Mencari Partner \`\`\``)
-                    throw false
-                }
-                let profile = await hisoka.profilePictureUrl(room.b)
-                let status = await hisoka.fetchStatus(room.b)
-                let msg = await hisoka.sendImage(room.a, profile, `Nama : ${await hisoka.getName(room.b)}\nBio : ${status.status}\nUser : @${room.b.split("@")[0]}`, m, { mentions: [room.b] })
-                hisoka.sendContact(room.a, [room.b.split("@")[0]], msg)
-            }
-            break
             case 'mulai': case 'start': {
                 if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
                 this.anonymous = this.anonymous ? this.anonymous : {}
@@ -2313,6 +2328,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}getmusic [query]
 │⭔ ${prefix}getvideo [query]
 │⭔ ${prefix}umma [url]
+│⭔ ${prefix}joox [query]
+│⭔ ${prefix}soundcloud [url]
 │
 └───────⭓
 
@@ -2333,19 +2350,13 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 ┌──⭓ *Random Menu*
 │
 │⭔ ${prefix}coffe
-│⭔ ${prefix}porno
-│⭔ ${prefix}hentai
 │⭔ ${prefix}quotesanime
 │⭔ ${prefix}motivasi
 │⭔ ${prefix}dilanquote
 │⭔ ${prefix}bucinquote
 │⭔ ${prefix}katasenja
 │⭔ ${prefix}puisi
-│
-└───────⭓
-
-┌──⭓ *Image Menu*
-│
+│⭔ ${prefix}couple
 │⭔ ${prefix}anime
 │⭔ ${prefix}waifu
 │⭔ ${prefix}husbu
@@ -2355,7 +2366,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │
 └───────⭓
 
-┌──⭓ *Maker Menu*
+┌──⭓ *Text Pro Menu*
 │
 │⭔ ${prefix}3dchristmas
 │⭔ ${prefix}3ddeepsea
@@ -2388,6 +2399,37 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}3dgradient
 │⭔ ${prefix}blackpink
 │⭔ ${prefix}gluetext
+│
+└───────⭓
+
+┌──⭓ *Photo Oxy Menu*
+│
+│⭔ ${prefix}shadow
+│⭔ ${prefix}romantic
+│⭔ ${prefix}smoke
+│⭔ ${prefix}burnpapper
+│⭔ ${prefix}naruto
+│⭔ ${prefix}lovemsg
+│⭔ ${prefix}grassmsg
+│⭔ ${prefix}lovetext
+│⭔ ${prefix}coffecup
+│⭔ ${prefix}butterfly
+│⭔ ${prefix}harrypotter
+│⭔ ${prefix}retrolol
+│
+└───────⭓
+
+┌──⭓ *Ephoto Menu*
+│
+│⭔ ${prefix}ffcover
+│⭔ ${prefix}crossfire
+│⭔ ${prefix}galaxy
+│⭔ ${prefix}glass
+│⭔ ${prefix}neon
+│⭔ ${prefix}beach
+│⭔ ${prefix}blackpink
+│⭔ ${prefix}igcertificate
+│⭔ ${prefix}ytcertificate
 │
 └───────⭓
 
