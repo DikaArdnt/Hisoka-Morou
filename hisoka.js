@@ -5,7 +5,7 @@
 */
 
 require('./config')
-const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser } = require('@adiwajshing/baileys')
+const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType } = require('@adiwajshing/baileys')
 const fs = require('fs')
 const util = require('util')
 const chalk = require('chalk')
@@ -20,19 +20,26 @@ const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
 
-let cmdmedia = JSON.parse(fs.readFileSync('./src/cmdmedia.json'))
-let game = JSON.parse(fs.readFileSync("./src/game.json"))
-let tebaklagu = game.tebaklagu = []
-let _family100 = game.family100 = []
-let kuismath = game.math = []
-let tebakgambar = game.tebakgambar = []
-let tebakkata = game.tebakkata = []
-let caklontong = game.lontong = []
-let caklontong_desk = game.lontong_desk = []
-let tebakkalimat = game.kalimat = []
-let tebaklirik = game.lirik = []
-let tebaktebakan = game.tebakan = []
-let vote = []
+// read database
+global.db = JSON.parse(fs.readFileSync('./src/database.json'))
+if (global.db) global.db = {
+    sticker: {},
+    database: {},
+    game: {},
+    others: {},
+    ...(global.db || {})
+}
+let tebaklagu = db.game.tebaklagu = []
+let _family100 = db.game.family100 = []
+let kuismath = db.game.math = []
+let tebakgambar = db.game.tebakgambar = []
+let tebakkata = db.game.tebakkata = []
+let caklontong = db.game.lontong = []
+let caklontong_desk = db.game.lontong_desk = []
+let tebakkalimat = db.game.kalimat = []
+let tebaklirik = db.game.lirik = []
+let tebaktebakan = db.game.tebakan = []
+let vote = db.others.vote = []
 
 module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
     try {
@@ -71,10 +78,16 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
             hisoka.sendReadReceipt(m.chat, m.sender, [m.key.id])
             console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
+	
+	// write database every 1 minute
+	setInterval(() => {
+            fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
+            console.log('Updating Database...')
+        }, 60 * 1000)
 
         // Respon Cmd with media
-        if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in cmdmedia)) {
-        let hash = cmdmedia[m.msg.fileSha256.toString('base64')]
+        if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.sticker)) {
+        let hash = global.db.sticker[m.msg.fileSha256.toString('base64')]
         let { text, mentionedJid } = hash
         let messages = await generateWAMessage(m.chat, { text: text, mentions: mentionedJid }, {
             userJid: hisoka.user.id,
@@ -2031,24 +2044,22 @@ ${id}`)
                 if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
                 if (!text) throw `Untuk Command Apa?`
                 let hash = m.quoted.fileSha256.toString('base64')
-                if (cmdmedia[hash] && cmdmedia[hash].locked) throw 'You have no permission to change this sticker command'
-                cmdmedia[hash] = {
+                if (global.db.sticker[hash] && global.db.sticker[hash].locked) throw 'You have no permission to change this sticker command'
+                global.db.sticker[hash] = {
                     text,
                     mentionedJid: m.mentionedJid,
                     creator: m.sender,
                     at: + new Date,
                     locked: false,
                 }
-                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
                 m.reply(`Done!`)
             }
             break
             case 'delcmd': {
                 let hash = m.quoted.fileSha256.toString('base64')
                 if (!hash) throw `Tidak ada hash`
-                if (cmdmedia[hash] && cmdmedia[hash].locked) throw 'You have no permission to delete this sticker command'              
-                delete cmdmedia[hash]
-                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
+                if (global.db.sticker[hash] && global.db.sticker[hash].locked) throw 'You have no permission to delete this sticker command'              
+                delete global.db.sticker[hash]
                 m.reply(`Done!`)
             }
             break
@@ -2056,9 +2067,9 @@ ${id}`)
                 let teks = `
 *List Hash*
 Info: *bold* hash is Locked
-${Object.entries(cmdmedia).map(([key, value], index) => `${index + 1}. ${value.locked ? `*${key}*` : key} : ${value.text}`).join('\n')}
+${Object.entries(global.db.sticker).map(([key, value], index) => `${index + 1}. ${value.locked ? `*${key}*` : key} : ${value.text}`).join('\n')}
 `.trim()
-                hisoka.sendText(m.chat, teks, m, { mentions: Object.values(cmdmedia).map(x => x.mentionedJid).reduce((a,b) => [...a, ...b], []) })
+                hisoka.sendText(m.chat, teks, m, { mentions: Object.values(global.db.sticker).map(x => x.mentionedJid).reduce((a,b) => [...a, ...b], []) })
             }
             break
             case 'lockcmd': {
@@ -2066,19 +2077,17 @@ ${Object.entries(cmdmedia).map(([key, value], index) => `${index + 1}. ${value.l
                 if (!m.quoted) throw 'Reply Pesan!'
                 if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
                 let hash = m.quoted.fileSha256.toString('base64')
-                if (!(hash in cmdmedia)) throw 'Hash not found in database'
-                cmdmedia[hash].locked = !/^un/i.test(command)
-                fs.writeFileSync('./src/cmdmedia.json', JSON.stringify(cmdmedia))
+                if (!(hash in global.db.sticker)) throw 'Hash not found in database'
+                global.db.sticker[hash].locked = !/^un/i.test(command)
                 m.reply('Done!')
             }
             break
             case 'addmsg': {
                 if (!m.quoted) throw 'Reply Message Yang Ingin Disave Di Database'
                 if (!text) throw `Example : ${prefix + command} nama file`
-                let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+                let msgs = global.db.database
                 if (text.toLowerCase() in msgs) throw `'${text}' telah terdaftar di list pesan`
                 msgs[text.toLowerCase()] = quoted.fakeObj
-                fs.writeFileSync('./src/database.json', JSON.stringify(msgs))
 m.reply(`Berhasil menambahkan pesan di list pesan sebagai '${text}'
     
 Akses dengan ${prefix}getmsg ${text}
@@ -2088,26 +2097,25 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             break
             case 'getmsg': {
                 if (!text) throw `Example : ${prefix + command} file name\n\nLihat list pesan dengan ${prefix}listmsg`
-                let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+                let msgs = global.db.database
                 if (!(text.toLowerCase() in msgs)) throw `'${text}' tidak terdaftar di list pesan`
                 hisoka.copyNForward(m.chat, msgs[text.toLowerCase()], true)
             }
             break
             case 'listmsg': {
                 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
-	        let seplit = Object.entries(msgs).map(([nama, isi]) => { return { nama, ...isi } })
+	        let seplit = Object.entries(global.db.database).map(([nama, isi]) => { return { nama, ...isi } })
 		let teks = '「 LIST DATABASE 」\n\n'
 		for (let i of seplit) {
-		    teks += `⬡ *Name :* ${i.nama}\n⬡ *Type :* ${Object.keys(i.message)[0]}\n────────────────────────\n\n`
+		    teks += `⬡ *Name :* ${i.nama}\n⬡ *Type :* ${getContentType(i.message).replace(/Message/i, '')}\n────────────────────────\n\n`
 	        }
 	        m.reply(teks)
 	    }
 	    break
             case 'delmsg': case 'deletemsg': {
-	        let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+	        let msgs = global.db.database
 	        if (!(text.toLowerCase() in msgs)) return m.reply(`'${text}' tidak terdaftar didalam list pesan`)
 		delete msgs[text.toLowerCase()]
-                fs.writeFileSync('./src/database.json', JSON.stringify(msgs))
 		m.reply(`Berhasil menghapus '${text}' dari list pesan`)
             }
 	    break
@@ -2672,7 +2680,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 		if (isCmd && budy.toLowerCase() != undefined) {
 		    if (m.chat.endsWith('broadcast')) return
 		    if (m.isBaileys) return
-		    let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
+		    let msgs = global.db.database
 		    if (!(budy.toLowerCase() in msgs)) return
 		    hisoka.copyNForward(m.chat, msgs[budy.toLowerCase()], true)
 		}
