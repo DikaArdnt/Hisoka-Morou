@@ -46,7 +46,7 @@ npm install
 ## IF ERROR INSTALL MODULE FOR TERMUX
 
 ```bash
-npm i yarn -g
+pkg install yarn
 npm i typescript -g
 yarn
 tsc -p ./node_modules/@adiwajshing/baileys/
