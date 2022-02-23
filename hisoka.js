@@ -2522,6 +2522,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}toaudio
 │⭔ ${prefix}ebinary
 │⭔ ${prefix}dbinary
+│⭔ ${prefix}styletext
 │
 └───────⭓
 
