@@ -82,7 +82,6 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 	// write database every 1 minute
 	setInterval(() => {
             fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
-            console.log('Updating Database...')
         }, 60 * 1000)
 
         // Respon Cmd with media
