@@ -19,8 +19,7 @@
   "author": "Dika Ardnt.",
   "license": "MIT",
   "dependencies": {
-    "@adiwajshing/baileys": "github:adiwajshing/baileys",
-    "@adiwajshing/keyed-db": "^0.2.4",
+    "@adiwajshing/baileys": "^4.0.1",
     "awesome-phonenumber": "^2.64.0",
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
@@ -52,7 +51,8 @@
     "yt-search": "^2.10.2"
   },
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "src": "src",
   },
   "devDependencies": {},
   "repository": {
