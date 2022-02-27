@@ -42,16 +42,6 @@ cd Hisoka-Morou
 npm install
 ```
 
-## IF ERROR INSTALL MODULE FOR TERMUX
-
-```bash
-pkg install yarn
-npm i typescript -g
-yarn
-tsc -p ./node_modules/@adiwajshing/baileys/
-npm start
-```
-
 ## Installing
 ```bash
 $ node .
