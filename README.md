@@ -42,6 +42,13 @@ cd Hisoka-Morou
 npm install
 ```
 
+## IF ERROR INSTALL MODULE FOR TERMUX
+
+```bash
+pkg install yarn
+yarn
+```
+
 ## Installing
 ```bash
 $ node .
