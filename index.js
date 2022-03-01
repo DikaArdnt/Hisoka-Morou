@@ -5,7 +5,7 @@
 */
 
 require('./config')
-const { default: hisokaConnect, useSingleFileAuthState, DisconnectReason, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
+const { default: hisokaConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
 const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
 const pino = require('pino')
 const fs = require('fs')
@@ -20,24 +20,14 @@ global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
-const getVersionWaweb = () => {
-    let version
-    try {
-        let a = fetchJson('https://web.whatsapp.com/check-update?version=1&platform=web')
-        version = [a.currentVersion.replace(/[.]/g, ', ')]
-    } catch {
-        version = [2, 2204, 13]
-    }
-    return version
-}
-
 async function startHisoka() {
+    let { version, isLatest } = await fetchLatestBaileysVersion()
     const hisoka = hisokaConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
         browser: ['Hisoka Multi Device','Safari','1.0.0'],
         auth: state,
-        version: getVersionWaweb() || [2, 2204, 13]
+        version
     })
 
     store.bind(hisoka.ev)
@@ -142,6 +132,23 @@ async function startHisoka() {
 	    })
 	}
 	hisoka.sendMessage(jid, { contacts: { displayName: `${list.length} Kontak`, contacts: list }, ...opts }, { quoted })
+    }
+    
+    hisoka.setStatus = (status) => {
+        hisoka.query({
+            tag: 'iq',
+            attrs: {
+                to: '@s.whatsapp.net',
+                type: 'set',
+                xmlns: 'status',
+            },
+            content: [{
+                tag: 'status',
+                attrs: {},
+                content: Buffer.from(status, 'utf-8')
+            }]
+        })
+        return status
     }
 	
     hisoka.public = true
