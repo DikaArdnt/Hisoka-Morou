@@ -731,9 +731,8 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
             break
 			case 'style': case 'styletext': {
 async function stylizeText(text) {
-    let res = await fetch('http://qaz.wtf/u/convert.cgi?text=' + encodeURIComponent(text))
-    let html = await res.text()
-    let dom = new JSDOM(html)
+    let res = await fetchJson('http://qaz.wtf/u/convert.cgi?text=' + encodeURIComponent(text))
+    let dom = new JSDOM(res)
     let table = dom.window.document.querySelector('table').children[0].children
     let obj = {}
     for (let tr of table) {
