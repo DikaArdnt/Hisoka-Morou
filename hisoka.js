@@ -28,6 +28,7 @@ if (global.db) global.db = {
     database: {},
     game: {},
     others: {},
+    users: {},
     ...(global.db || {})
 }
 let tebaklagu = db.game.tebaklagu = []
@@ -67,8 +68,27 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
-
+	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 	
+	
+	try {
+            let isNumber = x => typeof x === 'number' && !isNaN(x)
+            let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
+            let user = global.db.users[m.sender]
+            if (typeof user !== 'object') global.db.users[m.sender] = {}
+            if (user) {
+                if (!isNumber(user.afkTime)) user.afkTime = -1
+                if (!('afkReason' in user)) user.afkReason = ''
+                if (!isNumber(user.limit)) user.limit = limitUser
+            } else global.db.users[m.sender] = {
+                afkTime: -1,
+                afkReason: '',
+                limit: limitUser,
+            }
+        } catch (err) {
+            console.error(err)
+        }
+	    
         // Public & Self
         if (!hisoka.public) {
             if (!m.key.fromMe) return
@@ -85,6 +105,18 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
             fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
         }, 60 * 1000)
 
+	// reset limit every 12 hours
+        let cron = require('node-cron')
+        cron.schedule('00 12 * * *', () => {
+            let user = Object.keys(global.db.users)
+            let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
+            for (let jid of user) global.db.users[jid].limit = limitUser
+            console.log('Reseted Limit')
+        }, {
+            scheduled: true,
+            timezone: "Asia/Jakarta"
+        })
+	    
         // Respon Cmd with media
         if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.sticker)) {
         let hash = global.db.sticker[m.msg.fileSha256.toString('base64')]
@@ -338,7 +370,39 @@ klik https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] }
 	    delete this.suit[roof.id]
 	    }
 	    }
+	    
+	    let mentionUser = [...new Set([...(m.mentionedJid || []), ...(m.quoted ? [m.quoted.sender] : [])])]
+	    for (let jid of mentionUser) {
+            let user = global.db.users[jid]
+            if (!user) continue
+            let afkTime = user.afkTime
+            if (!afkTime || afkTime < 0) continue
+            let reason = user.afkReason || ''
+            m.reply(`
+Jangan tag dia!
+Dia sedang AFK ${reason ? 'dengan alasan ' + reason : 'tanpa alasan'}
+Selama ${clockString(new Date - afkTime)}
+`.trim())
+        }
+
+        if (db.users[m.sender].afkTime > -1) {
+            let user = global.db.users[m.sender]
+            m.reply(`
+Kamu berhenti AFK${user.afkReason ? ' setelah ' + user.afkReason : ''}
+Selama ${clockString(new Date - user.afkTime)}
+`.trim())
+            user.afkTime = -1
+            user.afkReason = ''
+        }
+	    
         switch(command) {
+	    case 'afk': {
+                let user = global.db.users[m.sender]
+                user.afkTime = + new Date
+                user.afkReason = text
+                m.reply(`${m.pushName} Telah Afk${text ? ': ' + text : ''}`)
+            }
+            break	
         case 'ttc': case 'ttt': case 'tictactoe': {
             let TicTacToe = require("./lib/tictactoe")
             this.game = this.game ? this.game : {}
@@ -729,23 +793,19 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
             hisoka.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
             }
             break
-			case 'style': case 'styletext': {
-async function stylizeText(text) {
-    let res = await fetch('http://qaz.wtf/u/convert.cgi?text=' + encodeURIComponent(text))
-    let html = await res.text()
-    let dom = new JSDOM(html)
-    let table = dom.window.document.querySelector('table').children[0].children
-    let obj = {}
-    for (let tr of table) {
-      let name = tr.querySelector('.aname').innerHTML
-      let content = tr.children[1].textContent.replace(/^\n/, '').replace(/\n$/, '')
-      obj[name + (obj[name] ? ' Reversed' : '')] = content
-    }
-    return obj
-}
-m.reply(Object.entries(await stylizeText(text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text)).map(([name, value]) => `*${name}*\n${value}`).join`\n\n`)
-}
-break
+	    case 'style': case 'styletext': {
+	        if (!isPremium && global.db.users[m.sender].limit < 1) return m.reply(mess.endLimit) // respon ketika limit habis
+		db.users[m.sender].limit -= 1 // -1 limit
+		let { styletext } = require('./lib/scraper')
+		if (!text) throw 'Masukkan Query text!'
+                let anu = await styletext(text)
+                let teks = `Srtle Text From ${text}\n\n`
+                for (let i of anu) {
+                    teks += `⭔ *${i.name}* : ${i.result}\n\n`
+                }
+                m.reply(teks)
+	    }
+	    break
                case 'vote': {
             if (!m.isGroup) throw mess.group
             if (m.chat in vote) throw `_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`
