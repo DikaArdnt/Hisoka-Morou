@@ -19,6 +19,7 @@ global.APIKeys = {
 
 // Other
 global.owner = ['6283167714830','6281382420312','6288292024190']
+global.premium = ['6288292024190']
 global.packname = 'Hisoka Morrow'
 global.author = 'WhatsApp Bot'
 global.sessionName = 'hisoka'
@@ -33,6 +34,11 @@ global.mess = {
     private: 'Fitur Digunakan Hanya Untuk Private Chat!',
     bot: 'Fitur Khusus Pengguna Nomor Bot',
     wait: 'Loading...',
+    endLimit: 'Limit Harian Anda Telah Habis, Limit Akan Direset Setiap Jam 12',
+}
+global.limitawal = {
+    premium: "Infinity",
+    free: 100
 }
 global.thumb = fs.readFileSync('./lib/hisoka.jpg')
 
