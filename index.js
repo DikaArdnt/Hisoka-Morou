@@ -8,7 +8,6 @@ require('./config')
 const { default: hisokaConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
 const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
 const pino = require('pino')
-const { Boom } = require("@hapi/boom")
 const fs = require('fs')
 const chalk = require('chalk')
 const FileType = require('file-type')
@@ -159,7 +158,7 @@ async function startHisoka() {
     hisoka.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update	    
         if (connection === 'close') {
-        let reason = lastDisconnect.error ? new Boom(lastDisconnect)?.output.statusCode : 0;
+        let reason = lastDisconnect.error ? lastDisconnect?.error?.output.statusCode : 0;
             if (reason === DisconnectReason.badSession) { console.log(`Bad Session File, Please Delete Session and Scan Again`); process.exit(); }
             else if (reason === DisconnectReason.connectionClosed) { console.log("Connection closed, reconnecting...."); startHisoka(); }
             else if (reason === DisconnectReason.connectionLost) { console.log("Connection Lost from Server, reconnecting..."); startHisoka(); }
