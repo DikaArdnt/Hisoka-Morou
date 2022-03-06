@@ -14,12 +14,15 @@
     "wabase-md",
     "base",
     "baileys-md",
-    "bot"
+    "bot",
+    "bot-md",
+    "multi-device"
   ],
   "author": "Dika Ardnt.",
   "license": "MIT",
   "dependencies": {
     "@adiwajshing/baileys": "^4.0.1",
+    "@adiwajshing/keyed-db": "^0.2.4",
     "awesome-phonenumber": "^2.64.0",
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
