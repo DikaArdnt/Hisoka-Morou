@@ -29,6 +29,7 @@ if (global.db) global.db = {
     game: {},
     others: {},
     users: {},
+    chats: {},
     ...(global.db || {})
 }
 let tebaklagu = db.game.tebaklagu = []
