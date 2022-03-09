@@ -68,7 +68,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
-	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
+    	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 	
 	
 	try {
@@ -85,6 +85,16 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                 afkReason: '',
                 limit: limitUser,
             }
+    
+            let chats = global.db.chats[m.chat]
+                if (typeof chats !== 'object') global.db.chats[m.chat] = {}
+                if (chats) {
+                if (!('mute' in chats)) chats.mute = false
+                if (!('antilink' in chats)) chats.antilink = false
+             } else global.db.chats[m.chat] = {
+                mute: false,
+                antilink: false,
+        }
         } catch (err) {
             console.error(err)
         }
@@ -116,7 +126,27 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
             scheduled: true,
             timezone: "Asia/Jakarta"
         })
-	    
+        
+	  // Anti Link
+        if (db.chats[m.chat].antilink) {
+        if (budy.match(`chat.whatsapp.com`)) {
+        m.reply(`「 ANTI LINK 」\n\nKamu terdeteksi mengirim link group, maaf kamu akan di kick !`)
+        if (!isBotAdmins) return m.reply(`Ehh bot gak admin T_T`)
+        let gclink = (`https://chat.whatsapp.com/`+await hisoka.groupInviteCode(m.chat))
+        let isLinkThisGc = new RegExp(gclink, 'i')
+        let isgclink = isLinkThisGc.test(m.text)
+        if (isgclink) return m.reply(`Ehh maaf gak jadi, karena kamu ngirim link group ini`)
+        if (isAdmins) return m.reply(`Ehh maaf kamu admin`)
+        if (isCreator) return m.reply(`Ehh maaf kamu owner bot ku`)
+        hisoka.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+        }
+        }
+        
+      // Mute Chat
+      if (db.chats[m.chat].mute && !isAdmins && !isCreator) {
+      return
+      }
+
         // Respon Cmd with media
         if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.sticker)) {
         let hash = global.db.sticker[m.msg.fileSha256.toString('base64')]
@@ -1004,6 +1034,48 @@ break
             }
             }
             break
+            case 'antilink': {
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isAdmins) throw mess.admin
+                if (args[0] === "on") {
+                if (db.chats[m.chat].antilink) return m.reply(`Sudah Aktif Sebelumnya`)
+                db.chats[m.chat].antilink = true
+                m.reply(`Antilink Aktif !`)
+                } else if (args[0] === "off") {
+                if (!db.chats[m.chat].antilink) return m.reply(`Sudah Tidak Aktif Sebelumnya`)
+                db.chats[m.chat].antilink = false
+                m.reply(`Antilink Tidak Aktif !`)
+                } else {
+                 let buttons = [
+                        { buttonId: 'antilink on', buttonText: { displayText: 'On' }, type: 1 },
+                        { buttonId: 'antilink off', buttonText: { displayText: 'Off' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, `Mode Antilink`, hisoka.user.name, m)
+                }
+             }
+             break
+             case 'mute': {
+                if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isAdmins) throw mess.admin
+                if (args[0] === "on") {
+                if (db.chats[m.chat].mute) return m.reply(`Sudah Aktif Sebelumnya`)
+                db.chats[m.chat].mute = true
+                m.reply(`${hisoka.user.name} telah di mute di group ini !`)
+                } else if (args[0] === "off") {
+                if (!db.chats[m.chat].mute) return m.reply(`Sudah Tidak Aktif Sebelumnya`)
+                db.chats[m.chat].mute = false
+                m.reply(`${hisoka.user.name} telah di unmute di group ini !`)
+                } else {
+                 let buttons = [
+                        { buttonId: 'mute on', buttonText: { displayText: 'On' }, type: 1 },
+                        { buttonId: 'mute off', buttonText: { displayText: 'Off' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, `Mute Bot`, hisoka.user.name, m)
+                }
+             }
+             break
             case 'linkgroup': case 'linkgc': {
                 if (!m.isGroup) throw mess.group
                 let response = await hisoka.groupInviteCode(m.chat)
@@ -2377,6 +2449,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}kick @user
 │⭔ ${prefix}hidetag [text]
 │⭔ ${prefix}tagall [text]
+│⭔ ${prefix}antilink [on/off]
+│⭔ ${prefix}mute [on/off]
 │⭔ ${prefix}promote @user
 │⭔ ${prefix}demote @user
 │⭔ ${prefix}vote [text]
