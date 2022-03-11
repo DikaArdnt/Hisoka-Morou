@@ -2036,6 +2036,15 @@ break
                 }
             }
             break
+		/** Backup misal yg atas ga keluar video **/
+		case 'igeh': case 'instagram2': case 'ig2': case 'igdl2': {
+                if (!text) throw 'Masukkan Query Link!'
+                m.reply(mess.wait)
+                
+                let anu = await fetchJson(api('zenz', '/downloader/instagram2', { url:text }, 'apikey'))
+                hisoka.sendMessage(m.chat, { video: { url: anu.data[0] } }, { quoted: m })
+            }
+            break
             case 'joox': case 'jooxdl': {
                 if (!text) throw 'No Query Title'
                 m.reply(mess.wait)
