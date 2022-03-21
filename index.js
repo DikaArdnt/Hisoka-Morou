@@ -55,7 +55,7 @@ if (global.db) setInterval(async () => {
   }, 30 * 1000)
 
 async function startHisoka() {
-    let version = await fetchJson('https://cemple-api.vercel.app/other/wawebversion')
+    let version = await fetchJson('https://dikaardnt.vercel.app/other/wawebversion')
     const hisoka = hisokaConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
