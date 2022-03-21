@@ -29,6 +29,14 @@ cd Hisoka-Morou
 npm install
 ```
 
+## HOW TO CONNECT TO MONGODB WHEN RUN IN HEROKU
+
+* Create account and database in mongodb atlas [`watch here`](https://youtu.be/rPqRyYJmx2g)
+* when you already have a database, you just need to take mongourl
+* Put mongourl in Procfile `web: node . --db 'mongourl'`
+* Example `web: node . -- db 'Your Mongo URI'`
+
+
 
 ## FOR TERMUX/UBUNTU/SSH USER
 
