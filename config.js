@@ -1,6 +1,6 @@
 /**
-   * Create By Dika Ardnt.
-   * Contact Me on wa.me/6288292024190
+   * Create onic.
+   * Contact Me on wa.me/0128667737
    * Follow https://github.com/DikaArdnt
 */
 
@@ -18,10 +18,10 @@ global.APIKeys = {
 }
 
 // Other
-global.owner = ['6283167714830','6281382420312','6288292024190']
-global.premium = ['6288292024190']
+global.owner = ['0128667737','0128667737','0128667737']
+global.premium = ['0128667737']
 global.packname = 'Hisoka Morrow'
-global.author = 'WhatsApp Bot'
+global.author = 'Onic'
 global.sessionName = 'hisoka'
 global.prefa = ['','!','.','🐦','🐤','🗿']
 global.sp = '⭔'
