@@ -56,6 +56,7 @@ if (global.db) setInterval(async () => {
 
 async function startHisoka() {
     let version = await fetchJson('https://dikaardnt.vercel.app/other/wawebversion')
+    version = [3,3234,9]
     const hisoka = hisokaConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
