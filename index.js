@@ -55,14 +55,14 @@ if (global.db) setInterval(async () => {
   }, 30 * 1000)
 
 async function startHisoka() {
-    let version = await fetchJson('https://dikaardnt.vercel.app/other/wawebversion')
-    const hisoka = hisokaConnect({
-        logger: pino({ level: 'silent' }),
-        printQRInTerminal: true,
-        browser: ['Hisoka Multi Device','Safari','1.0.0'],
-        auth: state,
-        version
-    })
+let { version, isLatest } = await fetchLatestBaileysVersion()
+const hisoka = hisokaConnect({
+logger: pino({ level: 'silent' }),
+printQRInTerminal: true,
+browser: ['Hisoka Multi Device','Safari','1.0.0'],
+auth: state,
+version
+})
 
     store.bind(hisoka.ev)
 
