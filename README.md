@@ -75,15 +75,14 @@ Get Apikey zenz on [`zenz`](https://zenzapi.xyz/pricing)
 * [`Nurutomo`](https://github.com/Nurutomo)
 * [`Mhankbarbar`](https://github.com/MhankBarBar)
 * [`DikaArdnt`](https://github.com/DikaArdnt)
+* [`Fatih Arridho`](https://github.com/FatihArridho)
+* [`zhwzein`](https://github.com/zhwzein)
+* [`CAF-ID`](https://github.com/CAF-ID)
+* [`Hisoka775`](https://github.com/Hisoka775)
+
 
 License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
 
 Support Me
 * [`Paypal`](https://www.paypal.me/Cakhaho)
 * [`Saweria`](https://saweria.co/DikaArdnt)
-
-## Contact Me
-* [`Wangsap`](https://wa.me/6288292024190)
-* [`Igeh`](https://instagram.com/cak_haho)
-* [`Pesbuk`](https://www.facebook.com/Haho.id)
-
