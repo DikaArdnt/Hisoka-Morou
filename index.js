@@ -49,6 +49,7 @@ global.db.data = {
     ...(global.db.data || {})
 }
 
+// save database every 30seconds
 if (global.db) setInterval(async () => {
     if (global.db.data) await global.db.write()
   }, 30 * 1000)
@@ -62,7 +63,8 @@ async function startHisoka() {
     })
 
     store.bind(hisoka.ev)
-
+    
+    // anticall auto block
     hisoka.ws.on('CB:call', async (json) => {
     const callerId = json.content[0].attrs['call-creator']
     if (json.content[0].tag == 'offer') {
