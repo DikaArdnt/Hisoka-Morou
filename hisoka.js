@@ -61,6 +61,15 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 	
+        const isImage = (type == 'imageMessage')
+        const isVideo = (type == 'videoMessage')
+        const isSticker = (type == 'stickerMessage')
+        const isQuotedMsg = (type == 'extendedTextMessage')
+        const isQuotedImage = isQuotedMsg ? content.includes('imageMessage') ? true : false : false
+        const isQuotedAudio = isQuotedMsg ? content.includes('audioMessage') ? true : false : false
+        const isQuotedDocument = isQuotedMsg ? content.includes('documentMessage') ? true : false : false
+        const isQuotedVideo = isQuotedMsg ? content.includes('videoMessage') ? true : false : false
+        const isQuotedSticker = isQuotedMsg ? content.includes('stickerMessage') ? true : false : false
 	
 	try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -1270,6 +1279,25 @@ break
             } else {
                 throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
                 }
+            }
+            break
+            case 'swm': case 'wm': case 'take': {
+            if (!quoted) throw `Kirim/Reply Gambar/Video Dengan Caption ${prefix + command}\n\nDurasi Sticker Video 1-9 Detik`
+            if (!text) throw `Kirim perintah ${prefix + command} packname|author`
+            if (!text.includes('|')) throw `Kirim perintah ${prefix + command} packname|author`
+            m.reply (mess.wait)
+            if (/image/.test(mime)) {
+            let media = await quoted.download()
+            let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: text.split("|")[0], author: text.split("|")[1] })
+            await fs.unlinkSync(encmedia)
+            } else if (/video/.test(mime)) {
+            if ((quoted.msg || quoted).seconds > 11) return reply(`Kirim/Reply Gambar/Video Dengan Caption ${prefix + command}\n\nDurasi Sticker Video 1-9 Detik`)
+            let media = await quoted.download()
+            let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: text.split("|")[0], author: text.split("|")[1] })
+            await fs.unlinkSync(encmedia)
+            } else {
+            m.reply(`Kirim/Reply Gambar/Video Dengan Caption ${prefix + command}\n\nDurasi Sticker Video 1-9 Detik`)
+            }
             }
             break
             case 'ebinary': {
@@ -2725,6 +2753,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}toimage
 │⭔ ${prefix}removebg
 │⭔ ${prefix}sticker
+│⭔ ${prefix}swm
+│⭔ ${prefix}take
 │⭔ ${prefix}emojimix
 │⭔ ${prefix}tovideo
 │⭔ ${prefix}togif
