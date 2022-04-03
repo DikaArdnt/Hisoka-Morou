@@ -46,6 +46,7 @@ global.db.data = {
     game: {},
     settings: {},
     others: {},
+    sticker: {},
     ...(global.db.data || {})
 }
 
