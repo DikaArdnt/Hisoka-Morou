@@ -2513,6 +2513,23 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 m.reply(respon)
             }
             break
+            case 'speedtest': {
+            m.reply('Testing Speed...')
+            let cp = require('child_process')
+            let { promisify } = require('util')
+            let exec = promisify(cp.exec).bind(cp)
+          let o
+          try {
+          o = await exec('python speed.py')
+          } catch (e) {
+          o = e
+         } finally {
+        let { stdout, stderr } = o
+        if (stdout.trim()) m.reply(stdout)
+        if (stderr.trim()) m.reply(stderr)
+            }
+            }
+            break
             case 'owner': case 'creator': {
                 hisoka.sendContact(m.chat, global.owner, m)
             }
@@ -2749,6 +2766,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}listpc
 │⭔ ${prefix}listgc
 │⭔ ${prefix}listonline
+│⭔ ${prefix}speedtest
 │
 └───────⭓
 
