@@ -10,15 +10,16 @@ const chalk = require('chalk')
 // Website Api
 global.APIs = {
 	zenz: 'https://zenzapi.xyz',
+	zacr: 'https://api.zacros.my.id',
 }
 
 // Apikey Website Api
 global.APIKeys = {
-	'https://zenzapi.xyz': 'Your Key',
+	'https://zenzapi.xyz': 'a9b1e9fa423a',
 }
 
 // Other
-global.owner = ['6283167714830','6281382420312','6288292024190']
+global.owner = ['6283167714830','6281382420312','6288292024190','62085936697907']
 global.premium = ['6288292024190']
 global.packname = 'Hisoka Morrow'
 global.author = 'WhatsApp Bot'
