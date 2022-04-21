@@ -58,7 +58,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const groupAdmins = m.isGroup ? await participants.filter(v => v.admin !== null).map(v => v.id) : ''
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
-    	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
+    	const isAdmins = m.isGroup ? groupOwner.includes(m.sender) || groupAdmins.includes(m.sender) : false
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 	
 	
@@ -2194,7 +2194,7 @@ bukhari
 1 - 7008
 darimi
 1 - 3367
-ibu-majah
+ibnu-majah
 1 - 4331
 nasai
 1 - 5662
