@@ -49,7 +49,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const text = q = args.join(" ")
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
-	    const isMedia = /image|video|sticker|audio/.test(mime)
+        const isMedia = /image|video|sticker|audio/.test(mime)
 	
         // Group
         const groupMetadata = m.isGroup ? await hisoka.groupMetadata(m.chat).catch(e => {}) : ''
@@ -1297,10 +1297,11 @@ break
 		}
 	    }
 	    break
-	       case 'smeme': {
-	        if (!text) throw `Kirim/reply image/sticker dengan caption ${prefix + command} teks1|teks2`
+	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
 	        if (!/image/.test(mime)) throw `Kirim/reply image/sticker dengan caption ${prefix + command} teks1|teks2`
 	        let [teks1, teks2] = text.split`|`
+	        if (!teks1) throw `Kirim/reply image/sticker dengan caption ${prefix + command} teks1|teks2`
+	        if (!teks2) throw `Kirim/reply image/sticker dengan caption ${prefix + command} teks1|teks2`
 	        let dwnld = await quoted.download()
 	        let { floNime } = require('./lib/uploader')
 	        let fatGans = await floNime(dwnld)
