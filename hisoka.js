@@ -1103,6 +1103,7 @@ break
              break
             case 'linkgroup': case 'linkgc': {
                 if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
                 let response = await hisoka.groupInviteCode(m.chat)
                 hisoka.sendText(m.chat, `https://chat.whatsapp.com/${response}\n\nLink Group : ${groupMetadata.subject}`, m, { detectLink: true })
             }
@@ -1288,8 +1289,9 @@ break
         }
         break
             case 'emojimix': {
-	        if (!text) throw `Example : ${prefix + command} 😅+🤔`
 		let [emoji1, emoji2] = text.split`+`
+		if (!emoji1) throw `Example : ${prefix + command} 😅+🤔`
+		if (!emoji2) throw `Example : ${prefix + command} 😅+🤔`
 		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
 		for (let res of anu.results) {
 		    let encmedia = await hisoka.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
