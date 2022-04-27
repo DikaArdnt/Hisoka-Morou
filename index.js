@@ -254,7 +254,7 @@ async function startHisoka() {
      */
     hisoka.send5ButImg = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
         let message = await prepareWAMessageMedia({ image: img }, { upload: hisoka.waUploadToServer })
-        var template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
         templateMessage: {
         hydratedTemplate: {
         imageMessage: message.imageMessage,
