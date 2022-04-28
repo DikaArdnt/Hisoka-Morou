@@ -1297,6 +1297,11 @@ break
 		}
 	    }
 	    break
+	       case 'attp': case 'ttp': {
+           if (!text) throw `Example : ${prefix + command} text`
+           hisoka.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'hisoka', 'morou', m, {asSticker: true})
+         }
+         break
 	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
 	        if (!/image/.test(mime)) throw `Kirim/reply image/sticker dengan caption ${prefix + command} teks1|teks2`
 	        let [teks1, teks2] = text.split`|`
@@ -2751,6 +2756,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 
 ┌──⭓ *Convert Menu*
 │
+│⭔ ${prefix}attp
+│⭔ ${prefix}ttp
 │⭔ ${prefix}toimage
 │⭔ ${prefix}removebg
 │⭔ ${prefix}sticker
@@ -2802,7 +2809,6 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}start
 │⭔ ${prefix}next
 │⭔ ${prefix}keluar
-│⭔ ${prefix}sendkontak
 │
 └───────⭓
 
