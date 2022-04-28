@@ -1244,7 +1244,7 @@ break
                  let teks = `⬣ *LIST GROUP CHAT*\n\nTotal Group : ${anu.length} Group\n\n`
                  for (let i of anu) {
                      let metadata = await hisoka.groupMetadata(i)
-                     teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* @${metadata.owner.split('@')[0]}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
+                     teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* ${metadata.owner !== undefined ? '@' + metadata.owner.split`@`[0] : 'Tidak diketahui'}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
                  }
                  hisoka.sendTextWithMentions(m.chat, teks, m)
              }
@@ -1273,18 +1273,16 @@ break
             }
             break
             case 'ebinary': {
-            if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            if (!text) throw `Example : ${prefix + command} text`
             let { eBinary } = require('./lib/binary')
-            let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
-            let eb = await eBinary(teks)
+            let eb = await eBinary(text)
             m.reply(eb)
         }
         break
             case 'dbinary': {
-            if (!m.quoted.text && !text) throw `Kirim/reply text dengan caption ${prefix + command}`
+            if (!text) throw `Example : ${prefix + command} text`
             let { dBinary } = require('./lib/binary')
-            let teks = text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text
-            let db = await dBinary(teks)
+            let db = await dBinary(text)
             m.reply(db)
         }
         break
