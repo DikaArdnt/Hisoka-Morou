@@ -1297,6 +1297,15 @@ break
 		}
 	    }
 	    break
+	    case 'emojimix2': {
+	    if (!text) throw `Example : ${prefix + command} 😅`
+		let anu = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(text)}`)
+		for (let res of anu.results) {
+		    let encmedia = await hisoka.sendImageAsSticker(m.chat, res.url, m, { packname: global.packname, author: global.author, categories: res.tags })
+		    await fs.unlinkSync(encmedia)
+		}
+	    }
+	    break
 	       case 'attp': case 'ttp': {
            if (!text) throw `Example : ${prefix + command} text`
            await hisoka.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'hisoka', 'morou', m, {asSticker: true})
@@ -2762,6 +2771,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}removebg
 │⭔ ${prefix}sticker
 │⭔ ${prefix}emojimix
+│⭔ ${prefix}emojimix2
 │⭔ ${prefix}tovideo
 │⭔ ${prefix}togif
 │⭔ ${prefix}tourl
