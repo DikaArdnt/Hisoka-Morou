@@ -2559,6 +2559,119 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 hisoka.sendContact(m.chat, global.owner, m)
             }
             break
+            case 'playstore': {
+            if (!text) throw `Example : ${prefix + command} clash of clans`
+            let res = await fetchJson(api('zenz', '/webzone/playstore', { query: text }, 'apikey'))
+            let teks = `⭔ Playstore Search From : ${text}\n\n`
+            for (let i of res.result) {
+            teks += `⭔ Name : ${i.name}\n`
+            teks += `⭔ Link : ${i.link}\n`
+            teks += `⭔ Developer : ${i.developer}\n`
+            teks += `⭔ Link Developer : ${i.link_dev}\n\n──────────────────────\n`
+            }
+            m.reply(teks)
+            }
+            break
+            case 'gsmarena': {
+            if (!text) throw `Example : ${prefix + command} samsung`
+            let res = await fetchJson(api('zenz', '/webzone/gsmarena', { query: text }, 'apikey'))
+            let { judul, rilis, thumb, ukuran, type, storage, display, inchi, pixel, videoPixel, ram, chipset, batrai, merek_batre, detail } = res.result
+let capt = `⭔ Title: ${judul}
+⭔ Realease: ${rilis}
+⭔ Size: ${ukuran}
+⭔ Type: ${type}
+⭔ Storage: ${storage}
+⭔ Display: ${display}
+⭔ Inchi: ${inchi}
+⭔ Pixel: ${pixel}
+⭔ Video Pixel: ${videoPixel}
+⭔ Ram: ${ram}
+⭔ Chipset: ${chipset}
+⭔ Battery: ${batrai}
+⭔ Battery Brand: ${merek_batre}
+⭔ Detail: ${detail}`
+            hisoka.sendImage(m.chat, thumb, capt, m)
+            }
+            break
+            case 'jadwalbioskop': {
+            if (!text) throw `Example: ${prefix + command} jakarta`
+            let res = await fetchJson(api('zenz', '/webzone/jadwalbioskop', { kota: text }, 'apikey'))
+            let capt = `Jadwal Bioskop From : ${text}\n\n`
+            for (let i of res.result){
+            capt += `⭔ Title: ${i.title}\n`
+            capt += `⭔ Thumbnail: ${i.thumb}\n`
+            capt += `⭔ Url: ${i.url}\n\n──────────────────────\n`
+            }
+            hisoka.sendImage(m.chat, res.result[0].thumb, capt, m)
+            }
+            break
+            case 'nowplayingbioskop': {
+            let res = await fetchJson(api('zenz', '/webzone/nowplayingbioskop', {}, 'apikey'))
+            let capt = `Now Playing Bioskop\n\n`
+            for (let i of res.result){
+            capt += `⭔ Title: ${i.title}\n`
+            capt += `⭔ Url: ${i.url}\n`
+            capt += `⭔ Img Url: ${i.img}\n\n──────────────────────\n`
+            }
+            hisoka.sendImage(m.chat, res.result[0].img, capt, m)
+            }
+            break
+            case 'aminio': {
+            if (!text) throw `Example: ${prefix + command} free fire`
+            let res = await fetchJson(api('zenz', '/webzone/amino', { query: text }, 'apikey'))
+            let capt = `Amino Search From : ${text}\n\n`
+            for (let i of res.result){
+            capt += `⭔ Community: ${i.community}\n`
+            capt += `⭔ Community Link: ${i.community_link}\n`
+            capt += `⭔ Thumbnail: ${i.community_thumb}\n`
+            capt += `⭔ Description: ${i.community_desc}\n`
+            capt += `⭔ Member Count: ${i.member_count}\n\n──────────────────────\n`
+            }
+            hisoka.sendImage(m.chat, 'https://'+res.result[0].community_thumb, capt, m)
+            }
+            break
+            case 'wattpad': {
+            if (!text) throw `Example : ${prefix + command} love`
+            let res = await fetchJson(api('zenz', '/webzone/wattpad', { query: text }, 'apikey'))
+            let { judul, dibaca, divote, bab, waktu, url, thumb, description } = res.result[0]
+            let capt = `Wattpad From query\n\n`
+            capt += `⭔ Judul: ${judul}\n`
+            capt += `⭔ Dibaca: ${dibaca}\n`
+            capt += `⭔ Divote: ${divote}\n`
+            capt += `⭔ Bab: ${bab}\n`
+            capt += `⭔ Url: ${url}\n`
+            capt += `⭔ Deskripsi: ${description}`
+            hisoka.sendImage(m.chat, thumb, capt, m)
+            }
+            break
+            case 'webtoons': {
+            if (!text) throw `Example : ${prefix + command} love`
+            let res = await fetchJson(api('zenz', '/webzone/webtoons', { query: text }, 'apikey'))
+            let capt = `Webtoons Search From : ${text}\n\n`
+            for (let i of res.result) {
+            capt += `⭔ Judul: ${i.judul}\n`
+            capt += `⭔ Like: ${i.like}\n`
+            capt += `⭔ Creator: ${i.creator}\n`
+            capt += `⭔ Genre: ${i.genre}\n`
+            capt += `⭔ Url: ${i.url}\n\n──────────────────────\n`
+            }
+            m.reply(capt)
+            }
+            break
+            case 'drakor': {
+            if (!text) throw `Example : ${prefix + command} love`
+            let res = await fetchJson(api('zenz', '/webzone/drakor', { query: text }, 'apikey'))
+            let capt = `Drakor Search From : ${text}\n\n`
+            for (let i of res.result) {
+            capt += `⭔ Judul: ${i.judul}\n`
+            capt += `⭔ Years: ${i.years}\n`
+            capt += `⭔ Genre: ${i.genre}\n`
+            capt += `⭔ Url: ${i.url}\n`
+            capt += `⭔ Thumbnail Url: ${i.thumbnail}\n\n──────────────────────\n`
+            }
+            hisoka.sendImage(m.chat, res.result[0].thumbnail, capt, m)
+            }
+            break
             case 'list': case 'menu': case 'help': case '?': {
                 anu = `┌──⭓ *Group Menu*
 │
@@ -2584,6 +2697,20 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 │⭔ ${prefix}hapusvote
 │
 └───────⭓
+
+┌──⭓ *Webzone Menu*
+│
+│⭔ ${prefix}playstore
+│⭔ ${prefix}gsmarena
+│⭔ ${prefix}jadwalbioskop
+│⭔ ${prefix}nowplayingbioskop
+│⭔ ${prefix}aminio
+│⭔ ${prefix}wattpad
+│⭔ ${prefix}webtoons
+│⭔ ${prefix}drakor
+│
+└───────⭓
+
 
 ┌──⭓ *Downloader Menu*
 │
