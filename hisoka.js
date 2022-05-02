@@ -1308,7 +1308,8 @@ break
 	    break
 	       case 'attp': case 'ttp': {
            if (!text) throw `Example : ${prefix + command} text`
-           await hisoka.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'hisoka', 'morou', m, {asSticker: true})
+           await hisoka.sendMedia(m.chat, `https://xteam.xyz/${command}?file&text=${text}`, 'hisoka', 'morou', m, {asSticker: true})
+
          }
          break
 	       case 'smeme': case 'stickmeme': case 'stikmeme': case 'stickermeme': case 'stikermeme': {
@@ -1661,6 +1662,24 @@ break
                     headerType: 2
                 }
                 hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
+            }
+            break
+            case 'fiersa': case 'fiersabersari': {
+                let fie = await fetch('https://raw.githubusercontent.com/irwanx/db/master/kata-kata/fiersa-besari.txt')
+                let rsa = await fie.text()
+                let ber = rsa.split('\n')
+                let sari = ber[Math.floor(Math.random() * ber.length)]
+                let btnfiersa = [{ buttonId: `${command}`, buttonText: { displayText: 'Fiersa Bersari️' }, type: 1 }]
+                await hisoka.sendButtonText(m.chat, btnfiersa, sari, hisoka.user.name, m)
+            }
+            break
+            case 'senja': {
+                let ka = await fetch('https://raw.githubusercontent.com/irwanx/db/master/kata-kata/senja.txt')
+                let ta = await ka.text()
+                let sen = ta.split('\n')
+                let ja = sen[Math.floor(Math.random() * sen.length)]
+                let btnsenja = [{ buttonId: `${command}`, buttonText: { displayText: 'Kata Senja' }, type: 1 }]
+                await hisoka.sendButtonText(m.chat, btnsenja, ja, hisoka.user.name, m)
             }
             break
             case '3dchristmas': case '3ddeepsea': case 'americanflag': case '3dscifi': case '3drainbow': case '3dwaterpipe': case 'halloweenskeleton': case 'sketch': case 'bluecircuit': case 'space': case 'metallic': case 'fiction': case 'greenhorror': case 'transformer': case 'berry': case 'thunder': case 'magma': case '3dcrackedstone': case '3dneonlight': case 'impressiveglitch': case 'naturalleaves': case 'fireworksparkle': case 'matrix': case 'dropwater':  case 'harrypotter': case 'foggywindow': case 'neondevils': case 'christmasholiday': case '3dgradient': case 'blackpink': case 'gluetext': {
