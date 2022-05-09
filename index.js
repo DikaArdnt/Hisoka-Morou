@@ -274,6 +274,46 @@ async function startHisoka() {
       }
       }
 
+    /** Send List Messaage
+      *
+      *@param {*} jid
+      *@param {*} text
+      *@param {*} footer
+      *@param {*} title
+      *@param {*} butText
+      *@param [*] sections
+      *@param {*} quoted
+      */
+        hisoka.sendListMsg = (jid, text = '', footer = '', title = '' , butText = '', sects = [], quoted) => {
+        let sections = sects
+        var listMes = {
+        text: text,
+        footer: footer,
+        title: title,
+        buttonText: butText,
+        sections
+        }
+        hisoka.sendMessage(jid, listMes, { quoted: quoted })
+        }
+
+    /** Send Button 5 Message
+     * 
+     * @param {*} jid
+     * @param {*} text
+     * @param {*} footer
+     * @param {*} button
+     * @returns 
+     */
+        hisoka.send5ButMsg = (jid, text = '' , footer = '', but = []) =>{
+        let templateButtons = but
+        var templateMessage = {
+        text: text,
+        footer: footer,
+        templateButtons: templateButtons
+        }
+        hisoka.sendMessage(jid, templateMessage)
+        }
+
     /** Send Button 5 Image
      *
      * @param {*} jid
