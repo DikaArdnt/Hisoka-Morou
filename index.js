@@ -243,6 +243,48 @@ async function startHisoka() {
     hisoka.ev.on('creds.update', saveState)
 
     // Add Other
+      
+      /** Resize Image
+      *
+      * @param {Buffer} Buffer (Only Image)
+      * @param {Numeric} Width
+      * @param {Numeric} Height
+      */
+      hisoka.reSize = async (image, width, height) => {
+       let jimp = require('jimp')
+       var oyy = await jimp.read(image);
+       var kiyomasa = await oyy.resize(width, height).getBufferAsync(jimp.MIME_JPEG)
+       return kiyomasa
+      }
+      // Siapa yang cita-citanya pakai resize buat keliatan thumbnailnya
+      
+      /** Send Button 5 Location
+       *
+       * @param {*} jid
+       * @param {*} text
+       * @param {*} footer
+       * @param {*} location
+       * @param [*] button
+       * @param {*} options
+       */
+      hisoka.send5ButLoc = async (jid , text = '' , footer = '', lok, but = [], options = {}) =>{
+       let resize = await hisoka.reSize(lok, 300, 150)
+       var template = generateWAMessageFromContent(jid, {
+       "templateMessage": {
+       "hydratedTemplate": {
+       "locationMessage": {
+       "degreesLatitude": 0,
+       "degreesLongitude": 0,
+       "jpegThumbnail": resize
+       },
+       "hydratedContentText": text,
+       "hydratedFooterText": footer,
+       "hydratedButtons": but
+       }
+       }
+       }, options)
+       hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
+      }
 
       /**
       *
@@ -324,8 +366,9 @@ async function startHisoka() {
      * @param {*} options
      * @returns
      */
-    hisoka.send5ButImg = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ image: img }, { upload: hisoka.waUploadToServer })
+    hisoka.send5ButImg = async (jid , text = '' , footer = '', img, but = [], buff, options = {}) =>{
+        let resize = await hisoka.reSize(buff, 300, 150)
+        let message = await prepareWAMessageMedia({ image: img, jpegThumbnail: resize }, { upload: hisoka.waUploadToServer })
         var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
         templateMessage: {
         hydratedTemplate: {
@@ -349,8 +392,9 @@ async function startHisoka() {
      * @param {*} options
      * @returns
      */
-    hisoka.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ video: vid }, { upload: hisoka.waUploadToServer })
+    hisoka.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], buff, options = {}) =>{
+        let resize = await hisoka.reSize(buff, 300, 150)
+        let message = await prepareWAMessageMedia({ video: vid, jpegThumbnail: resize }, { upload: hisoka.waUploadToServer })
         var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
         templateMessage: {
         hydratedTemplate: {
@@ -374,8 +418,11 @@ async function startHisoka() {
      * @param {*} options
      * @returns
      */
-    hisoka.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], options = {}) =>{
-        let message = await prepareWAMessageMedia({ video: gif, gifPlayback: true }, { upload: hisoka.waUploadToServer })
+    hisoka.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], buff, options = {}) =>{
+        let resize = await hisoka.reSize(buff, 300, 150)
+        let a = [1,2]
+        let b = a[Math.floor(Math.random() * a.length)]
+        let message = await prepareWAMessageMedia({ video: gif, gifPlayback: true, jpegThumbnail: resize, gifAttribution: b}, { upload: hisoka.waUploadToServer })
         var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
         templateMessage: {
         hydratedTemplate: {

@@ -94,7 +94,8 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 		if (!('templateImage' in setting)) setting.templateImage = true
 		if (!('templateVideo' in setting)) setting.templateVideo = false
 		if (!('templateGif' in setting)) setting.templateGif = false
-		if (!('templateMsg' in setting)) setting.templateMsg = false	
+		if (!('templateMsg' in setting)) setting.templateMsg = false
+		if (!('templateLocation' in setting)) setting.templateLocation = false
 	    } else global.db.data.settings[botNumber] = {
 		status: 0,
 		autobio: false,
@@ -102,6 +103,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 		templateVideo: false,
 		templateGif: false,
 		templateMsg: false,
+		templateLocation: false,
 	    }
 	    
         } catch (err) {
@@ -1128,7 +1130,6 @@ break
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
-                if (!text) throw `Masukkan opsi ephemeral\n\nList Opsi : 1, 7, 90, off\nExample : ${prefix + command} 7`
                 if (args[0] === '1') {
                     await hisoka.groupToggleEphemeral(m.chat, 1*24*3600).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
                 } else if (args[0] === '7') {
@@ -1137,6 +1138,19 @@ break
                     await hisoka.groupToggleEphemeral(m.chat, 90*24*3600).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
                 } else if (args[0] === 'off') {
                     await hisoka.groupToggleEphemeral(m.chat, 0).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+                } else {
+                let sections = [
+                {
+                title: "CHANGE EPHEMERAL GROUP",
+                rows: [
+                {title: "Ephemeral 1 day", rowId: `ephemeral 1`, description: `Activate the ephemeral group for 1 day`},
+                {title: "Ephemeral 7 day's", rowId: `ephemeral 7`, description: `Activate the ephemeral group for 7 day's`},
+                {title: "Ephemeral 90 days's", rowId: `ephemeral 90`, description: `Activate the ephemeral group for 90 day's`},
+                {title: "Ephemeral Off", rowId: `ephemeral off`, description: `Deactivate this Ephemeral group`}
+                ]
+                },
+                ]
+                hisoka.sendListMsg(m.chat, `Please select the following Ephemeral Options List !`, hisoka.user.name, `Hello Admin ${groupMetadata.subject}`, `Click Here`, sections, m)
                 }
             }
             break
@@ -2701,24 +2715,35 @@ let capt = `⭔ Title: ${judul}
                 setbot.templateVideo = false
                 setbot.templateGif = false
                 setbot.templateMsg = false
+                setbot.templateLocation = false
                 m.reply(mess.success)
                 } else if (args[0] === 'templateVideo'){
                 setbot.templateImage = false
                 setbot.templateVideo = true
                 setbot.templateGif = false
                 setbot.templateMsg = false
+                setbot.templateLocation = false
                 m.reply(mess.success)
                 } else if (args[0] === 'templateGif'){
                 setbot.templateImage = false
                 setbot.templateVideo = false
                 setbot.templateGif = true
                 setbot.templateMsg = false
+                setbot.templateLocation = false
                 m.reply(mess.success)
                 } else if (args[0] === 'templateMessage'){
                 setbot.templateImage = false
                 setbot.templateVideo = false
                 setbot.templateGif = false
                 setbot.templateMsg = true
+                setbot.templateLocation = false
+                m.reply(mess.success)
+                } else if (args[0] === 'templateLocation'){
+                setbot.templateImage = false
+                setbot.templateVideo = false
+                setbot.templateGif = false
+                setbot.templateMsg = false
+                setbot.templateLocation = true
                 m.reply(mess.success)
                 } else {
                 let sections = [
@@ -2728,7 +2753,8 @@ let capt = `⭔ Title: ${judul}
                 {title: "Template Image", rowId: `setmenu templateImage`, description: `Change menu bot to Template Image`},
                 {title: "Template Video", rowId: `setmenu templateVideo`, description: `Change menu bot to Template Video`},
                 {title: "Template Gif", rowId: `setmenu templateGif`, description: `Change menu bot to Template Gif`},
-                {title: "Template Message", rowId: `setmenu templateMessage`, description: `Change menu bot to Template Message`}
+                {title: "Template Message", rowId: `setmenu templateMessage`, description: `Change menu bot to Template Message`},
+                {title: "Template Location", rowId: `setmenu templateLocation`, description: `Change menu bot to Template Location`}
                 ]
                 },
                 ]
@@ -3083,13 +3109,15 @@ let capt = `⭔ Title: ${judul}
                             }]
                          let setbot = db.data.settings[botNumber]
                         if (setbot.templateImage) {
-                        hisoka.send5ButImg(m.chat, anu, hisoka.user.name, global.thumb, btn)
+                        hisoka.send5ButImg(m.chat, anu, hisoka.user.name, global.thumb, btn, global.thumb)
                         } else if (setbot.templateGif) {
-                        hisoka.send5ButGif(m.chat, anu, hisoka.user.name, global.visoka, btn)
+                        hisoka.send5ButGif(m.chat, anu, hisoka.user.name, global.visoka, btn, global.thumb)
                         } else if (setbot.templateVid) {
-                        hisoka.send5ButVid(m.chat, anu, hisoka.user.name, global.visoka, btn)
+                        hisoka.send5ButVid(m.chat, anu, hisoka.user.name, global.visoka, btn, global.thumb)
                         } else if (setbot.templateMsg) {
                         hisoka.send5ButMsg(m.chat, anu, hisoka.user.name, btn)
+                        } else if (setbot.templateLocation) {
+                        hisoka.send5ButLoc(m.chat, anu, hisoka.user.name, global.thumb, btn)
                         }
                      }
             break
