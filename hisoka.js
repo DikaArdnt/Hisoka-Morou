@@ -2262,6 +2262,8 @@ bukhari
 1 - 7008
 darimi
 1 - 3367
+tirmidzi
+1 - 3891
 ibnu-majah
 1 - 4331
 nasai
@@ -2273,7 +2275,7 @@ muslim
 		if (!args[1]) throw `Hadis yang ke berapa?\n\ncontoh:\n${prefix + command} muslim 1`
 		try {
 		let res = await fetchJson(`https://fatiharridho.herokuapp.com/api/islamic/hadits?list=${args[0]}`)
-		let { number, arab, id } = res.find(v => v.number == args[1])
+		let { number, arab, id } = res.result.find(v => v.number == args[1])
 		m.reply(`No. ${number}
 
 ${arab}
