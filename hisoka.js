@@ -1704,6 +1704,42 @@ break
                 hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
             break
+			case 'fact':{
+				 await axios
+            .get(`https://nekos.life/api/v2/fact`)
+            .then((response) => {
+                // console.log(response);
+                const tet = `*Fact:* ${response.data.fact}`
+                hisoka.sendMessage(from, {
+                image: { url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrRRbpuj_YZBtZA2B1NlRIM0d8R6mnyeeZiA&usqp=CAU"},    caption: tet,
+                footer: "Hisoka-Morou",
+                templateButtons: [
+                             {
+                                quickReplyButton: {
+                                    displayText: '♥️Next',
+                                    id: '${prefix}fact'
+                                }
+                            }
+                    
+                ]
+            }, { quoted: m })
+            })
+            .catch((err) => {
+                m.reply(`✖  An error occurred.`)
+            })
+			}
+				break
+			case 'movie':
+                if (!q) return reply(`What movie you wanna search?\nExample: ${prefix}movie Spiderman`)
+                dgxeon.Film(q)
+                    .then(data => {console.log(data)
+                    let krl = `*❒「  Film ${q} 」*\n*🌿 Author* : ${data[0].author}\n\n`
+                                for (let i of data) {
+                                krl += (`\n────────────────────\n\n *📍Title :* ${i.judul}\n *📟 Quality :* ${i.quality}\n *🖥️ Type : ${i.type}*\n *⌛ Uploaded :* ${i.upload}\n *🌍 Source :* ${i.link}`)
+                                }
+                               hisoka.sendMessage(from, { image: { url: data[0].thumb}, caption: krl }, { quoted: fdocs })
+                });
+                break
 	        case 'motivasi': case 'dilanquote': case 'bucinquote': case 'katasenja': case 'puisi': {
                 let anu = await fetchJson(api('zenz', '/api/'+command, {}, 'apikey'))
                 let buttons = [
