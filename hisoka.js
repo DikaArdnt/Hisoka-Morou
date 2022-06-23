@@ -18,6 +18,7 @@ const { JSDOM } = require('jsdom')
 const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
+const ZeroTwo = require('xfarr-api')
 const primbon = new Primbon()
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins } = require('./lib/myfunc')
 
@@ -1731,7 +1732,7 @@ break
 				break
 			case 'movie':
                 if (!q) return reply(`What movie you wanna search?\nExample: ${prefix}movie Spiderman`)
-                dgxeon.Film(q)
+                ZeroTwo.Film(q)
                     .then(data => {console.log(data)
                     let krl = `*❒「  Film ${q} 」*\n*🌿 Author* : ${data[0].author}\n\n`
                                 for (let i of data) {
