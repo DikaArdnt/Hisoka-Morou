@@ -1,5 +1,5 @@
 {
-  "name": "hisoka-morou",
+  "name": "Vyna",
   "version": "2.3.5",
   "description": "WhatsApp Using Lib Baileys Multi Device",
   "main": "index.js",
@@ -18,7 +18,7 @@
     "bot-md",
     "multi-device"
   ],
-  "author": "Dika Ardnt.",
+  "author": "Vyna Store.",
   "license": "MIT",
   "dependencies": {
     "@adiwajshing/baileys": "^4.2.0",
