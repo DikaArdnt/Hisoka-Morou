@@ -77,14 +77,21 @@ async function startHisoka() {
 
     store.bind(hisoka.ev)
     
-    // anticall auto block
-    hisoka.ws.on('CB:call', async (json) => {
-    const callerId = json.content[0].attrs['call-creator']
-    if (json.content[0].tag == 'offer') {
-    let pa7rick = await hisoka.sendContact(callerId, global.owner)
-    hisoka.sendMessage(callerId, { text: `Sistem otomatis block!\nJangan menelpon bot!\nSilahkan Hubungi Owner Untuk Dibuka !`}, { quoted : pa7rick })
+    // Anti Call
+    hisoka.ev.on('call', async (fatihh) => {
+    let botNumber = await hisoka.decodeJid(hisoka.user.id)
+    let ciko = db.data.settings[botNumber].anticall
+    if (!ciko) return
+    console.log(fatihh)
+    for (let tihh of fatihh) {
+    if (tihh.isGroup == false) {
+    if (tihh.status == "offer") {
+    let pa7rick = await hisoka.sendTextWithMentions(tihh.from, `*${hisoka.user.name}* tidak bisa menerima panggilan ${tihh.isVideo ? `video` : `suara`}. Maaf @${tihh.from.split('@')[0]} kamu akan diblockir. Jika tidak sengaja silahkan hubungi Owner untuk dibuka !`)
+    hisoka.sendContact(tihh.from, global.owner, pa7rick)
     await sleep(8000)
-    await hisoka.updateBlockStatus(callerId, "block")
+    await hisoka.updateBlockStatus(tihh.from, "block")
+    }
+    }
     }
     })
 
@@ -474,7 +481,7 @@ async function startHisoka() {
      * @param {*} options 
      * @returns 
      */
-    hisoka.sendText = (jid, text, quoted = '', options) => hisoka.sendMessage(jid, { text: text, ...options }, { quoted })
+    hisoka.sendText = (jid, text, quoted = '', options) => hisoka.sendMessage(jid, { text: text, ...options }, { quoted, ..options })
 
     /**
      * 

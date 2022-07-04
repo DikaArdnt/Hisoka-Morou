@@ -64,8 +64,8 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 	try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
             let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
-            let user = global.db.data.users[m.sender]
-            if (typeof user !== 'object') global.db.data.users[m.sender] = {}
+            let user = db.data.users[m.sender]
+            if (typeof user !== 'object') db.data.users[m.sender] = {}
             if (user) {
                 if (!isNumber(user.afkTime)) user.afkTime = -1
                 if (!('afkReason' in user)) user.afkReason = ''
@@ -76,8 +76,8 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                 limit: limitUser,
             }
     
-            let chats = global.db.data.chats[m.chat]
-            if (typeof chats !== 'object') global.db.data.chats[m.chat] = {}
+            let chats = db.data.chats[m.chat]
+            if (typeof chats !== 'object') db.data.chats[m.chat] = {}
             if (chats) {
                 if (!('mute' in chats)) chats.mute = false
                 if (!('antilink' in chats)) chats.antilink = false
@@ -86,9 +86,10 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
                 antilink: false,
             }
 		
-	    let setting = global.db.data.settings[botNumber]
-            if (typeof setting !== 'object') global.db.data.settings[botNumber] = {}
+	    let setting = db.data.settings[botNumber]
+        if (typeof setting !== 'object') db.data.settings[botNumber] = {}
 	    if (setting) {
+	    if (!('anticall' in setting)) setting.anticall = true
 		if (!isNumber(setting.status)) setting.status = 0
 		if (!('autobio' in setting)) setting.autobio = false
 		if (!('templateImage' in setting)) setting.templateImage = true
@@ -97,6 +98,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
 		if (!('templateMsg' in setting)) setting.templateMsg = false
 		if (!('templateLocation' in setting)) setting.templateLocation = false
 	    } else global.db.data.settings[botNumber] = {
+	    anticall: true,
 		status: 0,
 		autobio: false,
 		templateImage: true,
@@ -1154,6 +1156,26 @@ break
                 }
             }
             break
+            case 'anticall': {
+            if (!isCreator) throw mess.owner
+                let ciko = db.data.settings[botNumber].anticall
+                if (args[0] === "on") {
+                if (ciko) return m.reply(`Sudah Aktif Sebelumnya`)
+                ciko = true
+                m.reply(`AntiCall Aktif !`)
+                } else if (args[0] === "off") {
+                if (!ciko) return m.reply(`Sudah Tidak Aktif Sebelumnya`)
+                ciko = false
+                m.reply(`AntiCall Tidak Aktif !`)
+                } else {
+                 let buttons = [
+                        { buttonId: 'anticall on', buttonText: { displayText: 'On' }, type: 1 },
+                        { buttonId: 'anticall off', buttonText: { displayText: 'Off' }, type: 1 }
+                    ]
+                    await hisoka.sendButtonText(m.chat, buttons, `Mode AntiCall`, hisoka.user.name, m)
+                }
+             }
+             break
             case 'delete': case 'del': {
                 if (!m.quoted) throw false
                 let { chat, fromMe, id, isBaileys } = m.quoted
@@ -3103,6 +3125,7 @@ let capt = `⭔ Title: ${judul}
 │⭔ ${prefix}setppbot [image]
 │⭔ ${prefix}setexif
 │⭔ ${prefix}setmenu [option]
+│⭔ ${prefix}anticall [on/off]
 │
 └───────⭓`
                 let btn = [{
@@ -3177,7 +3200,7 @@ let capt = `⭔ Title: ${judul}
                 if (budy.startsWith('$')) {
                     if (!isCreator) return m.reply(mess.owner)
                     exec(budy.slice(2), (err, stdout) => {
-                        if(err) return m.reply(err)
+                        if (err) return m.reply(`${err}`)
                         if (stdout) return m.reply(stdout)
                     })
                 }
