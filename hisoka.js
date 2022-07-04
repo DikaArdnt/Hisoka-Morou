@@ -2448,7 +2448,6 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
 	    break
 	    case 'anonymous': {
                 if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-				this.anonymous = this.anonymous ? this.anonymous : {}
 				let buttons = [
                     { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
                 ]
@@ -2457,8 +2456,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
 			break
             case 'keluar': case 'leave': {
                 if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                let room = Object.values(this.anonymous).find(room => room.check(m.sender))
+                let room = Object.values(db.data.anonymous).find(room => room.check(m.sender))
                 if (!room) {
                     let buttons = [
                         { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
@@ -2469,20 +2467,19 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                 m.reply('Ok')
                 let other = room.other(m.sender)
                 if (other) await hisoka.sendText(other, `\`\`\`Partner Telah Meninggalkan Sesi Anonymous\`\`\``, m)
-                delete this.anonymous[room.id]
+                delete db.data.anonymous[room.id]
                 if (command === 'leave') break
             }
             case 'mulai': case 'start': {
                 if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                if (Object.values(this.anonymous).find(room => room.check(m.sender))) {
+                if (Object.values(db.data.anonymous).find(room => room.check(m.sender))) {
                     let buttons = [
                         { buttonId: 'keluar', buttonText: { displayText: 'Stop' }, type: 1 }
                     ]
                     await hisoka.sendButtonText(m.chat, buttons, `\`\`\`Kamu Masih Berada Di dalam Sesi Anonymous, Tekan Button Dibawah Ini Untuk Menghentikan Sesi Anonymous Anda\`\`\``, hisoka.user.name, m)
                     throw false
                 }
-                let room = Object.values(this.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
+                let room = Object.values(db.data.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
                 if (room) {
                     let buttons = [
                         { buttonId: 'next', buttonText: { displayText: 'Skip' }, type: 1 },
@@ -2494,7 +2491,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                     await hisoka.sendButtonText(room.b, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, hisoka.user.name, m)
                 } else {
                     let id = + new Date
-                    this.anonymous[id] = {
+                    db.data.anonymous[id] = {
                         id,
                         a: m.sender,
                         b: '',
@@ -2515,8 +2512,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
             }
             case 'next': case 'lanjut': {
                 if (m.isGroup) return m.reply('Fitur Tidak Dapat Digunakan Untuk Group!')
-                this.anonymous = this.anonymous ? this.anonymous : {}
-                let romeo = Object.values(this.anonymous).find(room => room.check(m.sender))
+                let romeo = Object.values(db.data.anonymous).find(room => room.check(m.sender))
                 if (!romeo) {
                     let buttons = [
                         { buttonId: 'start', buttonText: { displayText: 'Start' }, type: 1 }
@@ -2526,8 +2522,8 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                 }
                 let other = romeo.other(m.sender)
                 if (other) await hisoka.sendText(other, `\`\`\`Partner Telah Meninggalkan Sesi Anonymous\`\`\``, m)
-                delete this.anonymous[romeo.id]
-                let room = Object.values(this.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
+                delete db.data.anonymous[romeo.id]
+                let room = Object.values(db.data.anonymous).find(room => room.state === 'WAITING' && !room.check(m.sender))
                 if (room) {
                     let buttons = [
                         { buttonId: 'next', buttonText: { displayText: 'Skip' }, type: 1 },
@@ -2539,7 +2535,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
                     await hisoka.sendButtonText(room.b, buttons, `\`\`\`Berhasil Menemukan Partner, sekarang kamu dapat mengirim pesan\`\`\``, hisoka.user.name, m)
                 } else {
                     let id = + new Date
-                    this.anonymous[id] = {
+                    db.data.anonymous[id] = {
                         id,
                         a: m.sender,
                         b: '',
@@ -3206,8 +3202,7 @@ let capt = `⭔ Title: ${judul}
                 }
 			
 		if (m.chat.endsWith('@s.whatsapp.net') && isCmd) {
-                    this.anonymous = this.anonymous ? this.anonymous : {}
-                    let room = Object.values(this.anonymous).find(room => [room.a, room.b].includes(m.sender) && room.state === 'CHATTING')
+                    let room = Object.values(db.data.anonymous).find(room => [room.a, room.b].includes(m.sender) && room.state === 'CHATTING')
                     if (room) {
                         if (/^.*(next|leave|start)/.test(m.text)) return
                         if (['.next', '.leave', '.stop', '.start', 'Cari Partner', 'Keluar', 'Lanjut', 'Stop'].includes(m.text)) return
