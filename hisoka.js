@@ -502,17 +502,10 @@ Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
             }
             break
             case 'delttc': case 'delttt': {
-            this.game = this.game ? this.game : {}
-            try {
-            if (this.game) {
-            delete this.game
-            hisoka.sendText(m.chat, `Berhasil delete session TicTacToe`, m)
-            } else if (!this.game) {
-            m.reply(`Session TicTacToe🎮 tidak ada`)
-            } else throw '?'
-            } catch (e) {
-            m.reply('rusak')
-            }
+            let roomnya = Object.values(this.game).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))
+            if (!roomnya) throw `Kamu sedang tidak berada di room tictactoe !`
+            delete this.game[roomnya.id]
+            m.reply(`Berhasil delete session room tictactoe !`)
             }
             break
             case 'suitpvp': case 'suit': {
