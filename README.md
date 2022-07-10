@@ -24,7 +24,7 @@ This is Script of WhatsApp multi device, working with [`@adiwajshing/baileys`](h
 * WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
 * WhatsApp Bot Using Library whatsapp-web.js [`hisoka-waweb.js`](https://github.com/Hisoka-Morrou/hisoka-waweb.js/)
 
-## Heroku Buildpack
+## HEROKU BUILDPACK
 ```bash
 heroku/nodejs
 heroku/python
@@ -73,12 +73,12 @@ pkg install yarn
 yarn
 ```
 
-## Installing
+## INSTALLING
 ```bash
 $ node .
 ```
 
-## ❗ Warning
+## ❗ WARNING
 WhatsApp bot is still in the development stage, so there are a few bugs
 WhatsApp Connection (BETA, not working perfectly)
 
@@ -86,7 +86,7 @@ Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdn
 Get Apikey zenz on [`zenz`](https://zenzapi.xyz/pricing)
 
 
-## Thanks To
+## THANKS TO
 * [`@adiwajshing/baileys`](https://github.com/adiwajshing/baileys)
 * [`Nurutomo`](https://github.com/Nurutomo)
 * [`Mhankbarbar`](https://github.com/MhankBarBar)
