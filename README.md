@@ -24,6 +24,13 @@ This is Script of WhatsApp multi device, working with [`@adiwajshing/baileys`](h
 * WhatsApp Bot Multi Device [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
 * WhatsApp Bot Using Library whatsapp-web.js [`hisoka-waweb.js`](https://github.com/Hisoka-Morrou/hisoka-waweb.js/)
 
+## Heroku Buildpack
+```bash
+heroku/nodejs
+heroku/python
+https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
+https://github.com/clhuang/heroku-buildpack-webp-binaries.git
+```
 
 ## UNTUK PENGGUNA WINDOWS/RDP
 
