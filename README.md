@@ -49,8 +49,9 @@ npm install
 
 * Create account and database in mongodb atlas [`watch here`](https://youtu.be/rPqRyYJmx2g)
 * when you already have a database, you just need to take mongourl
-* Put mongourl in Procfile `web: node . --db 'mongourl'`
-* Example `web: node . -- db 'Your Mongo URI'`
+* Put mongourl in Procfile `worker: node . --db 'mongourl'`
+* Example `worker: node . -- db 'Your Mongo URI'`
+* Example `worker: node . -- db 'mongodb+srv://hisoka:hisokamorrow@hisoka.axmu8.mongodb.net/?retryWrites=true&w=majority'`
 
 
 
@@ -93,7 +94,7 @@ Get Apikey zenz on [`zenz`](https://zenzapi.xyz/pricing)
 * [`Faiz`](https://github.com/FaizBastomi)
 * [`Gimenz`](https://github.com/Gimenz)
 * [`rayy`](https://github.com/rayyreall)
-* [`Fatih Arridho`](https://github.com/FatihArridho)
+* [`FatihArridho`](https://github.com/FatihArridho)
 * [`Pa7rick`](https://github.com/pa7rickr)
 * [`RidhoUhuy`](https://github.com/Atak676) 
 * [`zhwzein`](https://github.com/zhwzein)
