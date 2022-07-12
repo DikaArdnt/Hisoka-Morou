@@ -1,6 +1,6 @@
 {
   "name": "hisoka-morou",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "WhatsApp Using Lib Baileys Multi Device",
   "main": "index.js",
   "type": "commonjs",
