@@ -435,10 +435,8 @@ Selama ${clockString(new Date - afkTime)}
 
         if (db.data.users[m.sender].afkTime > -1) {
             let user = global.db.data.users[m.sender]
-            m.reply(`
-Kamu berhenti AFK${user.afkReason ? ' setelah ' + user.afkReason : ''}
-Selama ${clockString(new Date - user.afkTime)}
-`.trim())
+            hisoka.sendTextWithMentions(m.chat, `©${m.sender.split('@')[0]} berhenti AFK${user.afkReason ? ' setelah ' + user.afkReason : ''}
+Selama ${clockString(new Date - user.afkTime)}`)
             user.afkTime = -1
             user.afkReason = ''
         }
