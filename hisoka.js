@@ -47,7 +47,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const isCreator = [botNumber, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const itsMe = m.sender == botNumber ? true : false
         const text = q = args.join(" ")
-        const quoted = m.quoted ? m.quoted : m
+        const quoted = ((m.quoted || m).mtype == 'buttonsMessage') ? m.quoted[Object.keys(m.quoted)[1]] : ((m.quoted || m).mtype == 'templateMessage') ? m.quoted.hydratedTemplate[Object.keys(m.quoted.hydratedTemplate)[1]] : ((m.quoted || m).mtype == 'product') ? m.quoted[Object.keys(m.quoted)[0]] : m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
         const isMedia = /image|video|sticker|audio/.test(mime)
 	
@@ -1308,12 +1308,12 @@ break
             if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
                     if (/image/.test(mime)) {
-                let media = await quoted.download()
+                let media = await hisoka.downloadMediaMessage(quoted)
                 let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
                 if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
-                let media = await quoted.download()
+                let media = await hisoka.downloadMediaMessage(quoted)
                 let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else {
@@ -1328,12 +1328,12 @@ break
                 if (!teks2) throw `Kirim/reply image/video dengan caption ${prefix + command} teks1|teks2`
             	m.reply(mess.wait)
                 if (/image/.test(mime)) {
-                    let media = await quoted.download()
+                    let media = await hisoka.downloadMediaMessage(quoted)
                     let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
                     await fs.unlinkSync(encmedia)
                 } else if (/video/.test(mime)) {
                     if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
-                    let media = await quoted.download()
+                    let media = await hisoka.downloadMediaMessage(quoted)
                     let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
                     await fs.unlinkSync(encmedia)
                 } else {
@@ -1388,7 +1388,7 @@ break
 	        m.reply(mess.wait)
             atas = text.split('|')[0] ? text.split('|')[0] : '-'
             bawah = text.split('|')[1] ? text.split('|')[1] : '-'
-	        let dwnld = await quoted.download()
+	        let dwnld = await hisoka.downloadMediaMessage(quoted)
 	        let { floNime } = require('./lib/uploader')
 	        let fatGans = await floNime(dwnld)
 	        let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(atas)}/${encodeURIComponent(bawah)}.png?background=${fatGans.result.url}`
