@@ -50,6 +50,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         const fatkuns = (m.quoted || m)
         const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
+        const qmsg = (quoted.msg || quoted)
         const isMedia = /image|video|sticker|audio/.test(mime)
 	
         // Group
@@ -1307,12 +1308,12 @@ break
             if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
                     if (/image/.test(mime)) {
-                let media = await hisoka.downloadMediaMessage(quoted)
+                let media = await hisoka.downloadMediaMessage(qmsg)
                 let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
-                if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
-                let media = await hisoka.downloadMediaMessage(quoted)
+                if (qmsg.seconds > 11) return m.reply('Maksimal 10 detik!')
+                let media = await hisoka.downloadMediaMessage(qmsg)
                 let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else {
@@ -1321,18 +1322,17 @@ break
             }
             break
             case 'stickerwm': case 'swm': case 'stickergifwm': case 'sgifwm': {
-                if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command} teks1|teks2`
                 let [teks1, teks2] = text.split`|`
                 if (!teks1) throw `Kirim/reply image/video dengan caption ${prefix + command} teks1|teks2`
                 if (!teks2) throw `Kirim/reply image/video dengan caption ${prefix + command} teks1|teks2`
             	m.reply(mess.wait)
                 if (/image/.test(mime)) {
-                    let media = await hisoka.downloadMediaMessage(quoted)
+                    let media = await hisoka.downloadMediaMessage(qmsg)
                     let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
                     await fs.unlinkSync(encmedia)
                 } else if (/video/.test(mime)) {
                     if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
-                    let media = await hisoka.downloadMediaMessage(quoted)
+                    let media = await hisoka.downloadMediaMessage(qmsg)
                     let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: teks1, author: teks2 })
                     await fs.unlinkSync(encmedia)
                 } else {
