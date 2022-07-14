@@ -814,10 +814,9 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
             break
           case 'setppbot': {
                 if (!isCreator) throw mess.owner
-                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
                 if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
                 if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 await hisoka.updateProfilePicture(botNumber, { url: media }).catch((err) => fs.unlinkSync(media))
                 m.reply(mess.success)
                 }
@@ -825,10 +824,9 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
            case 'setppgroup': case 'setppgrup': case 'setppgc': {
                 if (!m.isGroup) throw mess.group
                 if (!isAdmins) throw mess.admin
-                if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
                 if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
                 if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 await hisoka.updateProfilePicture(m.chat, { url: media }).catch((err) => fs.unlinkSync(media))
                 m.reply(mess.success)
                 }
@@ -1305,19 +1303,19 @@ break
              }
              break
             case 'sticker': case 's': case 'stickergif': case 'sgif': {
-            if (!quoted) throw `Balas Video/Image Dengan Caption ${prefix + command}`
-            m.reply(mess.wait)
-                    if (/image/.test(mime)) {
+           if (/image/.test(mime)) {
+           m.reply(mess.wait)
                 let media = await hisoka.downloadMediaMessage(qmsg)
                 let encmedia = await hisoka.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
+            m.reply(mess.wait)
                 if (qmsg.seconds > 11) return m.reply('Maksimal 10 detik!')
                 let media = await hisoka.downloadMediaMessage(qmsg)
                 let encmedia = await hisoka.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 await fs.unlinkSync(encmedia)
             } else {
-                throw `Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`
+                m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}\nDurasi Video/Gif 1-9 Detik`
                 }
             }
             break
@@ -1387,7 +1385,7 @@ break
 	        m.reply(mess.wait)
             atas = text.split('|')[0] ? text.split('|')[0] : '-'
             bawah = text.split('|')[1] ? text.split('|')[1] : '-'
-	        let dwnld = await hisoka.downloadMediaMessage(quoted)
+	        let dwnld = await hisoka.downloadMediaMessage(qmsg)
 	        let { floNime } = require('./lib/uploader')
 	        let fatGans = await floNime(dwnld)
 	        let smeme = `https://api.memegen.link/images/custom/${encodeURIComponent(atas)}/${encodeURIComponent(bawah)}.png?background=${fatGans.result.url}`
@@ -1402,10 +1400,9 @@ break
             }
             break
             case 'toimage': case 'toimg': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `Balas sticker dengan caption *${prefix + command}*`
+                if (!/webp/.test(mime)) throw `Reply sticker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 let ran = await getRandom('.png')
                 exec(`ffmpeg -i ${media} ${ran}`, (err) => {
                     fs.unlinkSync(media)
@@ -1417,11 +1414,10 @@ break
             }
             break
 	        case 'tomp4': case 'tovideo': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
+                if (!/webp/.test(mime)) throw `Reply stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
-		let { webp2mp4File } = require('./lib/uploader')
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+		        let { webp2mp4File } = require('./lib/uploader')
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 let webpToMp4 = await webp2mp4File(media)
                 await hisoka.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' } }, { quoted: m })
                 await fs.unlinkSync(media)
@@ -1429,20 +1425,17 @@ break
             break
             case 'toaud': case 'toaudio': {
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
-            let media = await quoted.download()
+            let media = await hisoka.downloadMediaMessage(qmsg)
             let { toAudio } = require('./lib/converter')
             let audio = await toAudio(media, 'mp4')
             hisoka.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
             }
             break
             case 'tomp3': {
-            if (/document/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
-            let media = await quoted.download()
+            let media = await hisoka.downloadMediaMessage(qmsg)
             let { toAudio } = require('./lib/converter')
             let audio = await toAudio(media, 'mp4')
             hisoka.sendMessage(m.chat, {document: audio, mimetype: 'audio/mpeg', fileName: `Convert By ${hisoka.user.name}.mp3`}, { quoted : m })
@@ -1450,20 +1443,18 @@ break
             break
             case 'tovn': case 'toptt': {
             if (!/video/.test(mime) && !/audio/.test(mime)) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
-            if (!quoted) throw `Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`
             m.reply(mess.wait)
-            let media = await quoted.download()
+            let media = await hisoka.downloadMediaMessage(qmsg)
             let { toPTT } = require('./lib/converter')
             let audio = await toPTT(media, 'mp4')
             hisoka.sendMessage(m.chat, {audio: audio, mimetype:'audio/mpeg', ptt:true }, {quoted:m})
             }
             break
             case 'togif': {
-                if (!quoted) throw 'Reply Image'
-                if (!/webp/.test(mime)) throw `balas stiker dengan caption *${prefix + command}*`
+                if (!/webp/.test(mime)) throw `Reply stiker dengan caption *${prefix + command}*`
                 m.reply(mess.wait)
-		let { webp2mp4File } = require('./lib/uploader')
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+		        let { webp2mp4File } = require('./lib/uploader')
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 let webpToMp4 = await webp2mp4File(media)
                 await hisoka.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' }, gifPlayback: true }, { quoted: m })
                 await fs.unlinkSync(media)
@@ -1472,7 +1463,7 @@ break
 	        case 'tourl': {
                 m.reply(mess.wait)
 		let { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 if (/image/.test(mime)) {
                     let anu = await TelegraPh(media)
                     m.reply(util.format(anu))
@@ -1484,14 +1475,13 @@ break
             }
             break
             case 'imagenobg': case 'removebg': case 'remove-bg': {
-	    if (!quoted) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
 	    if (!/image/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
 	    if (/webp/.test(mime)) throw `Kirim/Reply Image Dengan Caption ${prefix + command}`
 	    let remobg = require('remove.bg')
 	    let apirnobg = ['q61faXzzR5zNU6cvcrwtUkRU','S258diZhcuFJooAtHTaPEn4T','5LjfCVAp4vVNYiTjq9mXJWHF','aT7ibfUsGSwFyjaPZ9eoJc61','BY63t7Vx2tS68YZFY6AJ4HHF','5Gdq1sSWSeyZzPMHqz7ENfi8','86h6d6u4AXrst4BVMD9dzdGZ','xp8pSDavAgfE5XScqXo9UKHF','dWbCoCb3TacCP93imNEcPxcL']
 	    let apinobg = apirnobg[Math.floor(Math.random() * apirnobg.length)]
 	    hmm = await './src/remobg-'+getRandom('')
-	    localFile = await hisoka.downloadAndSaveMediaMessage(quoted, hmm)
+	    localFile = await hisoka.downloadAndSaveMediaMessage(qmsg, hmm)
 	    outputFile = await './src/hremo-'+getRandom('.png')
 	    m.reply(mess.wait)
 	    remobg.removeBackgroundFromImageFile({
@@ -2324,7 +2314,7 @@ ${id}`)
                 if (/tupai/.test(command)) set = '-filter:a "atempo=0.5,asetrate=65100"'
                 if (/audio/.test(mime)) {
                 m.reply(mess.wait)
-                let media = await hisoka.downloadAndSaveMediaMessage(quoted)
+                let media = await hisoka.downloadAndSaveMediaMessage(qmsg)
                 let ran = getRandom('.mp3')
                 exec(`ffmpeg -i ${media} ${set} ${ran}`, (err, stderr, stdout) => {
                 fs.unlinkSync(media)
