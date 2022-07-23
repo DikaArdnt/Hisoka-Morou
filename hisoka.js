@@ -56,7 +56,7 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         // Group
         const groupMetadata = m.isGroup ? await hisoka.groupMetadata(m.chat).catch(e => {}) : ''
         const groupName = m.isGroup ? groupMetadata?.subject : ''
-        const participants = m.isGroup ? await groupMetadata?.participants : ''
+        const participants = m.isGroup ? await groupMetadata?.participants : []
         const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
