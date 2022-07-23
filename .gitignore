@@ -1,0 +1,6 @@
+
+config.js
+node_modules/
+package-lock.json
+hisoka.json
+src/database.json

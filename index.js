@@ -4,12 +4,13 @@
    * Follow https://github.com/DikaArdnt
 */
 
+const fs = require('fs')
+if(!fs.existsSync('./config.js')) fs.renameSync('./contoh-config.js', './config.js')
 require('./config')
 const { default: hisokaConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
 const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
 const pino = require('pino')
 const { Boom } = require('@hapi/boom')
-const fs = require('fs')
 const yargs = require('yargs/yargs')
 const chalk = require('chalk')
 const FileType = require('file-type')

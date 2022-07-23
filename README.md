@@ -83,7 +83,8 @@ $ node .
 WhatsApp bot is still in the development stage, so there are a few bugs
 WhatsApp Connection (BETA, not working perfectly)
 
-Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdnt/Hisoka-Morou/blob/master/config.js)
+Editing Number Owner & session name in [`config.js`](https://github.com/DikaArdnt/Hisoka-Morou/blob/master/contoh-config.js)  _*rename file ```contoh-config.js``` to ```config.js``` first_
+
 Get Apikey zenz on [`zenz`](https://zenzapis.xyz/)
 
 
