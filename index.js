@@ -221,23 +221,6 @@ async function startHisoka() {
 	hisoka.sendMessage(jid, { contacts: { displayName: `${list.length} Kontak`, contacts: list }, ...opts }, { quoted })
     }
     
-    hisoka.setStatus = (status) => {
-        hisoka.query({
-            tag: 'iq',
-            attrs: {
-                to: '@s.whatsapp.net',
-                type: 'set',
-                xmlns: 'status',
-            },
-            content: [{
-                tag: 'status',
-                attrs: {},
-                content: Buffer.from(status, 'utf-8')
-            }]
-        })
-        return status
-    }
-	
     hisoka.public = true
 
     hisoka.serializeM = (m) => smsg(hisoka, m, store)
