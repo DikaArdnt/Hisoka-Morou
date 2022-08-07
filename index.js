@@ -105,6 +105,7 @@ async function startHisoka() {
         if (mek.key && mek.key.remoteJid === 'status@broadcast') return
         if (!hisoka.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
         if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
+        if (mek.key.id.startsWith('FatihArridho_')) return
         m = smsg(hisoka, mek, store)
         require("./hisoka")(hisoka, m, chatUpdate, store)
         } catch (err) {
