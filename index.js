@@ -236,6 +236,7 @@ async function startHisoka() {
             else if (reason === DisconnectReason.loggedOut) { console.log(`Device Logged Out, Please Scan Again And Run.`); hisoka.logout(); }
             else if (reason === DisconnectReason.restartRequired) { console.log("Restart Required, Restarting..."); startHisoka(); }
             else if (reason === DisconnectReason.timedOut) { console.log("Connection TimedOut, Reconnecting..."); startHisoka(); }
+            else if (reason === DisconnectReason.Multidevicemismatch) { console.log("Multi device mismatch, please scan again"); hisoka.logout(); }
             else hisoka.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
         console.log('Connected...', update)
@@ -259,33 +260,6 @@ async function startHisoka() {
       }
       // Siapa yang cita-citanya pakai resize buat keliatan thumbnailnya
       
-      /** Send Button 5 Location
-       *
-       * @param {*} jid
-       * @param {*} text
-       * @param {*} footer
-       * @param {*} location
-       * @param [*] button
-       * @param {*} options
-       */
-      hisoka.send5ButLoc = async (jid , text = '' , footer = '', lok, but = [], options = {}) =>{
-       let resize = await hisoka.reSize(lok, 300, 150)
-       var template = generateWAMessageFromContent(jid, {
-       "templateMessage": {
-       "hydratedTemplate": {
-       "locationMessage": {
-       "degreesLatitude": 0,
-       "degreesLongitude": 0,
-       "jpegThumbnail": resize
-       },
-       "hydratedContentText": text,
-       "hydratedFooterText": footer,
-       "hydratedButtons": but
-       }
-       }
-       }, options)
-       hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
-      }
 
       /**
       *
@@ -368,20 +342,22 @@ async function startHisoka() {
      * @returns
      */
     hisoka.send5ButImg = async (jid , text = '' , footer = '', img, but = [], buff, options = {}) =>{
-        let resize = await hisoka.reSize(buff, 300, 150)
-        let message = await prepareWAMessageMedia({ image: img, jpegThumbnail: resize }, { upload: hisoka.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        imageMessage: message.imageMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
+    hisoka.sendMessage(jid, { image: img, caption: text, footer: footer, templateButtons: but, ...options })
     }
+
+      /** Send Button 5 Location
+       *
+       * @param {*} jid
+       * @param {*} text
+       * @param {*} footer
+       * @param {*} location
+       * @param [*] button
+       * @param {*} options
+       */
+      hisoka.send5ButLoc = async (jid , text = '' , footer = '', lok, but = [], options = {}) =>{
+      let bb = await hisoka.reSize(lok, 300, 150)
+      hisoka.sendMessage(jid, { location: { jpegThumbnail: bb }, caption: text, footer: footer, templateButtons: but, ...options })
+      }
 
     /** Send Button 5 Video
      *
@@ -394,19 +370,8 @@ async function startHisoka() {
      * @returns
      */
     hisoka.send5ButVid = async (jid , text = '' , footer = '', vid, but = [], buff, options = {}) =>{
-        let resize = await hisoka.reSize(buff, 300, 150)
-        let message = await prepareWAMessageMedia({ video: vid, jpegThumbnail: resize }, { upload: hisoka.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        videoMessage: message.videoMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
+    let lol = await hisoka.reSize(buf, 300, 150)
+    hisoka.sendMessage(jid, { video: vid, jpegThumbnail: lol, caption: text, footer: footer, templateButtons: but, ...options })
     }
 
     /** Send Button 5 Gif
@@ -420,21 +385,10 @@ async function startHisoka() {
      * @returns
      */
     hisoka.send5ButGif = async (jid , text = '' , footer = '', gif, but = [], buff, options = {}) =>{
-        let resize = await hisoka.reSize(buff, 300, 150)
-        let a = [1,2]
-        let b = a[Math.floor(Math.random() * a.length)]
-        let message = await prepareWAMessageMedia({ video: gif, gifPlayback: true, jpegThumbnail: resize, gifAttribution: b}, { upload: hisoka.waUploadToServer })
-        var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-        templateMessage: {
-        hydratedTemplate: {
-        videoMessage: message.videoMessage,
-               "hydratedContentText": text,
-               "hydratedFooterText": footer,
-               "hydratedButtons": but
-            }
-            }
-            }), options)
-            hisoka.relayMessage(jid, template.message, { messageId: template.key.id })
+    let ahh = await hisoka.reSize(buf, 300, 150)
+    let a = [1,2]
+    let b = a[Math.floor(Math.random() * a.length)]
+    hisoka.sendMessage(jid, { video: gif, gifPlayback: true, gifAttribution: b, caption: text, footer: footer, jpegThumbnail: ahh, templateButtons: but, ...options })
     }
 
     /**
