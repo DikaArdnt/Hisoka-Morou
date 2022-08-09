@@ -704,6 +704,31 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
                     await hisoka.sendButtonText(m.chat, buttons, jawab, hisoka.user.name, m, {mentions: ments})
             }
             break
+            case 'fitnah': {
+            if (!m.isGroup) return reply(mess.group)
+            if (!args.join(" ")) return reply(`Example :\n- ${command} no | jawaban | fitnah\n- ${command} @6288888888 | p | apa`)
+            targetd = args.join(" ").split("|")[0];
+            jawbanbot = args.join(" ").split("|")[1];
+            teksfit = args.join(" ").split("|")[2];
+            targetnya = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : targetd.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+            hisoka.sendMessage(m.chat, {text:jawbanbot}, {quoted:{
+             key: {
+            fromMe: false,
+            participant: targetnya
+            },
+            message: {
+            conversation: teksfit
+            }
+            }})
+            }
+            break
+            case 'rate':
+           if (!m.isGroup) return reply(mess.group)
+			   	 if (!q) return reply(`Penggunaan ${command} text\n\nContoh : ${command} Gambar aku`)
+					const ra = ['5', '10', '15' ,'20', '25','30','35','40','45','50','55','60','65','70','75','80','85','90','100']
+					const te = ra[Math.floor(Math.random() * ra.length)]
+          hisoka.sendMessage(m.chat, { text: `Rate : ${q}\nJawaban : *${te}%*` }, { quoted: m })
+					break
             case 'jadian': {
             if (!m.isGroup) throw mess.group
             let member = participants.map(u => u.id)
@@ -2952,6 +2977,8 @@ let capt = `⭔ Title: ${judul}
 │⭔ ${prefix}holoh
 │⭔ ${prefix}jadian
 │⭔ ${prefix}jodohku
+│⭔ ${prefix}rate
+│⭔ ${prefix}fitnah
 │⭔ ${prefix}delttt
 │⭔ ${prefix}tictactoe
 │⭔ ${prefix}family100
