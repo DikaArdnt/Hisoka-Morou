@@ -881,7 +881,7 @@ let teks = `══✪〘 *👥 Tag All* 〙✪══
                if (!isBotAdmins) throw mess.botAdmin
                if (!isAdmins) throw mess.admin
                if (!m.quoted) throw `Reply pesan dengan caption ${prefix + command}`
-               hisoka.sendMessage(m.chat, { forward: m.quoted.fakeObj, mentions: participants.map(a => a.id) })
+               hisoka.sendMessage(m.chat, { forward: m.quoted.fakeObj, mentions: participants.map(a => a.id), quoted: m })
                }
                break
 	    case 'style': case 'styletext': {
