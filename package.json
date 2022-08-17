@@ -1,6 +1,6 @@
 {
   "name": "hisoka-morou",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "WhatsApp Using Lib Baileys Multi Device",
   "main": "index.js",
   "type": "commonjs",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@adiwajshing/baileys" : "github:FatihArridho/Baileys",
     "@adiwajshing/keyed-db": "^0.2.4",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "awesome-phonenumber": "^2.64.0",
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
