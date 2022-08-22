@@ -19,6 +19,7 @@ const speed = require('performance-now')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const primbon = new Primbon()
+const {ssweb} = require('./lib/anubis')
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins } = require('./lib/myfunc')
 
 // read database
@@ -27,6 +28,7 @@ let _family100 = db.data.game.family100 = []
 let kuismath = db.data.game.math = []
 let tebakgambar = db.data.game.tebakgambar = []
 let tebakkata = db.data.game.tebakkata = []
+let rangkaikata = db.data.game.rangkaikata = []
 let caklontong = db.data.game.lontong = []
 let caklontong_desk = db.data.game.lontong_desk = []
 let tebakkalimat = db.data.game.kalimat = []
@@ -187,100 +189,111 @@ module.exports = hisoka = async (hisoka, m, chatUpdate, store) => {
         hisoka.ev.emit('messages.upsert', msg)
         }
 	    
-	if (('family100'+m.chat in _family100) && isCmd) {
-            kuis = true
-            let room = _family100['family100'+m.chat]
-            let teks = budy.toLowerCase().replace(/[^\w\s\-]+/, '')
-            let isSurender = /^((me)?nyerah|surr?ender)$/i.test(m.text)
-            if (!isSurender) {
-                let index = room.jawaban.findIndex(v => v.toLowerCase().replace(/[^\w\s\-]+/, '') === teks)
-                if (room.terjawab[index]) return !0
-                room.terjawab[index] = m.sender
+        if (command != 'clue'){
+            if (('family100'+m.chat in _family100) && isCmd) {
+                kuis = true
+                let room = _family100['family100'+m.chat]
+                let teks = budy.toLowerCase().replace(/[^\w\s\-]+/, '')
+                let isSurender = /^((me)?nyerah|surr?ender)$/i.test(m.text)
+                if (!isSurender) {
+                    let index = room.jawaban.findIndex(v => v.toLowerCase().replace(/[^\w\s\-]+/, '') === teks)
+                    if (room.terjawab[index]) return !0
+                    room.terjawab[index] = m.sender
+                }
+                let isWin = room.terjawab.length === room.terjawab.filter(v => v).length
+                let caption = `
+    Jawablah Pertanyaan Berikut :\n${room.soal}\n\n\nTerdapat ${room.jawaban.length} Jawaban ${room.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}
+    ${isWin ? `Semua Jawaban Terjawab` : isSurender ? 'Menyerah!' : ''}
+    ${Array.from(room.jawaban, (jawaban, index) => {
+            return isSurender || room.terjawab[index] ? `(${index + 1}) ${jawaban} ${room.terjawab[index] ? '@' + room.terjawab[index].split('@')[0] : ''}`.trim() : false
+        }).filter(v => v).join('\n')}
+        ${isSurender ? '' : `Perfect Player`}`.trim()
+                hisoka.sendText(m.chat, caption, m, { contextInfo: { mentionedJid: parseMention(caption) }}).then(mes => { return _family100['family100'+m.chat].pesan = mesg }).catch(_ => _)
+                if (isWin || isSurender) delete _family100['family100'+m.chat]
             }
-            let isWin = room.terjawab.length === room.terjawab.filter(v => v).length
-            let caption = `
-Jawablah Pertanyaan Berikut :\n${room.soal}\n\n\nTerdapat ${room.jawaban.length} Jawaban ${room.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}
-${isWin ? `Semua Jawaban Terjawab` : isSurender ? 'Menyerah!' : ''}
-${Array.from(room.jawaban, (jawaban, index) => {
-        return isSurender || room.terjawab[index] ? `(${index + 1}) ${jawaban} ${room.terjawab[index] ? '@' + room.terjawab[index].split('@')[0] : ''}`.trim() : false
-    }).filter(v => v).join('\n')}
-    ${isSurender ? '' : `Perfect Player`}`.trim()
-            hisoka.sendText(m.chat, caption, m, { contextInfo: { mentionedJid: parseMention(caption) }}).then(mes => { return _family100['family100'+m.chat].pesan = mesg }).catch(_ => _)
-            if (isWin || isSurender) delete _family100['family100'+m.chat]
-        }
 
-        if (tebaklagu.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebaklagu[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebaklagu[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (tebaklagu.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebaklagu[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebaklagu[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = kuismath[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await m.reply(`🎮 Kuis Matematika  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}math mode`)
-                delete kuismath[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = kuismath[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await m.reply(`🎮 Kuis Matematika  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}math mode`)
+                    delete kuismath[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (tebakgambar.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebakgambar[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebakgambar[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (tebakgambar.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebakgambar[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebakgambar[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (tebakkata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebakkata[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebakkata[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (tebakkata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebakkata[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebakkata[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (caklontong.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = caklontong[m.sender.split('@')[0]]
-	    deskripsi = caklontong_desk[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n*${deskripsi}*\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete caklontong[m.sender.split('@')[0]]
-		delete caklontong_desk[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (rangkaikata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = rangkaikata[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'rangkai kata', buttonText: { displayText: 'Rangkai Kata' }, type: 1 }], `🎮 Rangkai Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete rangkaikata[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebakkalimat[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebakkalimat[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
+            if (caklontong.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = caklontong[m.sender.split('@')[0]]
+            deskripsi = caklontong_desk[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n*${deskripsi}*\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete caklontong[m.sender.split('@')[0]]
+            delete caklontong_desk[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
 
-        if (tebaklirik.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebaklirik[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebaklirik[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
-        }
-	    
-	if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
-            kuis = true
-            jawaban = tebaktebakan[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak tebakan', buttonText: { displayText: 'Tebak Tebakan' }, type: 1 }], `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
-                delete tebaktebakan[m.sender.split('@')[0]]
-            } else m.reply('*Jawaban Salah!*')
+            if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebakkalimat[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebakkalimat[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
+
+            if (tebaklirik.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebaklirik[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebaklirik[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
+            
+            if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+                kuis = true
+                jawaban = tebaktebakan[m.sender.split('@')[0]]
+                if (budy.toLowerCase() == jawaban) {
+                    await hisoka.sendButtonText(m.chat, [{ buttonId: 'tebak tebakan', buttonText: { displayText: 'Tebak Tebakan' }, type: 1 }], `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, hisoka.user.name, m)
+                    delete tebaktebakan[m.sender.split('@')[0]]
+                } else m.reply('*Jawaban Salah!*')
+            }
         }
         
         //TicTacToe
@@ -587,6 +600,32 @@ Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
             tex = m.quoted ? m.quoted.text ? m.quoted.text : q ? q : m.text : q ? q : m.text
             m.reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
             break
+            case 'clue': {
+                if (!text) return
+                const [jawab,game] = text.split('|')
+                let anu = jawab.replace(/[BCDFGHIJKLMNPQRSTVWXYZbcdfghijklmnpqrstvwxyz]/g, '-')
+                let pes = 'Cluenya : '+anu
+                m.reply(pes)
+            }
+            break
+            case 'rangkai':
+                {
+                    if (!text) throw `Example : ${prefix + command} kata`
+                    if (args[0] === "kata") {
+                        if (rangkaikata.hasOwnProperty(m.sender.split('@')[0])) throw "Masih Ada Sesi Yang Belum Diselesaikan!"
+                        let result = await fetchJson('https://anubis.6te.net/api/rangkaikata.php?api=anubis')
+                        console.log(result.anubis.jawaban)
+                        await hisoka.sendButtonText(m.chat, [{ buttonId: `clue ${result.anubis.jawaban}`, buttonText: { displayText: 'Clue' }, type: 1 }], `Silahkan Rangkai Kata Berikut\n\n*${result.anubis.soal}*\nWaktu : 60s`, hisoka.user.name, m)
+                        rangkaikata[m.sender.split('@')[0]] = result.anubis.jawaban.toLowerCase()
+                        await sleep(60000)
+                        if (rangkaikata.hasOwnProperty(m.sender.split('@')[0])) {
+                        console.log("Jawaban: " + result.anubis.jawaban)
+                        hisoka.sendButtonText(m.chat, [{ buttonId: 'rangkai kata', buttonText: { displayText: 'Rangkai Kata' }, type: 1 }], `Waktu Habis\nJawaban:  ${rangkaikata[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, hisoka.user.name, m)
+                        delete rangkaikata[m.sender.split('@')[0]]
+                        }
+                    }
+                }
+                break
             case 'tebak': {
                 if (!text) throw `Example : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`
                 if (args[0] === "lagu") {
@@ -1510,30 +1549,24 @@ break
 	    })
 	    }
 	    break
-	    case 'yts': case 'ytsearch': {
-                if (!text) throw `Example : ${prefix + command} story wa anime`
-                let yts = require("yt-search")
-                let search = await yts(text)
-                let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
-                let no = 1
-                for (let i of search.all) {
-                    teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
-                }
-                hisoka.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
-            }
-            break
         case 'google': {
                 if (!text) throw `Example : ${prefix + command} fatih arridho`
                 let google = require('google-it')
-                google({'query': text}).then(res => {
                 let teks = `Google Search From : ${text}\n\n`
+                google({'query': text}).then(res => {
                 for (let g of res) {
                 teks += `⭔ *Title* : ${g.title}\n`
                 teks += `⭔ *Description* : ${g.snippet}\n`
                 teks += `⭔ *Link* : ${g.link}\n\n────────────────────────\n\n`
-                } 
-                m.reply(teks)
+                }
                 })
+                try {
+                    let url = 'https://google.com/search?q=' + encodeURIComponent(text)
+                    let ss = await ssweb(url)
+                    hisoka.sendImage(m.chat, ss, teks, m)
+                } catch(e){
+                    m.reply(teks)
+                }
                 }
                 break
         case 'gimage': {
@@ -1558,7 +1591,7 @@ break
         })
         }
         break
-	    case 'play': case 'ytplay': {
+	    case 'play': case 'ytplay': case 'ytsearch': case 'yts': {
                 if (!text) throw `Example : ${prefix + command} story wa anime`
                 let yts = require("yt-search")
                 let search = await yts(text)
@@ -1667,6 +1700,14 @@ break
                 }
                 hisoka.sendMessage(m.chat, buttonMessage, { quoted: m })
             }
+            break
+            case 'ssweb':
+                {
+                    if (!text) throw 'Masukan Query url'
+                    if (!isUrl(text)) throw 'harus url ngab!!'
+                    const anu = await ssweb(text)
+                    hisoka.sendMessage(m.chat, { image: { url: anu }, caption: anu }, { quoted: m })
+                }
             break
             case 'wallpaper': {
                 if (!text) throw 'Masukkan Query Title'
@@ -2835,6 +2876,7 @@ let capt = `⭔ Title: ${judul}
 │⭔ ${prefix}umma [url]
 │⭔ ${prefix}joox [query]
 │⭔ ${prefix}soundcloud [url]
+│⭔ ${prefix}ssweb [url]
 │
 └───────⭓
 
@@ -2850,6 +2892,22 @@ let capt = `⭔ Title: ${judul}
 │⭔ ${prefix}ytsearch [query]
 │⭔ ${prefix}ringtone [query]
 │⭔ ${prefix}stalk [option] [query]
+│
+└───────⭓
+
+┌──⭓ *Game Menu*
+│
+│⭔ ${prefix}family100
+│⭔ ${prefix}suitpvp
+│⭔ ${prefix}tictactoe
+│⭔ ${prefix}kuismath
+│⭔ ${prefix}rangkai kata
+│⭔ ${prefix}tebak lagu
+│⭔ ${prefix}tebak gambar
+│⭔ ${prefix}tebak kata
+│⭔ ${prefix}tebak kalimat
+│⭔ ${prefix}tebak lirik
+│⭔ ${prefix}tebak lontong
 │
 └───────⭓
 

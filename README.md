@@ -28,7 +28,6 @@ This is Script of WhatsApp multi device, working with [`@adiwajshing/baileys`](h
 ```bash
 heroku/nodejs
 heroku/python
-https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
 https://github.com/clhuang/heroku-buildpack-webp-binaries.git
 ```
 
@@ -36,7 +35,6 @@ https://github.com/clhuang/heroku-buildpack-webp-binaries.git
 
 * Unduh & Instal Git [`Klik Disini`](https://git-scm.com/downloads)
 * Unduh & Instal NodeJS [`Klik Disini`](https://nodejs.org/en/download)
-* Unduh & Instal FFmpeg [`Klik Disini`](https://ffmpeg.org/download.html) (**Jangan Lupa Tambahkan FFmpeg ke variabel lingkungan PATH**)
 
 
 ```bash
@@ -61,7 +59,6 @@ npm install
 apt update && apt upgrade
 apt install git -y
 apt install nodejs -y
-apt install ffmpeg -y
 git clone https://github.com/DikaArdnt/Hisoka-Morou
 cd Hisoka-Morou
 npm install
@@ -100,6 +97,7 @@ Get Apikey zenz on [`zenz`](https://zenzapis.xyz/)
 * [`zhwzein`](https://github.com/zhwzein)
 * [`CAF-ID`](https://github.com/CAF-ID)
 * [`bintang`](https://github.com/Bintangp02)
+* [`anubiskun`](https://github.com/anubiskun)
 
 ```Thanks to all who have participated in the development of this script```
 
