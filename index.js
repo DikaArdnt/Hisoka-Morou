@@ -5,8 +5,8 @@
 */
 
 require('./config')
-const { default: hisokaConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
-const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
+const { default: hisokaConnect, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
+const { state, saveCreds } = useMultiFileAuthState(`./${sessionName}`)
 const pino = require('pino')
 const { Boom } = require('@hapi/boom')
 const fs = require('fs')
@@ -243,7 +243,7 @@ async function startHisoka() {
         console.log('Connected...', update)
     })
 
-    hisoka.ev.on('creds.update', saveState)
+    hisoka.ev.on('creds.update', saveCreds)
 
     // Add Other
       
