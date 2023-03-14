@@ -5,7 +5,7 @@ module.exports = {
     execute: async({ hisoka, m, prefix, command, quoted }) => {
         mess("wait", m)
         if (/image|video|sticker/.test(quoted.mime)) {
-            if (quoted?.msg?.seconds > 10) return m.reply(`Max video 9 second`)
+            if (quoted?.duration > 10) return m.reply(`Max video 9 second`)
             let media = await hisoka.downloadMediaMessage(quoted)
             let [packname, author] = m.text.split`|`
             hisoka.sendMessage(m.from, media, { asSticker: true, quoted: m, packName: packname ? packname : global.Exif.packName, packPublish: author ? author : global.Exif.packPublish })
