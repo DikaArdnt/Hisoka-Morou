@@ -6,6 +6,7 @@ const qrcode = require("qrcode-terminal")
 const { Client, serialize } = require("./lib/whatsapp.serialize")
 const { readCommands, Message } = require('./event/event.message')
 const chalk = require("chalk")
+const os = require('os')
 
 
 global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name] } : {}) })) : '')
@@ -21,10 +22,10 @@ async function start() {
             dataPath: `./${sessionName}`
         }),
         puppeteer: {
-            headless: false,
+            headless: true,
             devtools: false,
             args: ['--enable-features=NetworkService', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-web-security', '--disable-features=IsolateOrigins,site-per-process', '--shm-size=8gb'],
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+            executablePath: os.platform() === 'win32' ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' : '/usr/bin/google-chrome-stable'
         },
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
     })
