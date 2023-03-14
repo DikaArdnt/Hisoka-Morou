@@ -1,0 +1,37 @@
+{
+  "name": "hisoka-web",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot Using Lib puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "wawebjs",
+    "base-wabot",
+    "puppeteer",
+    "hisoka",
+    "whatsapp-web.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DikaArdnt/Hisoka-Morou"
+  },
+  "bugs": {
+    "url": "https://github.com/DikaArdnt/Hisoka-Morou/issues"
+  },
+  "homepage": "https://github.com/DikaArdnt/Hisoka-Morou",
+  "author": "Dika Ardnt.",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0-rc.12",
+    "child_process": "^1.0.2",
+    "file-type": "^16.5.3",
+    "moment-timezone": "^0.5.41",
+    "path": "^0.12.7",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "github:amiruldev20/wwebjs"
+  }
+}
