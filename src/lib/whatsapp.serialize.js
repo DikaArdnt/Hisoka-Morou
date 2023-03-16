@@ -135,7 +135,7 @@ class Client extends _Client {
             }
 
             try {
-                const decryptedMedia = await window.Store.DownloadManager.downloadAndMaybeDecrypt({
+                const decryptedMedia = await (window.Store.DownloadManager.downloadAndMaybeDecrypt || window.Store.DownloadManager.downloadAndDecrypt)({
                     directPath: msg.directPath,
                     encFilehash: msg.encFilehash,
                     filehash: msg.filehash,
