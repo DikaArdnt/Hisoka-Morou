@@ -1,5 +1,5 @@
 {
-  "name": "hisoka-web",
+  "name": "hisoka-morou",
   "version": "1.0.0",
   "description": "WhatsApp Bot Using Lib whatsapp-web.js",
   "main": "index.js",
@@ -22,13 +22,16 @@
     "url": "https://github.com/DikaArdnt/Hisoka-Morou/issues"
   },
   "homepage": "https://github.com/DikaArdnt/Hisoka-Morou",
-  "author": "Dika Ardnt.",
-  "license": "ISC",
+  "author": {
+    "name": "Dika Ardnt.",
+    "email": "dika.ardianta7@yahoo.com",
+    "url": "https://github.com/DikaArdnt/Hisoka-Morou"
+  },
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "chalk": "^5.2.0",
     "child_process": "^1.0.2",
     "chokidar": "^3.5.3",
-    "file-type": "^18.2.1",
     "moment-timezone": "^0.5.41",
     "mongoose": "^6.8.1",
     "path": "^0.12.7",
