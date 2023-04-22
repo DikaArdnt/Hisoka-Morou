@@ -42,7 +42,7 @@ global.mess = (type, m, options = {}) => {
 }
 global.options = {
 	public: true,
-	URI: "mongodb+srv://hisoka:only.hisoka@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
+	URI: "mongodb+srv://hisoka:<your password>@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
 	owner: ["6288292024190", "6285815663170", '6285749652354']
 }
 global.Exif = {
