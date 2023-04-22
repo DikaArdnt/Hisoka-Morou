@@ -1,4 +1,4 @@
-import wweb from "whatsapp-web.js"
+import { Location } from "whatsapp-web.js"
 
 
 export default {
@@ -20,7 +20,7 @@ export default {
 📈 *Potensi :* ${a?.info?.potential}
 📝 *Dirasakan :* ${a?.info?.felt}
             `
-            await hisoka.sendMessage(m.from, new wweb.Location(a?.info?.point?.coordinates?.split(",")[1], a?.info?.point?.coordinates?.split(",")[0], `${a?.info?.felt}\n\n${a?.info?.area}`), { quoted: m })
+            await hisoka.sendMessage(m.from, new Location(a?.info?.point?.coordinates?.split(",")[1], a?.info?.point?.coordinates?.split(",")[0], `${a?.info?.felt}\n\n${a?.info?.area}`), { quoted: m })
             hisoka.sendMessage(m.from, "https://bmkg-content-inatews.storage.googleapis.com/" + a?.info?.shakemap, { caption: text, quoted: m })
         })
     }

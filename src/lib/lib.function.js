@@ -23,7 +23,7 @@ export default new class Function {
         }
     }
 
-    __require(dir = import.meta, module) {
+    require(module, dir = import.meta) {
         const path = (dir).url || (dir)
         let require = createRequire(path)
         return require(module)

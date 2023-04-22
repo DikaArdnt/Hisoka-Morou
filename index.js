@@ -5,7 +5,6 @@ import { watchFile, unwatchFile } from 'fs'
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 console.log('Starting . . .')
 
 

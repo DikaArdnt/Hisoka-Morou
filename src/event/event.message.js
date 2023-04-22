@@ -196,7 +196,7 @@ const Message = async (hisoka, m) => {
 const readCommands = async (pathname = "commands", filename = "") => {
     try {
         if (filename.endsWith(`.js`)) {
-            if (fs.existsSync(Func.__filename(filename, true))) {
+            if (fs.existsSync(Func.__filename(filename))) {
                 const command = await import(filename)
                 if (!command.default?.execute) {
                     commands.delete(command.default.name)

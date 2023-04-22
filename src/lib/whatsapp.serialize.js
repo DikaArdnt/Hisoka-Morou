@@ -1,14 +1,12 @@
-import { createRequire } from "module"
-const require = createRequire(import.meta.url)
-const { Client: _Client } = require("whatsapp-web.js")
-const { ClientInfo, Message, MessageMedia, Contact, Location, Buttons, List } = require("whatsapp-web.js/src/structures")
+import { Client as _Client } from "whatsapp-web.js"
+import { Message, MessageMedia, Contact, Location, Buttons, List } from 'whatsapp-web.js/src/structures/index.js'
 import Function from "./lib.function.js"
 import fs, { stat } from "fs"
 import { extension } from "mime-types"
 import { dirname, join } from "path"
 import { fileURLToPath } from "url"
 import Util from "whatsapp-web.js/src/util/Util.js"
-const { getUrlInfo } = require('whatsapp-web.js/src/util/LinkPreview.js')
+import { getUrlInfo } from 'whatsapp-web.js/src/util/LinkPreview.js'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -155,18 +153,6 @@ class Client extends _Client {
             );
         }
 
-        const isBigFile = internalOptions.attachment?.data?.length > (1024 * 1024 * 79);
-
-        if (isBigFile) {
-            const middle = internalOptions.attachment.data.length / 2;
-            await this.pupPage.evaluate(async (chatId, chunk) => {
-                if (chunk) {
-                    window.Store[`mediaChunk_${chatId}`] = chunk;
-                }
-            }, chatId, internalOptions.attachment.data.substring(0, middle));
-            internalOptions.attachment.data = internalOptions.attachment.data.substring(middle);
-        }
-
         if (internalOptions.linkPreview) {
             const text = options.caption ? options.caption : content
             
@@ -187,11 +173,6 @@ class Client extends _Client {
 
             if (sendSeen) {
                 window.WWebJS.sendSeen(chatId);
-            }
-
-            if (options.attachment?.data && window.Store[`mediaChunk_${chatId}`]) {
-                options.attachment.data = window.Store[`mediaChunk_${chatId}`] + options.attachment.data;
-                delete window.Store[`mediaChunk_${chatId}`];
             }
 
             const msg = await window.WWebJS.sendMessage(chat, message, options, sendSeen);

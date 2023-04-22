@@ -1,5 +1,5 @@
 import { format } from "util"
-import webjs from "whatsapp-web.js"
+const wweb = await import('whatsapp-web.js')
 
 
 export default {

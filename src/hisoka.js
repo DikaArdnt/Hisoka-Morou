@@ -1,8 +1,10 @@
 import "../config.js"
 
-import wweb from "whatsapp-web.js"
+import { LocalAuth } from 'whatsapp-web.js'
 import qrcode from "qrcode-terminal"
 import chokidar from "chokidar"
+import { executablePath } from 'puppeteer'
+import { platform } from 'os'
 
 
 import Function from "./lib/lib.function.js"
@@ -33,7 +35,7 @@ async function start() {
     }
 
     const hisoka = new Client({
-        authStrategy: new wweb.LocalAuth({
+        authStrategy: new LocalAuth({
             dataPath: `./${session.Path}`,
             clientId: `${session.Name}`
         }),
@@ -57,7 +59,7 @@ async function start() {
                 '--no-zygote',
                 //'--enable-features=WebContentsForceDark:inversion_method/cielab_based/image_behavior/selective/text_lightness_threshold/150/background_lightness_threshold/205'
             ],
-            executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+            executablePath: platform() === 'win32' ? executablePath() : '/usr/bin/google-chrome-stable'
         },
         markOnlineAvailable: true,
         qrMaxRetries: 2,
@@ -76,8 +78,6 @@ async function start() {
     hisoka.on("loading_screen", (percent, message) => {
         console.log(chalk.bgBlack(chalk.green(message)) + " :" + chalk.bgBlack(chalk.yellow(percent)))
     })
-
-    hisoka.on("authenticated", console.info)
 
     hisoka.on("auth_failure", console.error)
 
