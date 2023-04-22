@@ -4,4 +4,4 @@
 
 <br> Hisoka Bot
 </h1>
-<h4> align="center">Hisoka Morou</h4>
+<h4 align="center">Hisoka Morou</h4>
