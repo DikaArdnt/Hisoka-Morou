@@ -32,6 +32,7 @@
     "chalk": "^5.2.0",
     "child_process": "^1.0.2",
     "chokidar": "^3.5.3",
+    "file-type": "^18.2.1",
     "moment-timezone": "^0.5.41",
     "mongoose": "^6.8.1",
     "path": "^0.12.7",
