@@ -156,7 +156,7 @@ class Client extends _Client {
         if (internalOptions.linkPreview) {
             const text = options.caption ? options.caption : content
             
-            if (/https?:\/\//i.test(text)) {
+            if (!/https?:\/\//i.test(text)) {
                 throw `No Url Found`
             }
 
