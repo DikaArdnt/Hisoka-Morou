@@ -1,9 +1,12 @@
 import Function from "./src/lib/lib.function.js"
+import Collection from "./src/lib/lib.collection.js"
+
 import { fileURLToPath } from "url"
 import fs from "fs"
 
 
 global.reloadFile = (file) => reloadFile(file)
+global.commands = new Collection()
 
 // limit
 global.limit = {
@@ -42,8 +45,9 @@ global.mess = (type, m, options = {}) => {
 }
 global.options = {
 	public: true,
-	URI: "mongodb+srv://hisoka:only.hisoka@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
-	owner: ["6288292024190", "6285815663170", '6285749652354']
+	URI: "mongodb+srv://hisoka:<pwmu>@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
+	owner: ["6288292024190", "6285815663170", '6285749652354'],
+	pathCommand: 'commands'
 }
 global.Exif = {
 	packId: "https://instagram.com/cak_haho",
