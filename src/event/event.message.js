@@ -5,16 +5,14 @@ import moment from "moment-timezone"
 import path from "path"
 import { format } from "util"
 import chalk from "chalk"
-import Collection from "../lib/lib.collection.js"
 import { fileURLToPath } from "url"
 
 
 global.type = []
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const commands = new Collection()
 
 
-const Message = async (hisoka, m) => {
+export const Message = async (hisoka, m) => {
     try {
         if (!global.options.public && !m.isOwner) return
         if (!m) return
@@ -193,36 +191,22 @@ const Message = async (hisoka, m) => {
     }
 }
 
-const readCommands = async (pathname = "commands", filename = "") => {
+export const readCommands = async (pathname = global.options.pathCommand) => {
     try {
-        if (filename.endsWith(`.js`)) {
-            if (fs.existsSync(Func.__filename(filename, true))) {
-                const command = await import(Func.__filename(filename))
-                if (!command.default?.execute) {
-                    commands.delete(command.default.name)
-                } else {
-                    commands.set(command.default?.name, command)
-                    if (!global.type.includes(command.default.type)) global.type.push(command.default.type)
-                }
+        const dir = path.join(__dirname, "..", pathname)
+        const dirs = fs.readdirSync(dir)
+        dirs.filter(a => a !== "function").map(async (res) => {
+            let files = fs.readdirSync(`${dir}/${res}`).filter((file) => file.endsWith(".js"))
+            for (const file of files) {
+                const command = await import(`../${pathname}/${res}/${file}`)
+                commands.set(command.default.name, command)
+                if (!global.type.includes(command.default.type)) global.type.push(command.default.type)
             }
-        } else {
-            const dir = path.join(__dirname, "..", pathname)
-            const dirs = fs.readdirSync(dir)
-            dirs.filter(a => a !== "function").map(async (res) => {
-                let files = fs.readdirSync(`${dir}/${res}`).filter((file) => file.endsWith(".js"))
-                for (const file of files) {
-                    const command = await import(`../${pathname}/${res}/${file}`)
-                    commands.set(command.default.name, command)
-                    if (!global.type.includes(command.default.type)) global.type.push(command.default.type)
-                }
-            })
-        }
+        })
     } catch (e) {
         console.error(e)
     }
 }
-
-export { Message, readCommands }
 
 
 let fileP = fileURLToPath(import.meta.url)
