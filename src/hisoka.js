@@ -109,10 +109,10 @@ start()
 let choki = chokidar.watch('./src/commands', { ignored: /^\./, persistent: true })
 choki
 .on('change', async(path) => {
-    await import(`${Func.__filename(path)}?version=${Date.now()}`)
-    await readCommands('commands', Func.__filename(path))
+    const command = await import(Func.__filename(path))
+    global.commands.set(command?.default?.name, command)
 })
 .on('add', async function(path) {
-    await import(`${Func.__filename(path, false)}?version=${Date.now()}`)
-    await readCommands('commands', Func.__filename(path))
+    const command = await import(Func.__filename(path))
+    global.commands.set(command?.default?.name, command)
 })
