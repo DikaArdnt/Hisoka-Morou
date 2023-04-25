@@ -6,6 +6,7 @@ import chokidar from "chokidar"
 import { executablePath } from 'puppeteer'
 import { platform } from 'os'
 import path from 'path'
+import API from "./lib/lib.api.js"
 
 
 import Function from "./lib/lib.function.js"
@@ -16,6 +17,7 @@ import { database as databes } from "./lib/lib.database.js"
 
 const database = new databes()
 global.Func = Function
+global.api = API
 
 
 async function start() {
