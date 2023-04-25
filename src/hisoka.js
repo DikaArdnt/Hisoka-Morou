@@ -5,6 +5,7 @@ import qrcode from "qrcode-terminal"
 import chokidar from "chokidar"
 import { executablePath } from 'puppeteer'
 import { platform } from 'os'
+import path from 'path'
 
 
 import Function from "./lib/lib.function.js"
@@ -106,7 +107,7 @@ async function start() {
 start()
 
 
-let choki = chokidar.watch('./src/commands', { ignored: /^\./, persistent: true })
+let choki = chokidar.watch(Func.__filename(path.join(process.cwd(), 'src', 'commands')), { ignored: /^\./ })
 choki
 .on('change', async(path) => {
     const command = await import(Func.__filename(path))
