@@ -1,5 +1,6 @@
 import { Client as _Client } from "whatsapp-web.js"
-import { Message, MessageMedia, Contact, Location, Buttons, List } from 'whatsapp-web.js/src/structures/index.js'
+import WhatsappWeb from 'whatsapp-web.js/src/structures/index.js';
+const { Message, MessageMedia, Contact, Location, Buttons, List } = WhatsappWeb
 import Function from "./lib.function.js"
 import fs, { stat } from "fs"
 import { extension } from "mime-types"

@@ -1,6 +1,8 @@
 import "../config.js"
 
-import { LocalAuth } from 'whatsapp-web.js'
+import whatsapp from 'whatsapp-web.js';
+const { LocalAuth } = whatsapp;
+
 import qrcode from "qrcode-terminal"
 import chokidar from "chokidar"
 import { executablePath } from 'puppeteer'
