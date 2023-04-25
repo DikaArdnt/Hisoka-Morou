@@ -24,7 +24,7 @@ global.limit = {
 global.APIs = {
 	sinon: {
 		URI: 'http://api-rest-sinon.my.id:5000',
-		Key: '642d5ff9133a8c843ab3f051'
+		Key: 'create your key at the url abrove'
 	}
 }
 
