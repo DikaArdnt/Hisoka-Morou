@@ -6,7 +6,6 @@ import { extension } from "mime-types"
 import { dirname, join } from "path"
 import { fileURLToPath } from "url"
 import Util from "whatsapp-web.js/src/util/Util.js"
-import { getUrlInfo } from 'whatsapp-web.js/src/util/LinkPreview.js'
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -15,34 +14,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 class Client extends _Client {
     constructor(...args) {
         super(...args)
-    }
-
-    /**
-     * 
-     * @param {*} chatId 
-     * @param {*} contacts 
-     * @param {*} options 
-     * @returns 
-     */
-    async sendContact(chatId, contacts = [], options = {}) {
-        if (!Array.isArray(contacts)) contacts = [contacts]
-
-        let arr = []
-        for (const id of contacts) {
-            const ids = id.endsWith('@c.us') ? id : id + '@c.us'
-            let contact = await this.getContactById(ids)
-            arr.push({
-                id: ids,
-                name: (contact?.name || contact?.pushname)
-            })
-        }
-
-        const msg = await this.pupPage.evaluate((chatId, contacts, options) => {
-            return window.WWebJS.chat.sendVCardContactMessage(chatId, contacts, options)
-        }, chatId, arr, options)
-
-        if (!msg) return null
-        return await this.loadMessage(msg?.id)
     }
 
     /**
@@ -151,19 +122,6 @@ class Client extends _Client {
                 isAvatar: options?.isAvatar ? options.isAvatar : global?.Exif?.isAvatar
             }, this.pupPage
             );
-        }
-
-        if (internalOptions.linkPreview) {
-            const text = options.caption ? options.caption : content
-            
-            if (!/https?:\/\//i.test(text)) {
-                throw `No Url Found`
-            }
-
-            const preview = await getUrlInfo(text)
-            
-            preview.subtype = 'url';
-            internalOptions = { ...internalOptions, ...preview };
         }
 
         const newMessage = await this.pupPage.evaluate(async (chatId, message, options, sendSeen) => {
@@ -361,7 +319,17 @@ class Client extends _Client {
         let data
         if ((Buffer.isBuffer(content) || /^data:.*?\/.*?;base64,/i.test(content) || /^https?:\/\//.test(content) || fs.existsSync(content))) {
             let media = await Function.getFile(content)
-            data = await Util.generateProfilePicture(media.data, type)
+            if (type === 'long') {
+                data = {
+                    img: await (await Function.resizeImage(media?.data, 720)).toString('base64'),
+                    preview: await (await Function.resizeImage(media?.data, 120)).toString('base64')
+                }
+            } else if (type === 'normal') {
+                data = {
+                    img: await (await Function.resizeImage(media?.data, 640)).toString('base64'),
+                    preview: await (await Function.resizeImage(media?.data, 96)).toString('base64')
+                }
+            }
         }
 
         return this.pupPage.evaluate(async (chatId, preview, image, type) => {
