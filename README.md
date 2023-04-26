@@ -21,8 +21,7 @@
 <b>Requirements:</b>
 * Git [`Click here`](https://git-scm.com/downloads)
 * NodeJS [`Click here`](https://nodejs.org/en/download)
-* FFmpeg [`Click here`](https://ffmpeg.org/download.html)
-* ZIP [`Click here`](https://infozip.sourceforge.net/Zip.html)
+* FFmpeg [`Click here`](https://ffmpeg.org/download.html
 * Speedtest by Okla
  
 ```bash
