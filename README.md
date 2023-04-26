@@ -5,7 +5,8 @@
 <br> Hisoka Bot
  
  > This script is run using the whatsapp-web.js library and uses puppeteer
- > it is strictly forbidden to perform spam actions when using this script 
+ 
+ it is strictly forbidden to perform spam actions when using this script 
 
 ### Give A Star
 
