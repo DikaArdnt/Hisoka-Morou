@@ -3,7 +3,7 @@ import "../config.js"
 import { LocalAuth } from 'whatsapp-web.js'
 import qrcode from "qrcode-terminal"
 import chokidar from "chokidar"
-import { executablePath } from 'puppeteer'
+import { chromium } from 'playwright-chromium'
 import { platform } from 'os'
 import path from 'path'
 import API from "./lib/lib.api.js"
@@ -42,7 +42,7 @@ async function start() {
             dataPath: `./${session.Path}`,
             clientId: `${session.Name}`
         }),
-        puppeteer: {
+        playwright: {
             headless: false,
             devtools: false,
             args: [
@@ -62,12 +62,12 @@ async function start() {
                 '--no-zygote',
                 //'--enable-features=WebContentsForceDark:inversion_method/cielab_based/image_behavior/selective/text_lightness_threshold/150/background_lightness_threshold/205'
             ],
-            executablePath: platform() === 'win32' ? executablePath() : '/usr/bin/google-chrome-stable'
+            executablePath: platform() === 'win32' ? chromium.executablePath() : '/usr/bin/google-chrome-stable',
+            bypassCSP: true
         },
         markOnlineAvailable: true,
         qrMaxRetries: 2,
-        bypassCSP: true,
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/11.1.2 Safari/603.2.4',
         takeoverTimeoutMs: 'Infinity'
     })
 

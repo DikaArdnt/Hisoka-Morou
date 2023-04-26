@@ -25,7 +25,7 @@ class Client extends _Client {
      * @returns 
      */
     async sendPoll(chatId, name, choices, options = {}) {
-        let message = await this.pupPage.evaluate(async (chatId, name, choices, options) => {
+        let message = await this.pupPage.evaluate(async ({ chatId, name, choices, options }) => {
             let rawMessage = {
                 waitForAck: true,
                 sendSeen: true,
@@ -38,7 +38,7 @@ class Client extends _Client {
             }
 
             await window.WWebJS.sendRawMessage(chatId, rawMessage, options)
-        }, chatId, name, choices, options)
+        }, { chatId, name, choices, options })
 
         if (!message) return null
         return new Message(this, message)
@@ -69,17 +69,16 @@ class Client extends _Client {
         if (options.caption) internalOptions.caption = options.caption
         const sendSeen = typeof options.sendSeen === 'undefined' ? true : options.sendSeen;
 
-        if ((Buffer.isBuffer(content) || /^data:.*?\/.*?;base64,/i.test(content) || /^https?:\/\//.test(content) || fs.existsSync(content))) {
+        if ((Buffer.isBuffer(content) || /^[a-zA-Z0-9+/]*={0,2}$/i.test(content) || /^data:.*?\/.*?;base64,/i.test(content) || /^https?:\/\//.test(content) || fs.existsSync(content))) {
             let media = await Function.getFile(content)
             if (!options.mimetype && media.ext === '.bin') {
                 content = content
             } else {
                 internalOptions.attachment = {
                     mimetype: options.mimetype ? options.mimetype : media.mime,
-                    data: media.data.toString('base64'),
+                    data: media?.data?.toString('base64') || Function.bufferToBase64(media.data),
                     filename: options.fileName ? options.fileName : Function.getRandom(media.ext),
-                    filesize: options.fileSize ? options.fileSize : media.size,
-                    ...options
+                    filesize: options.fileSize ? options.fileSize : media.size
                 }
                 content = ''
             }
@@ -124,7 +123,7 @@ class Client extends _Client {
             );
         }
 
-        const newMessage = await this.pupPage.evaluate(async (chatId, message, options, sendSeen) => {
+        const newMessage = await this.pupPage.evaluate(async ({ chatId, message, options, sendSeen }) => {
             const chatWid = window.Store.WidFactory.createWid(chatId);
             const chat = await window.Store.Chat.find(chatWid);
 
@@ -135,7 +134,7 @@ class Client extends _Client {
 
             const msg = await window.WWebJS.sendMessage(chat, message, options, sendSeen);
             return msg.serialize();
-        }, chatId, content, internalOptions, sendSeen);
+        }, { chatId, message: content, options: internalOptions, sendSeen });
 
         if (newMessage) return new Message(this, newMessage)
     }
@@ -145,34 +144,39 @@ class Client extends _Client {
      * Downloads and returns the attatched message media
      * @returns {Promise<MessageMedia>}
      */
-    async downloadMediaMessage(message) {
-        if (!Boolean(message.mediaKey && message.directPath)) throw new Error('Not Media Message')
+    async downloadMediaMessage(msg) {
+        if (!Boolean(msg.mediaKey && msg.directPath)) throw new Error('Not Media Message')
 
-        const result = await this.pupPage.evaluate(async (msg) => {
+        const result = await this.pupPage.evaluate(async ({ directPath, encFilehash, filehash, mediaKey, type, mediaKeyTimestamp, mimetype, filename, size,  _serialized }) => {
             try {
                 const decryptedMedia = await (window.Store.DownloadManager?.downloadAndMaybeDecrypt || window.Store.DownloadManager?.downloadAndDecrypt)({
-                    directPath: msg.directPath,
-                    encFilehash: msg.encFilehash,
-                    filehash: msg.filehash,
-                    mediaKey: msg.mediaKey,
-                    mediaKeyTimestamp: msg.mediaKeyTimestamp,
-                    type: msg.type,
+                    directPath,
+                    encFilehash,
+                    filehash,
+                    mediaKey,
+                    mediaKeyTimestamp,
+                    type: (type === 'chat') ? (mimetype.split('/')[0] || type) : type,
                     signal: (new AbortController).signal
                 });
 
-                const data = await window.WWebJS.arrayBufferToBase64Async(decryptedMedia);
+                const data = await window.WWebJS.arrayBufferToBase64(decryptedMedia);
 
                 return {
                     data,
-                    mimetype: msg.mimetype,
-                    filename: msg.filename,
-                    filesize: msg.size
+                    mimetype: mimetype,
+                    filename: filename,
+                    filesize: size
                 };
             } catch (e) {
-                if (e.status && e.status === 404) return undefined
-                throw e
+                const blob = await window.WWebJS.chat.downloadMedia(_serialized)
+                return {
+                    data: await window.WWebJS.util.blobToBase64(blob),
+                    mimetype: mimetype,
+                    filename: filename,
+                    filesize: size
+                }
             }
-        }, message)
+        }, { directPath: msg.directPath, encFilehash: msg.encFilehash, filehash: msg.filehash, mediaKey: msg.mediaKey, type: msg.type, mediaKeyTimestamp: msg.mediaKeyTimestamp, mimetype: msg.mime, filename: msg.filename, size: msg.fileSize,  _serialized: msg.id._serialized })
 
         if (!result) return undefined;
         return Function.base64ToBuffer(result?.data)
@@ -237,6 +241,24 @@ class Client extends _Client {
 
     /**
      * 
+     * @param {*} message ID 
+     * @returns 
+     */
+    async infoMessage(m) {
+        if (!m) return
+
+        const info = await this.pupPage.evaluate(async (msgId) => {
+            const msg = window.Store.Msg.get(msgId);
+            if (!msg) return null;
+
+            return await window.Store.MessageInfo.sendQueryMsgInfo(msg.id);
+        }, m.id ? m.id._serialized : m);
+
+        return info
+    }
+
+    /**
+     * 
      * @param {*} chatId 
      * @param {*} msgId 
      */
@@ -244,13 +266,12 @@ class Client extends _Client {
         if (!msgId) throw new Error("No Input Message ID")
         if (!chatId) throw new Error("No Input Chat ID")
 
-        await this.pupPage.evaluate(async (msgId, chatId, options) => {
+        await this.pupPage.evaluate(async ({ msgId, chatId, options }) => {
             let msg = window.Store.Msg.get(msgId)
-
             let chat = window.Store.Chat.get(chatId)
 
             return await chat.forwardMessages([msg])
-        }, msgId, chatId, options)
+        }, { msgId, chatId, options })
     }
 
     /**
@@ -332,13 +353,13 @@ class Client extends _Client {
             }
         }
 
-        return this.pupPage.evaluate(async (chatId, preview, image, type) => {
+        return this.pupPage.evaluate(async ({ chatId, preview, image, type }) => {
             let chatWid = await window.Store.WidFactory.createWid(chatId)
 
             if (type === 'delete') return window.Store.GroupUtils.requestDeletePicture(chatWid)
 
             return window.Store.GroupUtils.sendSetPicture(chatWid, image, preview)
-        }, chatId, data.img, data.preview, type)
+        }, { chatId, preview: data.img, image: data.preview, type })
     }
 
     /**

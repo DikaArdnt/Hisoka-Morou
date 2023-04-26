@@ -1,5 +1,4 @@
-import puppeteer from "puppeteer"
-const a = (await import('puppeteer'))
+import playwright from 'playwright-chromium'
 
 
 export default {
@@ -29,9 +28,6 @@ export default {
           // send message
           hisoka.sendMessage(m.from, media, { quoted: m })
           await page.close()
-          const session = await hisoka.pupPage.target().createCDPSession()
-          const { windowId } = await session.send('Browser.getWindowForTarget')
-          await session.send('Browser.setWindowBounds', { windowId, bounds: { windowState: 'minimized' } })
      }
 }
 
@@ -39,7 +35,6 @@ export default {
 async function getBrowser(opts = {}) {
      const chrome = {
           headless: true,
-          executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           args: [
                '--no-sandbox',
                '--no-first-run',
@@ -52,5 +47,5 @@ async function getBrowser(opts = {}) {
           ],
           ...opts
      }
-     return await puppeteer.launch(chrome)
+     return await playwright.chromium.launch(chrome)
 }

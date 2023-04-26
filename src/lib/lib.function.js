@@ -96,7 +96,7 @@ export default new class Function {
             let data
             if (/^https?:\/\//.test(PATH)) {
                 data = await this.fetchBuffer(PATH)
-            } else if (/^data:.*?\/.*?;base64,/i.test(PATH)) {
+            } else if (/^data:.*?\/.*?;base64,/i.test(PATH) || this.isBase64(PATH)) {
                 data = Buffer.from(PATH.split`,`[1], 'base64')
             } else if (fs.existsSync(PATH) && (fs.statSync(PATH)).isFile()) {
                 data = fs.readFileSync(PATH)
@@ -213,6 +213,11 @@ export default new class Function {
         return obj instanceof stream.Stream &&
             typeof (obj._read == "function") &&
             typeof (obj._readableState === "object")
+    }
+
+    isBase64(string) {
+        const regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+        return regex.test(string)
     }
 
     bufferToStream(buffer) {
