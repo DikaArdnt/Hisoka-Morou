@@ -38,12 +38,12 @@ export default class API {
                 form.append(key, valueKey)
             }
         
-            const data = await this.create.post(path + new URLSearchParams(Object.entries({ ...(apikey ? { [apikey]: global.APIs[this.name].Key } : {}) })), form, { ...options })
+            const res = await this.create.post(path + new URLSearchParams(Object.entries({ ...(apikey ? { [apikey]: global.APIs[this.name].Key } : {}) })), form, { ...options })
 
             return {
-                status: data.status,
-                statusText: data.statusText,
-                data: data.data
+                status: res.status,
+                statusText: res.statusText,
+                data: res.data
             }
         } else {
             throw `No Input Data`
