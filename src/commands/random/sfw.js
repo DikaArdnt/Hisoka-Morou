@@ -3,7 +3,7 @@ const regex = /(waifu|neko|shinobu|megumin)/i
 
 export default {
     name: 'sfw',
-    type: 'search',
+    type: 'random',
     desc: 'search random image',
     execute: async({ hisoka, m }) => {
         let search = regex.test(m.args[0]) ? m.args[0].match(regex)[0] : 'waifu'
