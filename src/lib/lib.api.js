@@ -17,9 +17,10 @@ export default class API {
         })
     }
 
-    async get(path = '/', query = {}, apikey) {
+    async get(path = '/', query = {}, apikey, options = {}) {
         const data = await this.create.get(path, {
-            params: (query || apikey) ? new URLSearchParams(Object.entries({ ...query, ...(apikey ? { [apikey]: global.APIs[this.name].Key } : {}) })) : ''
+            params: (query || apikey) ? new URLSearchParams(Object.entries({ ...query, ...(apikey ? { [apikey]: global.APIs[this.name].Key } : {}) })) : '',
+            ...options
         })
 
         return {
