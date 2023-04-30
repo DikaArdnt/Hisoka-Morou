@@ -53,7 +53,7 @@ global.mess = (type, m, options = {}) => {
 }
 global.options = {
 	public: true,
-	URI: "mongodb+srv://hisoka:<pw mu>@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
+	URI: "./temp/database.json", //support mongo
 	owner: ["6288292024190", "62858156631709"],
 	pathCommand: 'commands'
 }
