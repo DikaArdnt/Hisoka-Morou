@@ -30,6 +30,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "chalk": "^5.2.0",
+    "cheerio": "^1.0.0-rc.12",
     "child_process": "^1.0.2",
     "chokidar": "^3.5.3",
     "file-type": "^18.2.1",
