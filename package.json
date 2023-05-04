@@ -37,6 +37,7 @@
     "mongoose": "^6.8.1",
     "path": "^0.12.7",
     "qrcode-terminal": "^0.12.0",
+    "skrep": "latest",
     "util": "^0.12.5",
     "whatsapp-web.js": "github:DikaArdnt/whatsapp-web.js"
   }
