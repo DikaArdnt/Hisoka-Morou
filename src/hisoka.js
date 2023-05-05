@@ -7,6 +7,8 @@ import qrcode from "qrcode-terminal"
 import chokidar from "chokidar"
 import { executablePath } from 'puppeteer'
 import { platform } from 'os'
+import path from 'path'
+import API from "./lib/lib.api.js"
 
 
 import Function from "./lib/lib.function.js"
@@ -17,6 +19,7 @@ import { database as databes } from "./lib/lib.database.js"
 
 const database = new databes()
 global.Func = Function
+global.api = API
 
 
 async function start() {
@@ -108,7 +111,7 @@ async function start() {
 start()
 
 
-let choki = chokidar.watch('./src/commands', { ignored: /^\./, persistent: true })
+let choki = chokidar.watch(Func.__filename(path.join(process.cwd(), 'src', 'commands')), { ignored: /^\./ })
 choki
 .on('change', async(path) => {
     const command = await import(Func.__filename(path))

@@ -1,5 +1,6 @@
+import path from 'path'
 import fs from "fs"
-import { execSync } from "child_process"
+import archiver from 'archiver'
 
 
 export default {
@@ -8,11 +9,28 @@ export default {
     type: 'owner',
     desc: "Backup script gwehj",
     execute: async({ hisoka, m }) => {
-        let dir = fs.readdirSync(".")
-        let file = dir.filter(a => a !== "node_modules" && a !== "package-lock.json" && a !== ".git" && a !== global.session.Path)
         mess("wait", m)
-        let exec = await execSync(`zip -r hisoka.zip ${file.join(" ")}`)
-        await hisoka.sendMessage(global.options.owner[0] + "@s.whatsapp.net", "./hisoka.zip", { quoted: m, fileName: "hisoka-wawebjs-backup.zip" })
+        const output = fs.createWriteStream(path.join(process.cwd(), 'hisoka.zip'))
+        const archive = archiver('zip') // tar & zip
+
+        archive.pipe(output)
+
+        let dir = fs.readdirSync(".")
+        let files = dir.filter(a => a !== "node_modules" && a !== "package-lock.json" && a !== ".git" && a !== global.session.Path)
+
+        files.forEach(function (file) {
+            const lockFile = path.join(process.cwd(), file)
+
+            if ((fs.lstatSync(lockFile)).isDirectory()) {
+                archive.directory(lockFile, file)
+            } else {
+                archive.file(lockFile, { name: file })
+            }
+        })
+
+        await archive.finalize()
+        
+        await hisoka.sendFile(global.owner[0] + "@c.us", "./hisoka.zip", { quoted: m, filename: "hisoka-wawebjs-backup.zip", type: 'document' })
         fs.unlinkSync("./hisoka.zip")
     },
     isOwner: true

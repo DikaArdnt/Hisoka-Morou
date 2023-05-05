@@ -1,15 +1,15 @@
-import WhatsappWeb from "whatsapp-web.js"
-const { Message, MessageMedia, Contact, Location, Buttons, List } = WhatsappWeb
-
 export default {
-    name: "ouo",
-    aliases: ["ouo"],
+    name: 'ouo',
     type: 'tool',
-    desc: "Get Direct Link From Ouo",
-    execute: async({ hisoka, m }) => {
-        Func.fetchJson(`http://api-rest-sinon.my.id:5000/api/shortlink/ouo?&apikey=${global.apikeySinon}&url=${m.text}`)
-        .then(async (a) => {
-            hisoka.sendMessage(m.from, a.result, { quoted: m })
-        })
-    }
+    desc: 'shortlink from https://ouo.io',
+    example: 'No Urls!?\n\nExample : %prefix%command https://ouo.io/yourlink',
+    execute: async({ m }) => {
+        const data = (new api('sinon')).get('/api/shortlink/ouo', {
+            url: Func.isUrl(m.body)[0]
+        }, 'apikey')
+
+        if (data.status !== 200) return mess('error', m)
+        m.reply(data.data.result)
+    },
+    isLimit: true
 }

@@ -22,6 +22,17 @@ global.limit = {
 	}
 }
 
+//API
+global.APIs = {
+	sinon: {
+		URI: 'http://api-rest-sinon.my.id:5000',
+		Key: 'create your key at the url abrove'
+	},
+	xzn: {
+		URI: 'https://sh.xznsenpai.xyz'
+	}
+}
+
 // Other
 global.mess = (type, m, options = {}) => {
 	let msg = {
@@ -47,8 +58,8 @@ global.mess = (type, m, options = {}) => {
 }
 global.options = {
 	public: true,
-	URI: "mongodb+srv://hisoka:<pwmu>@hisoka.xtav1oz.mongodb.net/?retryWrites=true&w=majority",
-	owner: ["6288292024190", "6285815663170", '6285749652354'],
+	URI: "./temp/database.json", // support mongo 
+	owner: ["6288292024190", "6285815663170"],
 	pathCommand: 'commands'
 }
 global.Exif = {
