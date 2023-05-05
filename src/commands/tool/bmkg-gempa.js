@@ -1,5 +1,5 @@
-import { Location } from "whatsapp-web.js"
-
+import WhatsappWeb from "whatsapp-web.js"
+const { Message, MessageMedia, Contact, Location, Buttons, List } = WhatsappWeb
 
 export default {
     name: "gempa",

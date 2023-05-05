@@ -8,6 +8,8 @@ import fs from "fs"
 global.reloadFile = (file) => reloadFile(file)
 global.commands = new Collection()
 
+global.apikeySinon = ''
+
 // limit
 global.limit = {
 	free: 25,
