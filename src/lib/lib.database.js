@@ -67,16 +67,13 @@ if (/mongo/.test(global.options.URI)) {
    }
 } else if (/json/.test(global.options.URI)) {
    database = class Database {
-      constructor(URI) {
-         this.URI = URI
-      }
-      file = fs.existsSync(global.options.URI) ? path.resolve(global.options.URI) : path.join(__dirname, "..", "..", "temp", this.URI || global.options.URI)
+      file = fs.existsSync(global.options.URI) ? path.resolve(global.options.URI) : path.join(process.cwd(), 'temp', global.options.URI)
 
       data = {}
 
       read = async () => {
          try {
-            return this.data = { data: fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file)) : {} }
+            return this.data = fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file)) : {}
          } catch (e) {
             console.error(e)
             return this.data = {}
