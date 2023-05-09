@@ -26,13 +26,13 @@ async function start() {
     readCommands()
 
     const content = await database.read()
-    if (!content && Object.keys(content).length === 0) {
+    if (!content.data && Object.keys(content.data).length === 0) {
         global.db = {
             users: {},
             groups: {},
             ...(content.data || {})
         }
-        await database.write()
+        await database.write(global.db)
     } else {
         global.db = content.data
     }
