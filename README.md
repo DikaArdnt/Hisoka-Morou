@@ -30,6 +30,28 @@ Add to PATH environment variable
 ```
 </details>
 
+<b><details><summary>Ubuntu</summary></b>
+```bash
+1. apt update && apt upgrade
+2. apt install nodejs -y
+3. apt install git -y
+4. apt install ffmpeg -y
+5. apt install zip -y
+6. apt install wget curl
+```
+
+<b>Install Chrome:</b>
+```bash
+1. wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+2. sudo dpkg -i google-chrome-stable_current_amd64.deb
+3. sudo apt --fix-broken install
+```
+
+<b>Install speedtest:</b>
+* Speedtest by ookla [`There`](https://www.speedtest.net/apps/cli#ubuntu)
+
+</details>
+
 ## Install Script
 ```bash
 git clone https://github.com/DikaArdnt/Hisoka-Morou.git
