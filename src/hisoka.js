@@ -43,7 +43,7 @@ async function start() {
             clientId: `${session.Name}`
         }),
         playwright: {
-            headless: false,
+            headless: true,
             devtools: false,
             args: [
                 '--aggressive-tab-discard',
