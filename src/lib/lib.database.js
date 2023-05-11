@@ -73,7 +73,7 @@ if (/mongo/.test(global.options.URI)) {
 
       read = async () => {
          try {
-            return this.data = fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file)) : {}
+            return this.data = fs.existsSync(this.file) ? JSON.parse(fs.readFileSync(this.file)) : { data: {} }
          } catch (e) {
             console.error(e)
             return this.data = {}
