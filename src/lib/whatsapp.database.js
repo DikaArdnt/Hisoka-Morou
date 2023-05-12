@@ -12,6 +12,7 @@ const loadDatabase = (m) => {
         if (!("name" in user)) user.name = m.pushName
         if (!isNumber(user.exp)) user.exp = 0
         if (!isBoolean(user.banned)) user.banned = false
+        if (!isBoolean(user.simi)) user.simi = false
     } else {
         global.db.users[m.sender] = {
             limit: global.limit.free,
@@ -22,6 +23,7 @@ const loadDatabase = (m) => {
             name: m.pushName,
             exp: 0,
             banned: false,
+            simi: false
         }
     }
 

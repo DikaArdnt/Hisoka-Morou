@@ -186,6 +186,23 @@ export const Message = async (hisoka, m) => {
                     })
             }
         }
+        
+        if (!m.isBot) {
+            const dir = path.join(__dirname, '..', global.options.pathCommand, 'function')
+            const files = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
+            if (files.length === 0) return
+            for (const file of files) {
+                const load = await import(path.join(dir, file))
+                load.default({
+                    hisoka,
+                    m,
+                    quoted,
+                    prefix,
+                    commands,
+                    command: cmd
+                })
+            }
+        }
     } catch (e) {
         console.error(e)
     }
