@@ -37,7 +37,8 @@ Add to PATH environment variable
 3. apt install git -y
 4. apt install ffmpeg -y
 5. apt install zip -y
-6. apt install wget curl
+6. apt install wget curl -y
+7. apt install speedtest-cli -y
 ```
 
 <b>Install Chrome:</b>
@@ -47,9 +48,12 @@ Add to PATH environment variable
 3. sudo apt --fix-broken install
 ```
 
-<b>Install speedtest:</b>
-* Speedtest by ookla [`There`](https://www.speedtest.net/apps/cli#ubuntu)
-
+<b>Install nvm for custom nodejs version:</b>
+```bash
+1. curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+2. source ~/.bashrc
+3. nvm install node
+```
 </details>
 
 ## Install Script
