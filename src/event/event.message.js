@@ -187,7 +187,7 @@ export const Message = async (hisoka, m) => {
             }
         }
         
-        if (!m.isBot) {
+        if (!command && !m.isBot) {
             const dir = path.join(__dirname, '..', global.options.pathCommand, 'function')
             const files = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
             if (files.length === 0) return
