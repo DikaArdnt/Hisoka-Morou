@@ -268,6 +268,25 @@ class Client extends _Client {
 
         await this.pupPage.evaluate(async ({ msgId, chatId, options }) => {
             let msg = window.Store.Msg.get(msgId)
+
+            await msg.serialize()
+
+            if (options?.mentions) {
+                msg.mentionedJidList = options.mentions.map(cId => window.Store.WidFactory.createWid(cId));
+
+                delete options.mentions
+            }
+
+            if (options?.text) {
+                if (msg.type === 'chat') msg.body = options.text
+                else {
+                    msg.caption = ''
+                    msg.caption = options.text
+                }
+
+                delete options.text
+            }
+
             let chat = window.Store.Chat.get(chatId)
 
             return await chat.forwardMessages([msg])
