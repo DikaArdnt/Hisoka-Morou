@@ -50,6 +50,7 @@ global.mess = (type, m, options = {}) => {
 	}[type]
 
 	if (msg) return m.reply(msg, { quoted: m, ...options })
+	return mess(type, { quoted: m, ...options })
 }
 global.options = {
 	public: true,
