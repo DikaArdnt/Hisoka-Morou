@@ -7,8 +7,6 @@ import { format } from "util"
 import chalk from "chalk"
 import { fileURLToPath } from "url"
 
-
-global.type = []
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 
@@ -217,7 +215,6 @@ export const readCommands = async (pathname = global.options.pathCommand) => {
             for (const file of files) {
                 const command = await import(`../${pathname}/${res}/${file}`)
                 commands.set(command.default.name, command)
-                if (!global.type.includes(command.default.type)) global.type.push(command.default.type)
             }
         })
     } catch (e) {

@@ -8,6 +8,7 @@ function toUpper(query) {
     //return query.replace(/^\w/, c => c.toUpperCase())
 }
 
+
 export default {
     name: "menu",
     aliases: ["menu","help","list"],
@@ -33,7 +34,7 @@ export default {
         } else {
             let teks = `Hai @${m.sender.split("@")[0]}, Ini Adalah Daftar Perintah Yang Tersedia\n\n`
 
-            const tag = Array.from(commands.values()).filter((a) => global.type.sort().some(b => a.default.type === b))
+            const tag = Array.from(commands.values())
             const list = {}
 
             tag.forEach((a) => {
