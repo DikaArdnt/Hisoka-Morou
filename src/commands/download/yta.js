@@ -1,6 +1,3 @@
-import { youtubedlv2 } from "@bochilteam/scraper"
-
-
 export default {
     name: "ytmp3",
     aliases: ["ytaudio","yta"],
