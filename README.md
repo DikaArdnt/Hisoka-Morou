@@ -56,6 +56,7 @@ Add to PATH environment variable
 ```
 </details>
 
+
 ## Install Script
 ```bash
 git clone https://github.com/DikaArdnt/Hisoka-Morou.git

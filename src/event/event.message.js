@@ -192,7 +192,7 @@ export const Message = async (hisoka, m) => {
             const files = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
             if (files.length === 0) return
             for (const file of files) {
-                const load = await import(path.join(dir, file))
+                const load = await import(Func.__filename(path.join(dir, file)))
                 load.default({
                     hisoka,
                     m,
