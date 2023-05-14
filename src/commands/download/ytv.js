@@ -10,11 +10,12 @@ export default {
         if (request.data?.err) return mess('error', m)
         let { id: vid, title, links } = request.data
         let a = links.video[Object.keys(links.video)[0]]
-        let { size, data } = await Func.getFile(await (await a.url))
-        if (size >= limit.download.free && !m.isPremium) return mess("dlFree", m, { extra: `, please download manually ${a.url}` })
-        if (size >= limit.download.premium && !m.isVIP) return mess("dlPremium", m, { extra: `, please download manually ${a.url}` })
-        if (size >= limit.download.VIP) return mess("dlVIP", m, { extra: `, please download manually ${a.url}` })
-        hisoka.sendMessage(m.from, a.url, { caption: title })
+        let b = await Func.fetchJson(a.url)
+        let { size, data } = await Func.getFile(b.dlink)
+        if (size >= limit.download.free && !m.isPremium) return mess("dlFree", m, { extra: `, please download manually ${b.dlink}` })
+        if (size >= limit.download.premium && !m.isVIP) return mess("dlPremium", m, { extra: `, please download manually ${b.dlink}` })
+        if (size >= limit.download.VIP) return mess("dlVIP", m, { extra: `, please download manually ${b.dlink}` })
+        hisoka.sendMessage(m.from, b.dlink, { caption: title })
     },
     isLimit: true
 }
