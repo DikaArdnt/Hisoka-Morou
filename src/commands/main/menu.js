@@ -38,6 +38,7 @@ export default {
             const list = {}
 
             tag.forEach((a) => {
+                if (!a.default?.type) return
                 if (!(a.default.type in list)) list[a.default.type] = []
                 list[a.default.type].push(a)
             })
