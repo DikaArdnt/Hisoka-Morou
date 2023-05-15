@@ -25,6 +25,9 @@ global.APIs = {
 	sinon: {
 		URI: 'http://api-rest-sinon.my.id:5000',
 		Key: 'create your key at the url abrove'
+	},
+	xzn: {
+		URI: 'https://xznsenpai.xyz/'
 	}
 }
 
