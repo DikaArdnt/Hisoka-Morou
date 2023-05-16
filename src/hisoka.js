@@ -68,7 +68,8 @@ async function start() {
         markOnlineAvailable: true,
         qrMaxRetries: 2,
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/11.1.2 Safari/603.2.4',
-        takeoverTimeoutMs: 'Infinity'
+        takeoverTimeoutMs: 'Infinity',
+        autoClearSession: true
     })
 
     hisoka.initialize()
