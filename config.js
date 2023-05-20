@@ -52,8 +52,8 @@ global.mess = (type, m, options = {}) => {
 		dlVIP: `WhatsApp cannot send files larger than ${Function.formatSize(limit.download.VIP)}${options?.extra ? options.extra : ""}`
 	}[type]
 
-	if (msg) return m.reply(msg, { quoted: m, ...options })
-	return mess(type, { quoted: m, ...options })
+	if (msg) return m.reply(msg, { ...options })
+	else m.reply(type, { ...options })
 }
 global.options = {
 	public: true,
