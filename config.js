@@ -53,7 +53,7 @@ global.mess = (type, m, options = {}) => {
 	}[type]
 
 	if (msg) return m.reply(msg, { ...options })
-	else m.reply(type, { ...options })
+	
 }
 global.options = {
 	public: true,
