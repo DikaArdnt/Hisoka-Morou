@@ -38,6 +38,6 @@
     "qrcode-terminal": "^0.12.0",
     "sharp": "^0.32.0",
     "util": "^0.12.5",
-    "whatsapp-web.js": "github:DikaArdnt/whatsapp-web.js"
+    "whatsapp-web.js": "github:amiruldev20/mywajs#v2"
   }
 }
