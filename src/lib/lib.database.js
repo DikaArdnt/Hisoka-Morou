@@ -17,8 +17,8 @@ if (/mongo/.test(global.options.URI)) {
          this.options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            keepAlive: true,
-            keepAliveInitialDelay: 30000,
+            //keepAlive: true,
+            //keepAliveInitialDelay: 30000,
             // timeout: 30000
          }
          this.connection = this.url || global.options.URI
