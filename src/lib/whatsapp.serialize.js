@@ -25,7 +25,7 @@ class Client extends _Client {
      * @returns 
      */
     async sendPoll(chatId, name, choices, options = {}) {
-        let message = await this.pupPage.evaluate(async ({ chatId, name, choices, options }) => {
+        let message = await this.mPage.evaluate(async ({ chatId, name, choices, options }) => {
             let rawMessage = {
                 waitForAck: true,
                 sendSeen: true,
@@ -119,11 +119,11 @@ class Client extends _Client {
                 iOSApp: options?.iOSApp ? options.iOSApp : global?.Exif?.iOSApp,
                 categories: options?.categories ? options.categories : global?.Exif?.categories,
                 isAvatar: options?.isAvatar ? options.isAvatar : global?.Exif?.isAvatar
-            }, this.pupPage
+            }, this.mPage
             );
         }
 
-        const newMessage = await this.pupPage.evaluate(async ({ chatId, message, options, sendSeen }) => {
+        const newMessage = await this.mPage.evaluate(async ({ chatId, message, options, sendSeen }) => {
             const chatWid = window.Store.WidFactory.createWid(chatId);
             const chat = await window.Store.Chat.find(chatWid);
 
@@ -147,7 +147,7 @@ class Client extends _Client {
     async downloadMediaMessage(msg) {
         if (!Boolean(msg.mediaKey && msg.directPath)) throw new Error('Not Media Message')
 
-        const result = await this.pupPage.evaluate(async ({ directPath, encFilehash, filehash, mediaKey, type, mediaKeyTimestamp, mimetype, filename, size,  _serialized }) => {
+        const result = await this.mPage.evaluate(async ({ directPath, encFilehash, filehash, mediaKey, type, mediaKeyTimestamp, mimetype, filename, size,  _serialized }) => {
             try {
                 const decryptedMedia = await (window.Store.DownloadManager?.downloadAndMaybeDecrypt || window.Store.DownloadManager?.downloadAndDecrypt)({
                     directPath,
@@ -206,7 +206,7 @@ class Client extends _Client {
      * @returns 
      */
     async loadMessage(message) {
-        const msg = await this.pupPage.evaluate(async messageId => {
+        const msg = await this.mPage.evaluate(async messageId => {
             let msg = window.Store.Msg.get(messageId);
             if (msg) return window.WWebJS.getMessageModel(msg);
 
@@ -247,7 +247,7 @@ class Client extends _Client {
     async infoMessage(m) {
         if (!m) return
 
-        const info = await this.pupPage.evaluate(async (msgId) => {
+        const info = await this.mPage.evaluate(async (msgId) => {
             const msg = window.Store.Msg.get(msgId);
             if (!msg) return null;
 
@@ -266,7 +266,7 @@ class Client extends _Client {
         if (!msgId) throw new Error("No Input Message ID")
         if (!chatId) throw new Error("No Input Chat ID")
 
-        await this.pupPage.evaluate(async ({ msgId, chatId, options }) => {
+        await this.mPage.evaluate(async ({ msgId, chatId, options }) => {
             let msg = window.Store.Msg.get(msgId)
 
             await msg.serialize()
@@ -299,7 +299,7 @@ class Client extends _Client {
      * @returns {Promise<WAWebJS.ChatId[]>}
      */
     async getCommonGroups(contactId) {
-        const commonGroups = await this.pupPage.evaluate(async (contactId) => {
+        const commonGroups = await this.mPage.evaluate(async (contactId) => {
             let contact = window.Store.Contact.get(contactId);
             if (!contact) {
                 const wid = window.Store.WidFactory.createUserWid(contactId);
@@ -327,7 +327,7 @@ class Client extends _Client {
      * Get All Metadata Groups
      */
     async getAllGroups() {
-        let groups = await this.pupPage.evaluate(() => {
+        let groups = await this.mPage.evaluate(() => {
             return window.mR.findModule('queryAllGroups')[0].queryAllGroups()
         })
         const chats = []
@@ -372,7 +372,7 @@ class Client extends _Client {
             }
         }
 
-        return this.pupPage.evaluate(async ({ chatId, preview, image, type }) => {
+        return this.mPage.evaluate(async ({ chatId, preview, image, type }) => {
             let chatWid = await window.Store.WidFactory.createWid(chatId)
 
             if (type === 'delete') return window.Store.GroupUtils.requestDeletePicture(chatWid)
