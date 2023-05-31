@@ -57,7 +57,7 @@ global.mess = (type, m, options = {}) => {
 }
 global.options = {
 	public: true,
-	URI: "database.json", // use mongo or file json 
+	URI: "database.json", // use mongo or file json
 	owner: ["6288292024190", "62858156631709"],
 	pathCommand: 'commands'
 }

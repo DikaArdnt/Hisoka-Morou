@@ -26,15 +26,15 @@ async function start() {
     readCommands()
 
     const content = await database.read()
-    if (!content.data && Object.keys(content.data).length === 0) {
+    if (content && Object.keys(content).length === 0) {
         global.db = {
             users: {},
             groups: {},
-            ...(content.data || {})
+            ...(content || {})
         }
         await database.write(global.db)
     } else {
-        global.db = content.data
+        global.db = content
     }
 
     const hisoka = new Client({
