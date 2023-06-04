@@ -189,4 +189,9 @@ const UploadFileUgu = (input) => {
 export { webp2mp4File, ffmpeg, toAudio, toPTT, toVideo, TelegraPh, UploadFileUgu, sticker }
 
 
-reloadFile(import.meta.url)
+let fileP = fileURLToPath(import.meta.url)
+fs.watchFile(fileP, () => {
+    fs.unwatchFile(fileP)
+    console.log(`Update File "${fileP}"`)
+    import(`${import.meta.url}?update=${Date.now()}`)
+})

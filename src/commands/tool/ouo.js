@@ -8,7 +8,7 @@ export default {
             url: Func.isUrl(m.body)[0]
         }, 'apikey')
 
-        if (data.status !== 200) return mess('error', m)
+        if (data.status !== 200) return m.reply("error")
         m.reply(data.data.result)
     },
     isLimit: true

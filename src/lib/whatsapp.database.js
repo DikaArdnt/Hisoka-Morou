@@ -1,10 +1,12 @@
+import config from "../../config.js"
+
 const loadDatabase = (m) => {
     const isNumber = x => typeof x === "number" && !isNaN(x)
     const isBoolean = x => typeof x === "boolean" && Boolean(x)
     let user = global.db.users[m.sender]
     if (typeof user !== "object") global.db.users[m.sender] = {}
     if (user) {
-        if (!isNumber(user.limit)) user.limit = global.limit.free
+        if (!isNumber(user.limit)) user.limit = config.limit.free
         if (!isBoolean(user.premium)) user.premium = m.isOwner ? true : false
         if (!isBoolean(user.VIP)) user.VIP = m.isOwner ? true : false
         if (!isBoolean(user.registered)) user.registered = false
@@ -15,7 +17,7 @@ const loadDatabase = (m) => {
         if (!isBoolean(user.simi)) user.simi = false
     } else {
         global.db.users[m.sender] = {
-            limit: global.limit.free,
+            limit: config.limit.free,
             lastChat: new Date * 1,
             premium: m.isOwner ? true : false,
             VIP: m.isOwner ? true : false,
@@ -45,4 +47,9 @@ const loadDatabase = (m) => {
 export { loadDatabase }
 
 
-reloadFile(import.meta.url)
+let fileP = fileURLToPath(import.meta.url)
+fs.watchFile(fileP, () => {
+    fs.unwatchFile(fileP)
+    console.log(`Update File "${fileP}"`)
+    import(`${import.meta.url}?update=${Date.now()}`)
+})

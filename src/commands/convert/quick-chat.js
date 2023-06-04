@@ -25,7 +25,7 @@ export default {
                 id: 5
             }
         }
-        mess("wait", m)
+        m.reply("wait")
         let jsonnya = {
             type: "quoted",
             format: "png",

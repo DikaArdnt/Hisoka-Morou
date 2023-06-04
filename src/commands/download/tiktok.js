@@ -8,9 +8,9 @@ export default {
     desc: "Download Video and Audio Tiktok",
     example: "No Urls!\n\nExample : %prefix%command https://www.tiktok.com/@flocki__/video/7158539658333392129",
     execute: async({ hisoka, m }) => {
-        mess("wait", m)
+        m.reply("wait")
         let json = await Func.fetchJson(`https://api.tiklydown.me/api/download?url=${Func.isUrl(m.text)[0]}`)
-        if (json?.video?.noWatermark == undefined) return mess("error", m)
+        if (json?.video?.noWatermark == undefined) return m.reply("error")
         let text = `
 Tiktok Video and Audio Downloader
 

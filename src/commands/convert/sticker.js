@@ -7,8 +7,8 @@ export default {
     aliases: ["s","stiker"],
     type: 'convert',
     desc: "Convert Image, Gif, Video, and Url media to Sticker\n\nWith Options?\n1. --circle\n2. --round\n3. --gray\n3. --negate\n4. --pixel\n5. --flip\n6. --flop\n7. --rotate\n8. --nobg\n\nExample :\n1. --circle : %prefix%command --circle\n2. --rotate : %prefix%command --rotate=20 (max 360)",
-    execute: async({ hisoka, m, quoted }) => {
-        mess("wait", m)
+    execute: async({ hisoka, m, quoted, config }) => {
+        m.reply("wait")
         if (/image|video|sticker/.test(quoted.mime)) {
             if (quoted?.duration > 10) return m.reply(`Max video 9 second`)
             let download = await hisoka.downloadMediaMessage(quoted)
@@ -32,11 +32,11 @@ export default {
             } else if (/rotate=/i.test(m.text.toLowerCase())) {
                 let text = m.text.toLowerCase().split`rotate=`[1]
                 if (isNaN(text) && !Number(text)) return m.reply(`Value harus berupa angka`)
-                exif = { packName: `Sticker ini Dibuat Oleh :\nhttps://instagram.com/cak_haho\n\nPada :\n${Func.tanggal(new Date())} Pukul ${Func.jam(new Date())} WIB\n\nOleh :\n${m.pushName}` }
+                exif = { packName: config.Exif.packName }
                 media = await rotate(download, Number(text))
             } else { 
                 let [packname, author] = m.text.split`|`
-                exif = { packName: packname ? packname : `Sticker ini Dibuat Oleh :\nhttps://instagram.com/cak_haho\n\nPada :\n${Func.tanggal(new Date())} Pukul ${Func.jam(new Date())} WIB\n\nOleh :\n${m.pushName}`, packPublish: author ? author : global.Exif.packPublish } 
+                exif = { packName: packname ? packname : config.Exif.packName, packPublish: author ? author : config.Exif.packPublish } 
                 media = download
             }
             hisoka.sendMessage(m.from, media, { asSticker: true, quoted: m, ...exif })
@@ -45,9 +45,9 @@ export default {
             for (let a = 0; a < (m.mentions.length < 4 ? m.mentions.length : 4); a++) {
                 url = await hisoka.getProfilePicUrl(m.mentions[a]).then(_ => _).catch(_ => 'https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu') 
             }
-            hisoka.sendMessage(m.from, url, { asSticker: true, quoted: m, packName: `Sticker ini Dibuat Oleh :\nhttps://instagram.com/cak_haho\n\nPada :\n${Func.tanggal(new Date())} Pukul ${Func.jam(new Date())} WIB\n\nOleh :\n${m.pushName}`, packPublish: global.Exif.packPublish })
+            hisoka.sendMessage(m.from, url, { asSticker: true, quoted: m, packName: config.Exif.packName, packPublish: config.Exif.packPublish })
         } else if (/(https?:\/\/.*\.(?:png|jpg|jpeg|webp|mov|mp4|webm))/i.test(m.text)) {
-            hisoka.sendMessage(m.from, Func.isUrl(m.text)[0], { quoted: m, asSticker: true, packName: `Sticker ini Dibuat Oleh :\nhttps://instagram.com/cak_haho\n\nPada :\n${Func.tanggal(new Date())} Pukul ${Func.jam(new Date())} WIB\n\nOleh :\n${m.pushName}`, packPublish: global.Exif.packPublish })
+            hisoka.sendMessage(m.from, Func.isUrl(m.text)[0], { quoted: m, asSticker: true, packName: config.Exif.packName, packPublish: config.Exif.packPublish })
         } else {
             m.reply(`Reply media or send command with url media`)
         }

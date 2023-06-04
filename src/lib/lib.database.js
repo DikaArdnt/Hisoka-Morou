@@ -1,10 +1,12 @@
+import config from "../../config.js"
+
 import mongoose from "mongoose"
 import fs from "fs"
 import path from "path"
 mongoose.set("strictQuery", false)
 let database
 
-if (/mongo/.test(global.options.URI)) {
+if (/mongo/.test(config.options.URI)) {
     database = class MongoDB {
         constructor(url) {
             this.url = url
@@ -16,7 +18,7 @@ if (/mongo/.test(global.options.URI)) {
                 //keepAliveInitialDelay: 30000,
                 // timeout: 30000
             }
-            this.connection = this.url || global.options.URI
+            this.connection = this.url || config.options.URI
             this.model = {
                 database: {},
             }
@@ -61,10 +63,10 @@ if (/mongo/.test(global.options.URI)) {
             document.save()
         }
     }
-} else if (/json/.test(global.options.URI)) {
+} else if (/json/.test(config.options.URI)) {
     database = class Database {
         data = {}
-        file = path.join(process.cwd(), "temp", global.options.URI)
+        file = path.join(process.cwd(), "temp", config.options.URI)
 
         read() {
             let data

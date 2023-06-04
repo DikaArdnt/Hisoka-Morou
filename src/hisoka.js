@@ -1,4 +1,4 @@
-import "../config.js"
+import config from "../config.js"
 
 import { LocalAuth } from 'whatsapp-web.js'
 import qrcode from "qrcode-terminal"
@@ -18,6 +18,7 @@ import { database as databes } from "./lib/lib.database.js"
 const database = new databes()
 global.Func = Function
 global.api = API
+global.commands = new (await import("./lib/lib.collection.js")).default
 
 
 async function start() {
@@ -39,8 +40,8 @@ async function start() {
 
     const hisoka = new Client({
         authStrategy: new LocalAuth({
-            dataPath: `./${session.Path}`,
-            clientId: `${session.Name}`
+            dataPath: `./${config.session.Path}`,
+            clientId: `${config.session.Name}`
         }),
         playwright: {
             headless: true,
@@ -62,7 +63,7 @@ async function start() {
                 '--no-zygote',
                 //'--enable-features=WebContentsForceDark:inversion_method/cielab_based/image_behavior/selective/text_lightness_threshold/150/background_lightness_threshold/205'
             ],
-            executablePath: platform() === 'win32' ? chromium.executablePath() : '/usr/bin/google-chrome-stable',
+            executablePath: platform() === 'win32' ? chromium.executablePath() : platform() === "linux" ? '/usr/bin/google-chrome-stable' : '',
             bypassCSP: true
         },
         markOnlineAvailable: true,
@@ -113,10 +114,10 @@ start()
 let choki = chokidar.watch(Func.__filename(path.join(process.cwd(), 'src', 'commands')), { ignored: /^\./ })
 choki
 .on('change', async(path) => {
-    const command = await import(Func.__filename(path))
+    const command = await import(Func.__filename(path) + "?v=" + Date.now())
     global.commands.set(command?.default?.name, command)
 })
 .on('add', async function(path) {
-    const command = await import(Func.__filename(path))
+    const command = await import(Func.__filename(path) + "?v=" + Date.now())
     global.commands.set(command?.default?.name, command)
 })

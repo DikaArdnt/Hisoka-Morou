@@ -8,15 +8,15 @@ export default {
     aliases: ["bckp"],
     type: 'owner',
     desc: "Backup script gwehj",
-    execute: async({ hisoka, m }) => {
-        mess("wait", m)
+    execute: async({ hisoka, m, config }) => {
+        m.reply("wait")
         const output = fs.createWriteStream(path.join(process.cwd(), 'hisoka.zip'))
         const archive = archiver('zip') // tar & zip
 
         archive.pipe(output)
 
         let dir = fs.readdirSync(".")
-        let files = dir.filter(a => a !== "node_modules" && a !== "package-lock.json" && a !== ".git" && a !== global.session.Path)
+        let files = dir.filter(a => a !== "node_modules" && a !== "package-lock.json" && a !== ".git" && a !== config.session.Path)
 
         files.forEach(function (file) {
             const lockFile = path.join(process.cwd(), file)
@@ -30,7 +30,7 @@ export default {
 
         await archive.finalize()
         
-        await hisoka.sendFile(global.options.owner[0] + "@c.us", "./hisoka.zip", { quoted: m, filename: "hisoka-wawebjs-backup.zip", type: 'document' })
+        await hisoka.sendFile(config.options.owner[0] + "@c.us", "./hisoka.zip", { quoted: m, filename: "hisoka-wawebjs-backup.zip", type: 'document' })
         fs.unlinkSync("./hisoka.zip")
     },
     isOwner: true

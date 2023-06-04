@@ -8,7 +8,7 @@ export default {
      desc: "screenshot website",
      example: "No Urls!?\n\nExample %prefix%command https://google.com",
      execute: async ({ hisoka, m }) => {
-          mess("wait", m)
+          m.reply("wait")
           const browser = await hisoka.pupBrowser || await getBrowser()
 
           // create a new page

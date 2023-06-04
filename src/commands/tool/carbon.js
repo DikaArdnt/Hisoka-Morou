@@ -8,7 +8,7 @@ export default {
     desc: 'code heker',
     example: "No Query?!\n\nExample : %prefix%command <html?",
     execute: async({ hisoka, m }) => {
-        mess("wait", m)
+        m.reply("wait")
         let data = await axios({
             url: 'https://carbonara.solopov.dev/api/cook',
             method: 'post',

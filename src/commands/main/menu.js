@@ -20,7 +20,7 @@ export default {
             const nama = m.text.toLowerCase()
             const cmd = commands.get(nama) || commands.find((cmd) => cmd.default.aliases && cmd.default.aliases.includes(nama))
             if (!cmd) return m.reply("Command Not Found")
-            if (cmd.default?.isOwner && !m.isOwner) return global.mess("owner", m)
+            if (cmd.default?.isOwner && !m.isOwner) return m.reply("quoted")
             if (cmd.default?.name) data.push(`*- Command :* ${cmd.default.name}`)
             if (cmd.default?.aliases) data.push(`*- Alias :* ${cmd.default.aliases.join(", ")}`)
             if (cmd.default?.desc) data.push(`*- Desc :* ${cmd.default.desc.replace(/%prefix/g, prefix).replace(/%command/g, cmd.default.name)}`)

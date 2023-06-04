@@ -1,3 +1,5 @@
+import config from "../../config.js"
+
 import { Client as _Client } from "whatsapp-web.js"
 import { Message, MessageMedia, Contact, Location, Buttons, List } from 'whatsapp-web.js/src/structures/index.js'
 import Function from "./lib.function.js"
@@ -110,15 +112,15 @@ class Client extends _Client {
         if (internalOptions.sendMediaAsSticker && internalOptions.attachment) {
             internalOptions.attachment = await Util.formatToWebpSticker(
                 internalOptions.attachment, {
-                packId: options?.packId ? options.packId : global?.Exif?.packId,
-                packName: options?.packName ? options.packName : global?.Exif?.packName,
-                packPublish: options?.packPublish ? options.packPublish : global?.Exif?.packPublish,
-                packEmail: options?.packEmail ? options.packEmail : global?.Exif?.packEmail,
-                packWebsite: options?.packWebsite ? options.packWebsite : global?.Exif?.packWebsite,
-                androidApp: options?.androidApp ? options.androidApp : global?.Exif?.androidApp,
-                iOSApp: options?.iOSApp ? options.iOSApp : global?.Exif?.iOSApp,
-                categories: options?.categories ? options.categories : global?.Exif?.categories,
-                isAvatar: options?.isAvatar ? options.isAvatar : global?.Exif?.isAvatar
+                packId: options?.packId ? options.packId : config?.Exif?.packId,
+                packName: options?.packName ? options.packName : config?.Exif?.packName,
+                packPublish: options?.packPublish ? options.packPublish : config?.Exif?.packPublish,
+                packEmail: options?.packEmail ? options.packEmail : config?.Exif?.packEmail,
+                packWebsite: options?.packWebsite ? options.packWebsite : config?.Exif?.packWebsite,
+                androidApp: options?.androidApp ? options.androidApp : config?.Exif?.androidApp,
+                iOSApp: options?.iOSApp ? options.iOSApp : config?.Exif?.iOSApp,
+                categories: options?.categories ? options.categories : config?.Exif?.categories,
+                isAvatar: options?.isAvatar ? options.isAvatar : config?.Exif?.isAvatar
             }, this.mPage
             );
         }
@@ -406,7 +408,7 @@ const serialize = async (hisoka, m) => {
     }
     m.from = m.id.remote
     m.sender = m.id.participant || m._data.from._serialized || m._data.from || m.from
-    m.isOwner = m.sender && [...global.options.owner].includes(m.sender.replace(/\D+/g, ""))
+    m.isOwner = m.sender && [...config.options.owner].includes(m.sender.replace(/\D+/g, ""))
     m.isPremium = m.sender && global.db.users[m.sender]?.premium || m.isOwner || global.db.users[m.sender]?.VIP || false
     m.isVIP = m.sender && global.db.users[m.sender]?.VIP || m.isOwner || false
     m.pushName = m._data.notifyName
@@ -459,8 +461,10 @@ const serialize = async (hisoka, m) => {
         else return hisoka.downloadMediaMessage(m)
     }
     m.resend = () => hisoka.forwardMessage(m.from, m._serialized)
-    m.reply = (content, options = {}) => hisoka.sendMessage(options.from ? options.from : m.from, content, { quoted: m, ...options })
-
+    m.reply = (content, options = {}) => {
+        if (!!config.msg[content]) content = config.msg[content]
+        hisoka.sendMessage(options.from ? options.from : m.from, content, { quoted: m, ...options })
+    }
     if (!m.author) delete m.author
     if (!m.isStatus) delete m.isStatus
     if (!m.isForwarded) delete m.isForwarded

@@ -1,4 +1,4 @@
-import "../../config.js"
+import config from "../../config.js"
 
 import fs from "fs"
 import moment from "moment-timezone"
@@ -12,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export const Message = async (hisoka, m) => {
     try {
-        if (!global.options.public && !m.isOwner) return
+        if (!config.options.public && !m.isOwner) return
         if (!m) return
         if (m.isBot) return
 
@@ -33,7 +33,7 @@ export const Message = async (hisoka, m) => {
             // for command no prefix
             if (!prefix && command.default.noPrefix) {
                 if (command.default.locked && !m.isOwner) {
-                    return global.mess("locked", m)
+                    return m.reply("locked")
                 }
 
                 if (command.default.isMedia && !quoted.mime) {
@@ -47,44 +47,44 @@ export const Message = async (hisoka, m) => {
                         if (command.default.isMedia.Application && !/application/i.test(quoted.mime)) return m.reply('Reply Media Application...')
                         if (command.default.isMedia.ViewOnce && !quoted.isViewOnce) return m.reply('Reply View Once...')
                     } else {
-                        return global.mess("media", m)
+                        return m.reply("media")
                     }
                 }
 
                 if (command.default.isQuoted && !m.hasQuotedMsg) {
-                    return global.mess("quoted", m)
+                    return m.reply("quoted")
                 }
 
                 if (command.default.isOwner && !m.isOwner) {
-                    return global.mess("owner", m)
+                    return m.reply("owner")
                 }
 
                 if (command.default.isGroup && !m.isGroup) {
-                    return global.mess("group", m)
+                    return m.reply("group")
                 }
 
                 if (command.default.isPrivate && m.isGroup) {
-                    return global.mess("private", m)
+                    return m.reply("private")
                 }
 
                 if (command.default.isBotAdmin && !m.isBotAdmin) {
-                    return global.mess("botAdmin", m)
+                    return m.reply("botAdmin")
                 }
 
                 if (command.default.isAdmin && !m.isAdmin) {
-                    return global.mess("admin", m)
+                    return m.reply("admin")
                 }
 
                 if (command.default.isBot && m.fromMe) {
-                    return global.mess("bot", m)
+                    return m.reply("bot")
                 }
 
                 if (command.default.isPremium && !m.isPremium) {
-                    return global.mess('premium', m)
+                    return m.reply("premium")
                 }
 
                 if (command.default.isVIP && !m.isVIP) {
-                    return global.mess('vip', m)
+                    return m.reply("vip")
                 }
 
                 if (command.default.example && !m.text) {
@@ -97,7 +97,8 @@ export const Message = async (hisoka, m) => {
                     command: cmd,
                     quoted,
                     prefix,
-                    commands
+                    commands,
+                    config
                 })
                     ?.then(a => a)
                     ?.catch((err) => {
@@ -110,7 +111,7 @@ export const Message = async (hisoka, m) => {
             // for command with prefix
             if (!!prefix && m.body.startsWith(prefix)) {
                 if (command.default.locked && !m.isOwner) {
-                    return global.mess("locked", m)
+                    return m.reply("locked")
                 }
 
                 if (command.default.isMedia && !quoted.mime) {
@@ -124,44 +125,44 @@ export const Message = async (hisoka, m) => {
                         if (command.default.isMedia.Application && !/application/i.test(quoted.mime)) return m.reply('Reply Media Application...')
                         if (command.default.isMedia.ViewOnce && !quoted.isViewOnce) return m.reply('Reply View Once...')
                     } else {
-                        return global.mess("media", m)
+                        return m.reply("media")
                     }
                 }
 
                 if (command.default.isQuoted && !m.hasQuotedMsg) {
-                    return global.mess("quoted", m)
+                    return m.reply("quoted")
                 }
 
                 if (command.default.isOwner && !m.isOwner) {
-                    return global.mess("owner", m)
+                    return m.reply("owner")
                 }
 
                 if (command.default.isGroup && !m.isGroup) {
-                    return global.mess("group", m)
+                    return m.reply("group")
                 }
 
                 if (command.default.isPrivate && m.isGroup) {
-                    return global.mess("private", m)
+                    return m.reply("private")
                 }
 
                 if (command.default.isBotAdmin && !m.isBotAdmin) {
-                    return global.mess("botAdmin", m)
+                    return m.reply("bot")
                 }
 
                 if (command.default.isAdmin && !m.isAdmin) {
-                    return global.mess("admin", m)
+                    return m.reply("botAdmin")
                 }
 
                 if (command.default.isBot && m.fromMe) {
-                    return global.mess("bot", m)
+                    return m.reply("bot")
                 }
 
                 if (command.default.isPremium && !m.isPremium) {
-                    return global.mess('premium', m)
+                    return m.reply("premium")
                 }
 
                 if (command.default.isVIP && !m.isVIP) {
-                    return global.mess('vip', m)
+                    return m.reply("vip")
                 }
 
                 if (command.default.example && !m.text) {
@@ -174,7 +175,8 @@ export const Message = async (hisoka, m) => {
                     command: cmd,
                     quoted,
                     prefix,
-                    commands
+                    commands,
+                    config
                 })
                     ?.then(a => a)
                     ?.catch((err) => {
@@ -186,7 +188,7 @@ export const Message = async (hisoka, m) => {
         }
         
         if (!command && !m.isBot) {
-            const dir = path.join(__dirname, '..', global.options.pathCommand, 'function')
+            const dir = path.join(__dirname, '..', config.options.pathCommand, 'function')
             const files = fs.readdirSync(dir).filter(file => file.endsWith('.js'))
             if (files.length === 0) return
             for (const file of files) {
@@ -197,7 +199,8 @@ export const Message = async (hisoka, m) => {
                     quoted,
                     prefix,
                     commands,
-                    command: cmd
+                    command: cmd,
+                    config
                 })
             }
         }
@@ -206,7 +209,7 @@ export const Message = async (hisoka, m) => {
     }
 }
 
-export const readCommands = async (pathname = global.options.pathCommand) => {
+export const readCommands = async (pathname = config.options.pathCommand) => {
     try {
         const dir = path.join(__dirname, "..", pathname)
         const dirs = fs.readdirSync(dir)

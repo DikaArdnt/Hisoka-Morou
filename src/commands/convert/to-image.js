@@ -9,7 +9,7 @@ export default {
     type: 'convert',
     desc: "Convert Sticker to Image",
     execute: async ({ hisoka, m }) => {
-        mess("wait", m)
+        m.reply("wait")
         if (m.quoted.isAnimated) {
             let download = await m.quoted.downloadMedia()
             let media = await webp2mp4File(download)
