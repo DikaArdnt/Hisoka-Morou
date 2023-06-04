@@ -217,6 +217,7 @@ export const readCommands = async (pathname = config.options.pathCommand) => {
             let files = fs.readdirSync(`${dir}/${res}`).filter((file) => file.endsWith(".js"))
             for (const file of files) {
                 const command = await import(`../${pathname}/${res}/${file}`)
+                if (!command.default?.type) return
                 commands.set(command.default.name, command)
             }
         })

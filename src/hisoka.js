@@ -113,11 +113,11 @@ start()
 
 let choki = chokidar.watch(Func.__filename(path.join(process.cwd(), 'src', 'commands')), { ignored: /^\./ })
 choki
-.on('change', async(path) => {
-    const command = await import(Func.__filename(path) + "?v=" + Date.now())
+.on('change', async(Path) => {
+    const command = await import(Func.__filename(Path) + "?v=" + Date.now())
     global.commands.set(command?.default?.name, command)
 })
-.on('add', async function(path) {
-    const command = await import(Func.__filename(path) + "?v=" + Date.now())
+.on('add', async function(Path) {
+    const command = await import(Func.__filename(Path) + "?v=" + Date.now())
     global.commands.set(command?.default?.name, command)
 })
