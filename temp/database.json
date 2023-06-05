@@ -1,0 +1,21 @@
+{
+  "users": {
+    "62858156631709@c.us": {
+      "limit": 25,
+      "lastChat": 1685966656041,
+      "premium": true,
+      "VIP": true,
+      "registered": false,
+      "name": "Hisoka",
+      "exp": 0,
+      "banned": false,
+      "simi": false
+    }
+  },
+  "groups": {
+    "447471037113-1475003818@g.us": {
+      "lastChat": 1685966656041,
+      "mute": false
+    }
+  }
+}
