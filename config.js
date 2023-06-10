@@ -18,7 +18,7 @@ export default {
    limit,
    APIs: {
       xzn: {
-         URI: 'https://xznsenpai.xyz/',
+         URI: 'https://xzn.wtf',
          Key: "i dont know"
       }
    },
