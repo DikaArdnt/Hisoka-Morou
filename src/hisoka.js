@@ -40,7 +40,7 @@ async function start() {
 
     const hisoka = new Client({
         authStrategy: new LocalAuth({
-            dataPath: `./${config.session.Path}`,
+            dataPath: `../${config.session.Path}`,
             clientId: `${config.session.Name}`
         }),
         playwright: {
